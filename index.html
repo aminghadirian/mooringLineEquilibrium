@@ -9,7 +9,7 @@
   body { background: #1a1d23; color: #e0e0e0; font-family: 'Segoe UI', sans-serif; display: flex; height: 100vh; overflow: hidden; }
 
   #sidebar {
-    width: 300px; min-width: 300px; background: #22252e; border-right: 1px solid #333;
+    width: 310px; min-width: 310px; background: #22252e; border-right: 1px solid #333;
     display: flex; flex-direction: column; overflow-y: auto;
   }
   #sidebar h1 { font-size: 14px; font-weight: 600; color: #7ab8f5; padding: 14px 16px 10px; border-bottom: 1px solid #333; letter-spacing: 0.5px; }
@@ -24,40 +24,47 @@
   input[type=number] { width: 100%; background: #1a1d23; border: 1px solid #444; color: #e0e0e0; padding: 5px 8px; border-radius: 4px; font-size: 12px; }
   input[type=number]:focus { outline: none; border-color: #7ab8f5; }
 
-  .tension-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
-  .tension-card { background: #1a1d23; border-radius: 6px; padding: 8px; text-align: center; }
-  .tension-card .label { font-size: 10px; color: #888; margin-bottom: 3px; }
-  .tension-card .value { font-size: 16px; font-weight: 700; }
+  .tension-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
+  .tension-card { background: #1a1d23; border-radius: 6px; padding: 7px; text-align: center; }
+  .tension-card .label { font-size: 10px; color: #888; margin-bottom: 2px; }
+  .tension-card .value { font-size: 15px; font-weight: 700; }
   .t1 .value { color: #e06c6c; }
   .t2 .value { color: #6ce0a0; }
   .t3 .value { color: #6cb8e0; }
 
-  .pos-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 6px; }
-  .pos-card { background: #1a1d23; border-radius: 6px; padding: 8px; text-align: center; }
-  .pos-card .label { font-size: 10px; color: #888; margin-bottom: 3px; }
-  .pos-card .value { font-size: 14px; font-weight: 600; color: #e0c06c; }
+  .line-details { margin-top: 8px; }
+  .line-row { display: flex; gap: 4px; align-items: center; margin-bottom: 5px; padding: 5px 6px; background: #1a1d23; border-radius: 5px; font-size: 11px; }
+  .line-row .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .line-row .ldata { display: flex; gap: 8px; flex-wrap: wrap; }
+  .line-row .ldata span { color: #999; white-space: nowrap; }
+  .line-row .ldata span b { color: #ddd; }
+  .slack-tag { font-size: 9px; font-weight: 700; color: #e06c6c; background: #3a2020; border-radius: 3px; padding: 1px 4px; margin-left: 2px; }
 
-  .query-section { }
+  .pos-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 8px; }
+  .pos-card { background: #1a1d23; border-radius: 6px; padding: 7px; text-align: center; }
+  .pos-card .label { font-size: 10px; color: #888; margin-bottom: 2px; }
+  .pos-card .value { font-size: 13px; font-weight: 600; color: #e0c06c; }
+
   .query-row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
   .query-row label { font-size: 12px; color: #bbb; white-space: nowrap; width: 60px; }
+
   .btn { background: #7ab8f5; color: #1a1d23; border: none; padding: 7px 14px; border-radius: 4px; font-size: 12px; font-weight: 600; cursor: pointer; width: 100%; margin-top: 4px; }
   .btn:hover { background: #5aa0e0; }
+  .btn-ghost { background: #2a3a50; color: #7ab8f5; border: 1px solid #7ab8f550; }
+  .btn-ghost:hover { background: #3a4a60; }
   .btn-reset { background: #555; color: #e0e0e0; }
   .btn-reset:hover { background: #666; }
 
-  .result-box { background: #1a1d23; border-radius: 6px; padding: 10px; margin-top: 8px; font-size: 12px; line-height: 1.8; display: none; }
+  .result-box { background: #1a1d23; border-radius: 6px; padding: 10px; margin-top: 8px; font-size: 12px; line-height: 1.9; display: none; border: 1px solid #333; }
   .result-box.show { display: block; }
+  .result-box .note { font-size: 10px; color: #555; margin-top: 6px; border-top: 1px solid #2d3040; padding-top: 6px; }
 
-  .mode-toggle { display: flex; gap: 6px; margin-bottom: 10px; }
-  .mode-btn { flex: 1; background: #1a1d23; border: 1px solid #444; color: #888; padding: 6px; border-radius: 4px; font-size: 11px; cursor: pointer; text-align: center; }
-  .mode-btn.active { background: #2a3a50; border-color: #7ab8f5; color: #7ab8f5; }
-
-  #canvas-wrap { flex: 1; display: flex; align-items: center; justify-content: center; position: relative; }
-  canvas { display: block; }
-  #hint { position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); font-size: 11px; color: #555; pointer-events: none; }
-
-  .slack-badge { font-size: 9px; font-weight: 600; color: #e06c6c; background: #3a2020; border-radius: 3px; padding: 1px 4px; margin-left: 4px; display: none; }
-  .slack-badge.show { display: inline-block; }
+  #canvas-wrap { flex: 1; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+  canvas { display: block; cursor: default; }
+  canvas.dragging { cursor: grabbing; }
+  #hint { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); font-size: 11px; color: #444; pointer-events: none; white-space: nowrap; }
+  #mode-badge { position: absolute; top: 10px; right: 10px; font-size: 11px; background: #22252e; border: 1px solid #333; color: #888; padding: 4px 10px; border-radius: 12px; pointer-events: none; }
+  #residual-badge { position: absolute; top: 10px; left: 10px; font-size: 11px; background: #22252e; border: 1px solid #333; color: #888; padding: 4px 10px; border-radius: 12px; pointer-events: none; }
 </style>
 </head>
 <body>
@@ -73,7 +80,7 @@
     </div>
     <div class="field">
       <label>Anchor Radius R <span id="R-val">5.0 m</span></label>
-      <input type="range" id="R" min="1" max="15" step="0.5" value="5">
+      <input type="range" id="R" min="1" max="20" step="0.5" value="5">
     </div>
     <div class="field">
       <label>Pretension T₀ <span id="T0-val">200 N</span></label>
@@ -95,38 +102,35 @@
       <label>Fy <span id="Fy-val">0 N</span></label>
       <input type="range" id="Fy" min="-2000" max="2000" step="10" value="0">
     </div>
-    <button class="btn btn-reset" onclick="resetForce()">Reset Force</button>
+    <button class="btn btn-reset" id="btn-reset-force">Reset Force &amp; Position</button>
   </div>
 
   <div class="section">
     <div class="section-title">Tension Query — Given T₁ = ?</div>
+    <p style="font-size:11px;color:#666;margin-bottom:8px;">Finds floater position along anchor-1 axis (no ext. force assumption) and reports T₂, T₃ plus the external force required to hold that state.</p>
     <div class="query-row">
       <label>T₁ (N)</label>
       <input type="number" id="query-T1" min="0" placeholder="e.g. 400">
     </div>
     <button class="btn" onclick="runQuery()">Solve</button>
-    <div class="result-box" id="query-result"></div>
+    <div class="result-box" id="query-result">
+      <div id="qr-content"></div>
+      <button class="btn btn-ghost" id="btn-apply-query" style="margin-top:8px;">Apply to Simulation</button>
+      <div class="note">Spring 1 anchor is at 0° (right). By symmetry T₂ = T₃ when floater lies on that axis.</div>
+    </div>
   </div>
 
   <div class="section">
     <div class="section-title">Current State</div>
     <div class="tension-grid">
-      <div class="tension-card t1">
-        <div class="label">T₁ (N) <span class="slack-badge" id="s1">SLACK</span></div>
-        <div class="value" id="T1-disp">—</div>
-      </div>
-      <div class="tension-card t2">
-        <div class="label">T₂ (N) <span class="slack-badge" id="s2">SLACK</span></div>
-        <div class="value" id="T2-disp">—</div>
-      </div>
-      <div class="tension-card t3">
-        <div class="label">T₃ (N) <span class="slack-badge" id="s3">SLACK</span></div>
-        <div class="value" id="T3-disp">—</div>
-      </div>
+      <div class="tension-card t1"><div class="label">T₁ (N)</div><div class="value" id="T1-disp">—</div></div>
+      <div class="tension-card t2"><div class="label">T₂ (N)</div><div class="value" id="T2-disp">—</div></div>
+      <div class="tension-card t3"><div class="label">T₃ (N)</div><div class="value" id="T3-disp">—</div></div>
     </div>
+    <div class="line-details" id="line-details"></div>
     <div class="pos-grid">
-      <div class="pos-card"><div class="label">x (m)</div><div class="value" id="px-disp">0.00</div></div>
-      <div class="pos-card"><div class="label">y (m)</div><div class="value" id="py-disp">0.00</div></div>
+      <div class="pos-card"><div class="label">x (m)</div><div class="value" id="px-disp">0.000</div></div>
+      <div class="pos-card"><div class="label">y (m)</div><div class="value" id="py-disp">0.000</div></div>
     </div>
   </div>
 
@@ -136,14 +140,17 @@
       <label>Show force vectors <input type="checkbox" id="showForces" checked style="width:auto;margin-left:8px;"></label>
     </div>
     <div class="field">
-      <label>Force vector scale <span id="fscale-val">1×</span></label>
+      <label>Force vector scale <span id="fscale-val">1.0×</span></label>
       <input type="range" id="fscale" min="0.1" max="5" step="0.1" value="1">
     </div>
+    <button class="btn btn-ghost" onclick="fitView()">Fit View</button>
   </div>
 </div>
 
 <div id="canvas-wrap">
   <canvas id="canvas"></canvas>
+  <div id="mode-badge">Equilibrium</div>
+  <div id="residual-badge">|F_net| = 0.0 N</div>
   <div id="hint">Drag floater · Scroll to zoom</div>
 </div>
 
@@ -154,32 +161,35 @@ const ctx = canvas.getContext('2d');
 // ── State ─────────────────────────────────────────────────────────────────────
 let params = { k: 500, R: 5, T0: 200, floaterR: 0.5 };
 let externalForce = { x: 0, y: 0 };
-let floaterPos = { x: 0, y: 0 };  // metres, world coords
+let floaterPos = { x: 0, y: 0 };
 let showForces = true;
 let forceScale = 1;
 
+// In drag mode the floater is positioned freely; equilibrium mode re-solves
+let isDragging = false;
+
+// Ghost state from query (drawn as dashed overlay, doesn't change sim)
+let queryGhost = null; // { pos, T, Freq } or null
+
 // Camera
-let cam = { x: 0, y: 0, zoom: 50 }; // zoom = px per metre
+let cam = { x: 0, y: 0, zoom: 50 };
 
 // Drag state
 let drag = null;
 
-// Anchor angles: 0°, 120°, 240° (pointing right, upper-left, lower-left by default)
-// We'll orient spring 1 along +x for clarity
 const ANCHOR_ANGLES_DEG = [0, 120, 240];
 const SPRING_COLORS = ['#e06c6c', '#6ce0a0', '#6cb8e0'];
 
+// ── Physics ───────────────────────────────────────────────────────────────────
 function anchorPos(i) {
   const a = ANCHOR_ANGLES_DEG[i] * Math.PI / 180;
   return { x: params.R * Math.cos(a), y: params.R * Math.sin(a) };
 }
 
-// Natural length so that pretension T0 when floater at origin
 function naturalLength() {
   return params.R - params.T0 / params.k;
 }
 
-// Spring tension (clamped to ≥0, mooring lines can't push)
 function springTension(i, pos) {
   const a = anchorPos(i);
   const dx = a.x - pos.x, dy = a.y - pos.y;
@@ -197,8 +207,8 @@ function springForceOnFloater(i, pos) {
   return { x: T * dx / d, y: T * dy / d };
 }
 
-function totalForce(pos) {
-  let fx = externalForce.x, fy = externalForce.y;
+function totalSpringForce(pos) {
+  let fx = 0, fy = 0;
   for (let i = 0; i < 3; i++) {
     const f = springForceOnFloater(i, pos);
     fx += f.x; fy += f.y;
@@ -206,75 +216,115 @@ function totalForce(pos) {
   return { x: fx, y: fy };
 }
 
-// ── Solver (Newton-Raphson with numerical Jacobian) ────────────────────────────
-function solveEquilibrium() {
-  let pos = { ...floaterPos };
-  const eps = 1e-6, maxIter = 200;
+function totalForce(pos) {
+  const sf = totalSpringForce(pos);
+  return { x: sf.x + externalForce.x, y: sf.y + externalForce.y };
+}
+
+// Angle of mooring line i in degrees (direction from floater toward anchor)
+function lineAngleDeg(i, pos) {
+  const a = anchorPos(i);
+  const dx = a.x - pos.x, dy = a.y - pos.y;
+  return Math.atan2(dy, dx) * 180 / Math.PI;
+}
+
+function lineLength(i, pos) {
+  const a = anchorPos(i);
+  const dx = a.x - pos.x, dy = a.y - pos.y;
+  return Math.sqrt(dx * dx + dy * dy);
+}
+
+// ── Solver (Newton-Raphson with numerical Jacobian, damped) ───────────────────
+function solveEquilibrium(initialGuess) {
+  let pos = initialGuess ? { ...initialGuess } : { ...floaterPos };
+  const eps = 1e-6, maxIter = 300, tol = 1e-7;
 
   for (let iter = 0; iter < maxIter; iter++) {
     const F = totalForce(pos);
-    if (Math.abs(F.x) < 1e-8 && Math.abs(F.y) < 1e-8) break;
+    if (Math.abs(F.x) < tol && Math.abs(F.y) < tol) break;
 
-    // Numerical Jacobian
     const Fxp = totalForce({ x: pos.x + eps, y: pos.y });
     const Fyp = totalForce({ x: pos.x, y: pos.y + eps });
     const J11 = (Fxp.x - F.x) / eps, J12 = (Fyp.x - F.x) / eps;
     const J21 = (Fxp.y - F.y) / eps, J22 = (Fyp.y - F.y) / eps;
 
     const det = J11 * J22 - J12 * J21;
-    if (Math.abs(det) < 1e-12) break;
+    if (Math.abs(det) < 1e-14) break;
 
-    const dx = -(J22 * F.x - J12 * F.y) / det;
-    const dy = -(-J21 * F.x + J11 * F.y) / det;
+    let dx = -(J22 * F.x - J12 * F.y) / det;
+    let dy = -(-J21 * F.x + J11 * F.y) / det;
 
-    const step = Math.min(1, 0.5 / (Math.sqrt(dx*dx+dy*dy)+1e-9));
-    pos.x += step * dx;
-    pos.y += step * dy;
+    // Damping: limit step size to 0.5 m
+    const stepLen = Math.sqrt(dx*dx + dy*dy);
+    if (stepLen > 0.5) { dx *= 0.5 / stepLen; dy *= 0.5 / stepLen; }
 
-    // Clamp within anchors
+    pos.x += dx;
+    pos.y += dy;
+
+    // Keep inside the anchor circle
     const r2 = pos.x * pos.x + pos.y * pos.y;
-    if (r2 > (params.R * 0.98) ** 2) {
+    const maxR = params.R * 0.999;
+    if (r2 > maxR * maxR) {
       const r = Math.sqrt(r2);
-      pos.x *= params.R * 0.98 / r;
-      pos.y *= params.R * 0.98 / r;
+      pos.x *= maxR / r; pos.y *= maxR / r;
     }
   }
   return pos;
 }
 
-// ── Query: given T1 = target, solve for position (move along x-axis, symmetry) ──
-// With no external force and equal springs, if T1 = target, floater moves along
-// anchor 0 direction (x-axis). We solve 1D along that axis.
-function queryGivenT1(targetT1) {
+// ── Tension Query (pure — does NOT mutate global state) ───────────────────────
+// Finds the floater position along anchor-0 axis where T1 = targetT1,
+// then reports T2, T3 at that position, and the external force needed
+// to hold the floater there in static equilibrium.
+function computeQuery(targetT1) {
+  const L0 = naturalLength();
   const angle0 = ANCHOR_ANGLES_DEG[0] * Math.PI / 180;
   const dir = { x: Math.cos(angle0), y: Math.sin(angle0) };
 
-  // Binary search along the axis (floater moves toward anchor 0 to increase T1)
-  // When floater at 0, T1 = T0. When floater at anchor, T1 = k*naturalLength ... sort of.
-  let lo = 0, hi = params.R * 0.99;
-  // T1 increases as s increases (toward anchor 0)
-  for (let i = 0; i < 80; i++) {
-    const mid = (lo + hi) / 2;
-    const pos = { x: dir.x * mid, y: dir.y * mid };
-    const t1 = springTension(0, pos);
-    if (t1 < targetT1) lo = mid; else hi = mid;
+  // T1 as function of displacement s along anchor-0 axis:
+  // anchor 0 is at (R,0). Floater at s*(cos0°,sin0°) = (s,0).
+  // d = R - s (for s < R). T1 = k*(R-s - L0) = T0 - k*s  for s > 0 toward anchor.
+  // Wait — floater moves TOWARD anchor 0 means s > 0 → distance = R - s → shorter spring → LESS tension.
+  // Floater moves AWAY from anchor 0 means s < 0 → distance = R + |s| → longer spring → MORE tension.
+  // So to increase T1 above T0, floater must move AWAY from anchor 0 (s < 0).
+
+  // Binary search: s ranges from -R*0.99 to +R*0.99
+  // Evaluate T1 at each end
+  const posAtS = s => ({ x: dir.x * s, y: dir.y * s });
+  const T1atS = s => springTension(0, posAtS(s));
+
+  const lo_s = -params.R * 0.99, hi_s = params.R * 0.99;
+  const T1_lo = T1atS(lo_s), T1_hi = T1atS(hi_s);
+
+  // If targetT1 is outside achievable range
+  const T1max = Math.max(T1_lo, T1_hi);
+  if (targetT1 > T1max) {
+    return { error: `T₁ = ${targetT1} N exceeds max achievable (${T1max.toFixed(1)} N) along this axis.` };
   }
-  const s = (lo + hi) / 2;
-  const pos = { x: dir.x * s, y: dir.y * s };
 
-  // Now solve full equilibrium from this initial guess (with zero external force)
-  const savedExt = { ...externalForce };
-  externalForce = { x: 0, y: 0 };
-  const savedPos = { ...floaterPos };
-  floaterPos = { ...pos };
-  const eq = solveEquilibrium();
-  externalForce = savedExt;
-  floaterPos = savedPos;
+  // We need the side of the axis where T1 increases with |s|
+  // T1 increases when floater moves AWAY from anchor 0 (negative s along anchor-0 direction)
+  let a = lo_s, b = hi_s;
+  // Ensure T1(a) >= targetT1 >= T1(b) or vice-versa — find bracketing interval
+  // T1_lo = T1 at s=-R*0.99 (floater far from anchor 0, high T1)
+  // T1_hi = T1 at s=+R*0.99 (floater close to anchor 0, low T1)
+  // So T1 decreases as s increases. Binary search accordingly.
+  let sLo = lo_s, sHi = hi_s;
+  if (T1atS(sLo) < T1atS(sHi)) { [sLo, sHi] = [sHi, sLo]; }
 
-  return {
-    pos: eq,
-    T: [0, 1, 2].map(i => springTension(i, eq))
-  };
+  for (let i = 0; i < 100; i++) {
+    const mid = (sLo + sHi) / 2;
+    if (T1atS(mid) > targetT1) sHi = mid; else sLo = mid;
+  }
+  const s_eq = (sLo + sHi) / 2;
+  const pos = posAtS(s_eq);
+
+  const T = [0, 1, 2].map(i => springTension(i, pos));
+  // Required external force = -(sum of spring forces) to maintain equilibrium
+  const sf = totalSpringForce(pos);
+  const Freq = { x: -sf.x, y: -sf.y };
+
+  return { pos, T, Freq, s: s_eq };
 }
 
 // ── Coordinate transforms ─────────────────────────────────────────────────────
@@ -288,272 +338,306 @@ function canvasToWorld(cx, cy) {
 }
 
 // ── Drawing ───────────────────────────────────────────────────────────────────
-function drawArrow(x1, y1, x2, y2, color, width = 2) {
+function drawArrow(x1, y1, x2, y2, color, width) {
+  width = width || 2;
   const dx = x2 - x1, dy = y2 - y1;
   const len = Math.sqrt(dx*dx + dy*dy);
-  if (len < 2) return;
+  if (len < 3) return;
   const ux = dx / len, uy = dy / len;
-  const hw = Math.max(8, width * 3), hl = Math.max(12, width * 5);
+  const hw = Math.max(7, width * 3), hl = Math.max(11, width * 4.5);
 
   ctx.beginPath();
   ctx.moveTo(x1, y1);
   ctx.lineTo(x2 - ux * hl, y2 - uy * hl);
-  ctx.strokeStyle = color;
-  ctx.lineWidth = width;
-  ctx.stroke();
+  ctx.strokeStyle = color; ctx.lineWidth = width; ctx.stroke();
 
   ctx.beginPath();
   ctx.moveTo(x2, y2);
-  ctx.lineTo(x2 - ux * hl - uy * hw / 2, y2 - uy * hl + ux * hw / 2);
-  ctx.lineTo(x2 - ux * hl + uy * hw / 2, y2 - uy * hl - ux * hw / 2);
-  ctx.closePath();
-  ctx.fillStyle = color;
-  ctx.fill();
+  ctx.lineTo(x2 - ux*hl - uy*hw/2, y2 - uy*hl + ux*hw/2);
+  ctx.lineTo(x2 - ux*hl + uy*hw/2, y2 - uy*hl - ux*hw/2);
+  ctx.closePath(); ctx.fillStyle = color; ctx.fill();
 }
 
 function drawGrid() {
-  const step = 1; // 1 metre
-  const pxStep = step * cam.zoom;
-  if (pxStep < 8) return;
-
-  ctx.strokeStyle = '#2a2d38';
-  ctx.lineWidth = 1;
-
+  const step = 1;
+  if (step * cam.zoom < 8) return;
   const left = canvasToWorld(0, 0).x, right = canvasToWorld(canvas.width, 0).x;
   const top = canvasToWorld(0, 0).y, bottom = canvasToWorld(0, canvas.height).y;
 
-  for (let wx = Math.floor(left); wx <= right; wx += step) {
+  ctx.strokeStyle = '#23262f'; ctx.lineWidth = 1;
+  for (let wx = Math.floor(left); wx <= right + 1; wx++) {
     const p = worldToCanvas(wx, 0);
     ctx.beginPath(); ctx.moveTo(p.x, 0); ctx.lineTo(p.x, canvas.height); ctx.stroke();
   }
-  for (let wy = Math.floor(bottom); wy <= top; wy += step) {
+  for (let wy = Math.floor(bottom); wy <= top + 1; wy++) {
     const p = worldToCanvas(0, wy);
     ctx.beginPath(); ctx.moveTo(0, p.y); ctx.lineTo(canvas.width, p.y); ctx.stroke();
   }
-  // Axes
-  ctx.strokeStyle = '#3a3f50';
-  ctx.lineWidth = 1;
+  ctx.strokeStyle = '#2e3345'; ctx.lineWidth = 1;
   const ox = worldToCanvas(0, 0);
   ctx.beginPath(); ctx.moveTo(ox.x, 0); ctx.lineTo(ox.x, canvas.height); ctx.stroke();
   ctx.beginPath(); ctx.moveTo(0, ox.y); ctx.lineTo(canvas.width, ox.y); ctx.stroke();
 }
 
-function drawWater() {
-  const R = params.R;
+function drawAnchorRing() {
   const c = worldToCanvas(0, 0);
-  const rPx = R * cam.zoom * 1.4;
-  // Water area
-  ctx.beginPath();
-  ctx.arc(c.x, c.y, rPx * 1.5, 0, Math.PI * 2);
-  ctx.fillStyle = 'rgba(20, 60, 100, 0.18)';
-  ctx.fill();
+  const rPx = params.R * cam.zoom;
+  ctx.beginPath(); ctx.arc(c.x, c.y, rPx, 0, Math.PI * 2);
+  ctx.strokeStyle = '#2a2d3a'; ctx.lineWidth = 1; ctx.setLineDash([4, 6]); ctx.stroke();
+  ctx.setLineDash([]);
+}
+
+function drawAnchor(i) {
+  const a = anchorPos(i);
+  const ap = worldToCanvas(a.x, a.y);
+  ctx.beginPath(); ctx.arc(ap.x, ap.y, 11, 0, Math.PI * 2);
+  ctx.fillStyle = SPRING_COLORS[i] + '22'; ctx.fill();
+  ctx.strokeStyle = SPRING_COLORS[i]; ctx.lineWidth = 2; ctx.stroke();
+  // Cross
+  ctx.strokeStyle = SPRING_COLORS[i]; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(ap.x-7, ap.y); ctx.lineTo(ap.x+7, ap.y); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(ap.x, ap.y-7); ctx.lineTo(ap.x, ap.y+7); ctx.stroke();
+  // Label (outside the anchor ring)
+  const ang = ANCHOR_ANGLES_DEG[i] * Math.PI / 180;
+  const lx = worldToCanvas(a.x + Math.cos(ang) * 0.6, a.y + Math.sin(ang) * 0.6);
+  ctx.fillStyle = SPRING_COLORS[i]; ctx.font = 'bold 11px Segoe UI'; ctx.textAlign = 'center';
+  ctx.fillText(`A${i+1}`, lx.x, lx.y + 4);
+}
+
+function drawMooringLine(i, pos, dashed, alpha) {
+  const a = anchorPos(i);
+  const ap = worldToCanvas(a.x, a.y);
+  const fp = worldToCanvas(pos.x, pos.y);
+  const T = springTension(i, pos);
+  const slack = T < 0.01;
+
+  ctx.globalAlpha = alpha !== undefined ? alpha : 1;
+  if (slack || dashed) {
+    ctx.setLineDash(slack ? [4, 5] : [6, 6]);
+    ctx.strokeStyle = SPRING_COLORS[i] + (slack ? '55' : 'aa');
+    ctx.lineWidth = 1.2;
+  } else {
+    ctx.setLineDash([]);
+    ctx.strokeStyle = SPRING_COLORS[i];
+    ctx.lineWidth = Math.max(1.5, Math.min(5, T / 80));
+  }
+  ctx.beginPath(); ctx.moveTo(fp.x, fp.y); ctx.lineTo(ap.x, ap.y); ctx.stroke();
+  ctx.setLineDash([]); ctx.globalAlpha = 1;
+}
+
+function drawForceVectors(pos) {
+  const fp = worldToCanvas(pos.x, pos.y);
+  const fscale = forceScale * cam.zoom * 0.003;
+
+  for (let i = 0; i < 3; i++) {
+    const f = springForceOnFloater(i, pos);
+    const len = Math.sqrt(f.x*f.x + f.y*f.y);
+    if (len < 0.01) continue;
+    const ex = fp.x + f.x * fscale, ey = fp.y - f.y * fscale;
+    drawArrow(fp.x, fp.y, ex, ey, SPRING_COLORS[i], 2);
+    const T = springTension(i, pos);
+    const mx = fp.x + f.x * fscale * 0.55, my = fp.y - f.y * fscale * 0.55;
+    ctx.fillStyle = SPRING_COLORS[i]; ctx.font = 'bold 10px Segoe UI'; ctx.textAlign = 'center';
+    ctx.fillText(`${T.toFixed(0)} N`, mx, my - 8);
+  }
+
+  const ef = externalForce;
+  const eLen = Math.sqrt(ef.x*ef.x + ef.y*ef.y);
+  if (eLen > 0.5) {
+    const ex = fp.x + ef.x * fscale, ey = fp.y - ef.y * fscale;
+    drawArrow(fp.x, fp.y, ex, ey, '#f5c842', 3);
+    const mx = fp.x + ef.x * fscale * 0.5, my = fp.y - ef.y * fscale * 0.5;
+    ctx.fillStyle = '#f5c842'; ctx.font = 'bold 10px Segoe UI'; ctx.textAlign = 'center';
+    ctx.fillText(`Fext = ${eLen.toFixed(0)} N`, mx, my - 8);
+  }
+
+  // Net force residual (should be ~0 at equilibrium)
+  const net = totalForce(pos);
+  const netLen = Math.sqrt(net.x*net.x + net.y*net.y);
+  if (netLen > 0.5) {
+    const ex = fp.x + net.x * fscale, ey = fp.y - net.y * fscale;
+    drawArrow(fp.x, fp.y, ex, ey, '#ff880088', 1.5);
+  }
+}
+
+function drawFloater(pos, ghost) {
+  const fp = worldToCanvas(pos.x, pos.y);
+  const rpx = params.floaterR * cam.zoom;
+
+  if (ghost) {
+    ctx.globalAlpha = 0.35;
+    ctx.beginPath(); ctx.arc(fp.x, fp.y, rpx, 0, Math.PI * 2);
+    ctx.strokeStyle = '#f5c842'; ctx.lineWidth = 2; ctx.setLineDash([5,5]); ctx.stroke();
+    ctx.setLineDash([]); ctx.globalAlpha = 1;
+    ctx.fillStyle = '#f5c842aa'; ctx.font = 'bold 10px Segoe UI'; ctx.textAlign = 'center';
+    ctx.fillText('Query pos', fp.x, fp.y + rpx + 14);
+    return;
+  }
+
+  // Water ripple
+  ctx.beginPath(); ctx.arc(fp.x, fp.y, rpx + 7, 0, Math.PI * 2);
+  ctx.strokeStyle = 'rgba(100,180,255,0.12)'; ctx.lineWidth = 7; ctx.stroke();
+
+  ctx.beginPath(); ctx.arc(fp.x, fp.y, rpx, 0, Math.PI * 2);
+  const grad = ctx.createRadialGradient(fp.x - rpx*0.3, fp.y - rpx*0.3, rpx*0.1, fp.x, fp.y, rpx);
+  grad.addColorStop(0, '#a0c8f0'); grad.addColorStop(1, '#3a6080');
+  ctx.fillStyle = grad; ctx.fill();
+  ctx.strokeStyle = '#7ab8f5'; ctx.lineWidth = 2; ctx.stroke();
+
+  ctx.fillStyle = '#e0e0e0'; ctx.font = 'bold 11px Segoe UI'; ctx.textAlign = 'center';
+  ctx.fillText('Floater', fp.x, fp.y + rpx + 15);
+}
+
+function drawNaturalLengthCircles() {
+  const L0 = naturalLength();
+  if (L0 <= 0) return;
+  const L0px = L0 * cam.zoom;
+  for (let i = 0; i < 3; i++) {
+    const a = anchorPos(i);
+    const ap = worldToCanvas(a.x, a.y);
+    ctx.beginPath(); ctx.arc(ap.x, ap.y, L0px, 0, Math.PI * 2);
+    ctx.strokeStyle = SPRING_COLORS[i] + '18'; ctx.lineWidth = 1; ctx.setLineDash([3,8]); ctx.stroke();
+    ctx.setLineDash([]);
+  }
+}
+
+function drawScaleBar() {
+  const m = 1;
+  const px = m * cam.zoom;
+  const x = 16, y = canvas.height - 16;
+  ctx.strokeStyle = '#666'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x+px, y); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(x, y-4); ctx.lineTo(x, y+4); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(x+px, y-4); ctx.lineTo(x+px, y+4); ctx.stroke();
+  ctx.fillStyle = '#666'; ctx.font = '11px Segoe UI'; ctx.textAlign = 'left';
+  ctx.fillText('1 m', x, y - 8);
 }
 
 function render() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  // Background
-  ctx.fillStyle = '#1a1d23';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = '#1a1d23'; ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   drawGrid();
-  drawWater();
+  drawAnchorRing();
+  drawNaturalLengthCircles();
 
-  const fp = worldToCanvas(floaterPos.x, floaterPos.y);
-  const L0 = naturalLength();
-
-  // Draw anchor ground indicators
-  for (let i = 0; i < 3; i++) {
-    const a = anchorPos(i);
-    const ap = worldToCanvas(a.x, a.y);
-    ctx.beginPath(); ctx.arc(ap.x, ap.y, 10, 0, Math.PI * 2);
-    ctx.fillStyle = SPRING_COLORS[i] + '33';
-    ctx.fill();
-    ctx.strokeStyle = SPRING_COLORS[i];
-    ctx.lineWidth = 2;
-    ctx.stroke();
-    // Cross
-    ctx.strokeStyle = SPRING_COLORS[i];
-    ctx.lineWidth = 1.5;
-    ctx.beginPath(); ctx.moveTo(ap.x - 7, ap.y); ctx.lineTo(ap.x + 7, ap.y); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(ap.x, ap.y - 7); ctx.lineTo(ap.x, ap.y + 7); ctx.stroke();
-
-    // Label
-    const ang = ANCHOR_ANGLES_DEG[i] * Math.PI / 180;
-    const lx = ap.x + Math.cos(ang) * 18, ly = ap.y - Math.sin(ang) * 18;
-    ctx.fillStyle = SPRING_COLORS[i];
-    ctx.font = 'bold 11px Segoe UI';
-    ctx.textAlign = 'center';
-    ctx.fillText(`A${i+1}`, lx, ly);
+  // Draw query ghost first (behind sim)
+  if (queryGhost) {
+    for (let i = 0; i < 3; i++) drawMooringLine(i, queryGhost.pos, true, 0.4);
+    drawFloater(queryGhost.pos, true);
   }
 
-  // Draw mooring lines
-  for (let i = 0; i < 3; i++) {
-    const a = anchorPos(i);
-    const ap = worldToCanvas(a.x, a.y);
-    const T = springTension(i, floaterPos);
-    const slack = T < 0.01;
+  // Anchors
+  for (let i = 0; i < 3; i++) drawAnchor(i);
 
-    if (slack) {
-      ctx.setLineDash([5, 5]);
-      ctx.strokeStyle = SPRING_COLORS[i] + '44';
-    } else {
-      ctx.setLineDash([]);
-      // Line thickness proportional to tension
-      const maxT = params.k * params.R;
-      ctx.strokeStyle = SPRING_COLORS[i];
-    }
-    ctx.lineWidth = slack ? 1 : Math.max(1.5, Math.min(5, T / 100));
+  // Mooring lines
+  for (let i = 0; i < 3; i++) drawMooringLine(i, floaterPos, false, 1);
 
-    ctx.beginPath();
-    ctx.moveTo(fp.x, fp.y);
-    ctx.lineTo(ap.x, ap.y);
-    ctx.stroke();
-    ctx.setLineDash([]);
-  }
-
-  // Draw natural length circles (faint dashed)
-  for (let i = 0; i < 3; i++) {
-    const a = anchorPos(i);
-    const ap = worldToCanvas(a.x, a.y);
-    const L0px = L0 * cam.zoom;
-    ctx.beginPath();
-    ctx.arc(ap.x, ap.y, L0px, 0, Math.PI * 2);
-    ctx.strokeStyle = SPRING_COLORS[i] + '22';
-    ctx.lineWidth = 1;
-    ctx.setLineDash([4, 8]);
-    ctx.stroke();
-    ctx.setLineDash([]);
-  }
-
-  // Draw force vectors
-  if (showForces) {
-    const fscale = forceScale * cam.zoom * 0.003;
-    for (let i = 0; i < 3; i++) {
-      const f = springForceOnFloater(i, floaterPos);
-      const len = Math.sqrt(f.x * f.x + f.y * f.y);
-      if (len < 0.01) continue;
-      const ex = fp.x + f.x * fscale, ey = fp.y - f.y * fscale;
-      drawArrow(fp.x, fp.y, ex, ey, SPRING_COLORS[i], 2);
-      // Tension label
-      const T = springTension(i, floaterPos);
-      const mx = fp.x + f.x * fscale * 0.5, my = fp.y - f.y * fscale * 0.5;
-      ctx.fillStyle = SPRING_COLORS[i];
-      ctx.font = 'bold 11px Segoe UI';
-      ctx.textAlign = 'center';
-      ctx.fillText(`${T.toFixed(0)}N`, mx, my - 8);
-    }
-
-    // External force
-    const ef = externalForce;
-    const eLen = Math.sqrt(ef.x * ef.x + ef.y * ef.y);
-    if (eLen > 0.01) {
-      const ex = fp.x + ef.x * fscale, ey = fp.y - ef.y * fscale;
-      drawArrow(fp.x, fp.y, ex, ey, '#f5c842', 3);
-      ctx.fillStyle = '#f5c842';
-      ctx.font = 'bold 11px Segoe UI';
-      ctx.textAlign = 'center';
-      ctx.fillText(`Fext=${eLen.toFixed(0)}N`, fp.x + ef.x * fscale * 0.5, fp.y - ef.y * fscale * 0.5 - 8);
-    }
-
-    // Net force indicator (should be ~0 at equilibrium)
-    const net = totalForce(floaterPos);
-    const netLen = Math.sqrt(net.x * net.x + net.y * net.y);
-    if (netLen > 1) {
-      const ex = fp.x + net.x * fscale, ey = fp.y - net.y * fscale;
-      drawArrow(fp.x, fp.y, ex, ey, '#ff8800aa', 1.5);
-    }
-  }
+  // Force vectors
+  if (showForces) drawForceVectors(floaterPos);
 
   // Floater
-  const floaterRpx = params.floaterR * cam.zoom;
-  // Water ripple
-  ctx.beginPath(); ctx.arc(fp.x, fp.y, floaterRpx + 8, 0, Math.PI * 2);
-  ctx.strokeStyle = 'rgba(100,180,255,0.15)'; ctx.lineWidth = 6; ctx.stroke();
+  drawFloater(floaterPos, false);
 
-  ctx.beginPath(); ctx.arc(fp.x, fp.y, floaterRpx, 0, Math.PI * 2);
-  const grad = ctx.createRadialGradient(fp.x - floaterRpx*0.3, fp.y - floaterRpx*0.3, floaterRpx*0.1, fp.x, fp.y, floaterRpx);
-  grad.addColorStop(0, '#a0c8f0');
-  grad.addColorStop(1, '#3a6080');
-  ctx.fillStyle = grad;
-  ctx.fill();
-  ctx.strokeStyle = '#7ab8f5';
-  ctx.lineWidth = 2;
-  ctx.stroke();
-
-  // Floater label
-  ctx.fillStyle = '#e0e0e0';
-  ctx.font = 'bold 11px Segoe UI';
-  ctx.textAlign = 'center';
-  ctx.fillText('Floater', fp.x, fp.y + floaterRpx + 16);
-
-  // Scale bar
   drawScaleBar();
-
   updateUI();
 }
 
-function drawScaleBar() {
-  const m = 1; // 1 metre
-  const px = m * cam.zoom;
-  const x = 20, y = canvas.height - 20;
-  ctx.strokeStyle = '#888'; ctx.lineWidth = 2;
-  ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + px, y); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(x, y - 4); ctx.lineTo(x, y + 4); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(x + px, y - 4); ctx.lineTo(x + px, y + 4); ctx.stroke();
-  ctx.fillStyle = '#888'; ctx.font = '11px Segoe UI'; ctx.textAlign = 'left';
-  ctx.fillText('1 m', x, y - 8);
-}
-
+// ── UI Updates ────────────────────────────────────────────────────────────────
 function updateUI() {
   const T = [0, 1, 2].map(i => springTension(i, floaterPos));
+  const L0 = naturalLength();
+
   document.getElementById('T1-disp').textContent = T[0].toFixed(1);
   document.getElementById('T2-disp').textContent = T[1].toFixed(1);
   document.getElementById('T3-disp').textContent = T[2].toFixed(1);
   document.getElementById('px-disp').textContent = floaterPos.x.toFixed(3);
   document.getElementById('py-disp').textContent = floaterPos.y.toFixed(3);
+
+  // Net residual badge
+  const net = totalForce(floaterPos);
+  const netLen = Math.sqrt(net.x*net.x + net.y*net.y);
+  document.getElementById('residual-badge').textContent = `|F_net| = ${netLen.toFixed(2)} N`;
+  document.getElementById('residual-badge').style.color = netLen > 1 ? '#e0a060' : '#60b860';
+
+  // Mode badge
+  document.getElementById('mode-badge').textContent = isDragging ? 'Free Drag' : 'Equilibrium';
+
+  // Line details
+  const det = document.getElementById('line-details');
+  det.innerHTML = '';
   for (let i = 0; i < 3; i++) {
-    document.getElementById(`s${i+1}`).classList.toggle('show', T[i] < 0.01);
+    const len = lineLength(i, floaterPos);
+    const ang = lineAngleDeg(i, floaterPos);
+    const slack = T[i] < 0.01;
+    const el = document.createElement('div');
+    el.className = 'line-row';
+    el.innerHTML = `
+      <div class="dot" style="background:${SPRING_COLORS[i]}"></div>
+      <div class="ldata">
+        <span><b>${T[i].toFixed(1)}</b> N ${slack ? '<span class="slack-tag">SLACK</span>' : ''}</span>
+        <span>L = <b>${len.toFixed(3)}</b> m</span>
+        <span>ΔL = <b>${(len - L0).toFixed(3)}</b> m</span>
+        <span>θ = <b>${ang.toFixed(1)}°</b></span>
+      </div>`;
+    det.appendChild(el);
   }
 }
 
 // ── Controls ──────────────────────────────────────────────────────────────────
-function bindSlider(id, param, unit, decimals = 0, scale = 1) {
-  const el = document.getElementById(id);
-  const val = document.getElementById(id + '-val');
-  el.addEventListener('input', () => {
-    const v = parseFloat(el.value) * scale;
-    if (param.includes('.')) {
-      const [obj, key] = param.split('.');
-      if (obj === 'params') params[key] = v;
-    } else {
-      params[param] = v;
-    }
-    val.textContent = v.toFixed(decimals) + ' ' + unit;
-    // Re-solve
-    floaterPos = solveEquilibrium();
-    render();
-  });
-  // Init display
-  const v = parseFloat(el.value) * scale;
-  val.textContent = v.toFixed(decimals) + ' ' + unit;
+function setParam(key, value) {
+  params[key] = value;
+  if (!isDragging) {
+    floaterPos = solveEquilibrium(floaterPos);
+  }
+  render();
 }
 
-bindSlider('k', 'k', 'N/m', 0);
-bindSlider('R', 'R', 'm', 1);
-bindSlider('T0', 'T0', 'N', 0);
-bindSlider('floaterR', 'floaterR', 'm', 1);
+document.getElementById('k').addEventListener('input', function() {
+  const v = parseFloat(this.value);
+  document.getElementById('k-val').textContent = v + ' N/m';
+  setParam('k', v);
+});
+document.getElementById('R').addEventListener('input', function() {
+  const v = parseFloat(this.value);
+  document.getElementById('R-val').textContent = v.toFixed(1) + ' m';
+  setParam('R', v);
+  fitView();
+});
+document.getElementById('T0').addEventListener('input', function() {
+  const v = parseFloat(this.value);
+  document.getElementById('T0-val').textContent = v + ' N';
+  setParam('T0', v);
+});
+document.getElementById('floaterR').addEventListener('input', function() {
+  const v = parseFloat(this.value);
+  document.getElementById('r-val').textContent = v.toFixed(1) + ' m';
+  params.floaterR = v; render();
+});
 
 document.getElementById('Fx').addEventListener('input', function() {
   externalForce.x = parseFloat(this.value);
   document.getElementById('Fx-val').textContent = externalForce.x.toFixed(0) + ' N';
-  floaterPos = solveEquilibrium();
+  if (!isDragging) floaterPos = solveEquilibrium(floaterPos);
   render();
 });
 document.getElementById('Fy').addEventListener('input', function() {
   externalForce.y = parseFloat(this.value);
   document.getElementById('Fy-val').textContent = externalForce.y.toFixed(0) + ' N';
-  floaterPos = solveEquilibrium();
+  if (!isDragging) floaterPos = solveEquilibrium(floaterPos);
+  render();
+});
+
+document.getElementById('btn-reset-force').addEventListener('click', () => {
+  externalForce = { x: 0, y: 0 };
+  document.getElementById('Fx').value = 0;
+  document.getElementById('Fy').value = 0;
+  document.getElementById('Fx-val').textContent = '0 N';
+  document.getElementById('Fy-val').textContent = '0 N';
+  isDragging = false;
+  floaterPos = solveEquilibrium({ x: 0, y: 0 });
+  queryGhost = null;
+  document.getElementById('query-result').classList.remove('show');
   render();
 });
 
@@ -566,108 +650,128 @@ document.getElementById('fscale').addEventListener('input', function() {
   render();
 });
 
-function resetForce() {
-  externalForce = { x: 0, y: 0 };
-  document.getElementById('Fx').value = 0;
-  document.getElementById('Fy').value = 0;
-  document.getElementById('Fx-val').textContent = '0 N';
-  document.getElementById('Fy-val').textContent = '0 N';
-  floaterPos = { x: 0, y: 0 };
-  floaterPos = solveEquilibrium();
-  render();
-}
+// ── Tension Query ─────────────────────────────────────────────────────────────
+let lastQueryResult = null;
 
 function runQuery() {
   const targetT1 = parseFloat(document.getElementById('query-T1').value);
   if (isNaN(targetT1) || targetT1 < 0) return;
 
-  const res = queryGivenT1(targetT1);
+  const res = computeQuery(targetT1);
   const resultBox = document.getElementById('query-result');
+  const content = document.getElementById('qr-content');
   resultBox.classList.add('show');
-  resultBox.innerHTML = `
-    <b style="color:#7ab8f5">Query result (zero external force, by symmetry):</b><br>
+
+  if (res.error) {
+    content.innerHTML = `<span style="color:#e06c6c">${res.error}</span>`;
+    document.getElementById('btn-apply-query').style.display = 'none';
+    queryGhost = null;
+    render();
+    return;
+  }
+
+  const fMag = Math.sqrt(res.Freq.x * res.Freq.x + res.Freq.y * res.Freq.y);
+  const fAng = Math.atan2(res.Freq.y, res.Freq.x) * 180 / Math.PI;
+  content.innerHTML = `
     <span style="color:#e06c6c">T₁ = ${res.T[0].toFixed(2)} N</span><br>
     <span style="color:#6ce0a0">T₂ = ${res.T[1].toFixed(2)} N</span><br>
     <span style="color:#6cb8e0">T₃ = ${res.T[2].toFixed(2)} N</span><br>
-    <span style="color:#e0c06c">x = ${res.pos.x.toFixed(4)} m, y = ${res.pos.y.toFixed(4)} m</span><br>
-    <small style="color:#666">Spring 1 points along 0° (right). Floater moves along that axis by symmetry.</small>
+    <span style="color:#e0c06c">x = ${res.pos.x.toFixed(3)} m, y = ${res.pos.y.toFixed(3)} m</span><br>
+    <span style="color:#f5c842">F_req = ${fMag.toFixed(1)} N @ ${fAng.toFixed(1)}°</span>
   `;
+  document.getElementById('btn-apply-query').style.display = '';
+  lastQueryResult = res;
 
-  // Animate floater to query position
-  const saved = { ...externalForce };
-  externalForce = { x: 0, y: 0 };
-  floaterPos = res.pos;
+  // Show ghost on canvas (no state mutation)
+  queryGhost = res;
   render();
-  externalForce = saved;
 }
 
-// ── Canvas resize ─────────────────────────────────────────────────────────────
+document.getElementById('btn-apply-query').addEventListener('click', () => {
+  if (!lastQueryResult) return;
+  externalForce = { ...lastQueryResult.Freq };
+  document.getElementById('Fx').value = externalForce.x;
+  document.getElementById('Fy').value = externalForce.y;
+  document.getElementById('Fx-val').textContent = externalForce.x.toFixed(0) + ' N';
+  document.getElementById('Fy-val').textContent = externalForce.y.toFixed(0) + ' N';
+  isDragging = false;
+  // Solve starting from the query position
+  floaterPos = solveEquilibrium(lastQueryResult.pos);
+  queryGhost = null;
+  render();
+});
+
+// ── Canvas resize & fit view ──────────────────────────────────────────────────
+function fitView() {
+  const margin = 1.3; // 30% padding around anchor ring
+  const w = canvas.width, h = canvas.height;
+  cam.zoom = Math.min(w, h) * 0.5 / (params.R * margin);
+  cam.x = 0; cam.y = 0;
+  render();
+}
+
 function resize() {
   const wrap = document.getElementById('canvas-wrap');
   canvas.width = wrap.clientWidth;
   canvas.height = wrap.clientHeight;
-  cam.zoom = Math.min(canvas.width, canvas.height) / (params.R * 3);
-  render();
+  fitView();
 }
 window.addEventListener('resize', resize);
 
 // ── Drag floater ──────────────────────────────────────────────────────────────
-canvas.addEventListener('mousedown', e => {
-  const w = canvasToWorld(e.offsetX, e.offsetY);
-  const dx = w.x - floaterPos.x, dy = w.y - floaterPos.y;
-  const r = params.floaterR + 0.5;
+function startDrag(wx, wy) {
+  const dx = wx - floaterPos.x, dy = wy - floaterPos.y;
+  const r = params.floaterR + 0.3 / cam.zoom * 20;
   if (dx*dx + dy*dy < r*r) {
-    drag = { startWorld: w, startFloater: { ...floaterPos } };
+    drag = { startWorld: { x: wx, y: wy }, startFloater: { ...floaterPos } };
+    isDragging = true;
+    canvas.classList.add('dragging');
   }
-});
-canvas.addEventListener('mousemove', e => {
+}
+function moveDrag(wx, wy) {
   if (!drag) return;
-  const w = canvasToWorld(e.offsetX, e.offsetY);
-  floaterPos.x = drag.startFloater.x + (w.x - drag.startWorld.x);
-  floaterPos.y = drag.startFloater.y + (w.y - drag.startWorld.y);
-  // Clamp
-  const r2 = floaterPos.x * floaterPos.x + floaterPos.y * floaterPos.y;
-  if (r2 > (params.R * 0.98) ** 2) {
-    const r = Math.sqrt(r2);
-    floaterPos.x *= params.R * 0.98 / r;
-    floaterPos.y *= params.R * 0.98 / r;
-  }
+  floaterPos.x = drag.startFloater.x + (wx - drag.startWorld.x);
+  floaterPos.y = drag.startFloater.y + (wy - drag.startWorld.y);
+  const r2 = floaterPos.x*floaterPos.x + floaterPos.y*floaterPos.y;
+  const maxR = params.R * 0.999;
+  if (r2 > maxR*maxR) { const r = Math.sqrt(r2); floaterPos.x *= maxR/r; floaterPos.y *= maxR/r; }
   render();
-});
-canvas.addEventListener('mouseup', () => { drag = null; });
-canvas.addEventListener('mouseleave', () => { drag = null; });
+}
+function endDrag() {
+  drag = null;
+  canvas.classList.remove('dragging');
+  // After releasing, solve from the dragged position so display shows equilibrium
+  if (isDragging) {
+    isDragging = false;
+    floaterPos = solveEquilibrium(floaterPos);
+    render();
+  }
+}
 
-// Touch support
+canvas.addEventListener('mousedown', e => { startDrag(...Object.values(canvasToWorld(e.offsetX, e.offsetY))); });
+canvas.addEventListener('mousemove', e => { if (drag) moveDrag(...Object.values(canvasToWorld(e.offsetX, e.offsetY))); });
+canvas.addEventListener('mouseup', endDrag);
+canvas.addEventListener('mouseleave', endDrag);
+
 canvas.addEventListener('touchstart', e => {
   e.preventDefault();
-  const t = e.touches[0];
-  const rect = canvas.getBoundingClientRect();
+  const t = e.touches[0], rect = canvas.getBoundingClientRect();
   const w = canvasToWorld(t.clientX - rect.left, t.clientY - rect.top);
-  const dx = w.x - floaterPos.x, dy = w.y - floaterPos.y;
-  const r = params.floaterR + 0.5;
-  if (dx*dx + dy*dy < r*r) drag = { startWorld: w, startFloater: { ...floaterPos } };
+  startDrag(w.x, w.y);
 }, { passive: false });
 canvas.addEventListener('touchmove', e => {
   e.preventDefault();
-  if (!drag) return;
-  const t = e.touches[0];
-  const rect = canvas.getBoundingClientRect();
+  const t = e.touches[0], rect = canvas.getBoundingClientRect();
   const w = canvasToWorld(t.clientX - rect.left, t.clientY - rect.top);
-  floaterPos.x = drag.startFloater.x + (w.x - drag.startWorld.x);
-  floaterPos.y = drag.startFloater.y + (w.y - drag.startWorld.y);
-  const r2 = floaterPos.x * floaterPos.x + floaterPos.y * floaterPos.y;
-  if (r2 > (params.R * 0.98) ** 2) {
-    const r = Math.sqrt(r2); floaterPos.x *= params.R * 0.98 / r; floaterPos.y *= params.R * 0.98 / r;
-  }
-  render();
+  moveDrag(w.x, w.y);
 }, { passive: false });
-canvas.addEventListener('touchend', () => { drag = null; });
+canvas.addEventListener('touchend', endDrag);
 
 // ── Scroll to zoom ─────────────────────────────────────────────────────────────
 canvas.addEventListener('wheel', e => {
   e.preventDefault();
   const factor = e.deltaY < 0 ? 1.1 : 0.9;
-  cam.zoom = Math.max(10, Math.min(500, cam.zoom * factor));
+  cam.zoom = Math.max(8, Math.min(600, cam.zoom * factor));
   render();
 }, { passive: false });
 
