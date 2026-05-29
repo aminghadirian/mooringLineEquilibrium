@@ -9,7 +9,7 @@
   body { background: #1a1d23; color: #e0e0e0; font-family: 'Segoe UI', sans-serif; display: flex; height: 100vh; overflow: hidden; }
 
   #sidebar {
-    width: 310px; min-width: 310px; background: #22252e; border-right: 1px solid #333;
+    width: 320px; min-width: 320px; background: #22252e; border-right: 1px solid #333;
     display: flex; flex-direction: column; overflow-y: auto;
   }
   #sidebar h1 { font-size: 14px; font-weight: 600; color: #7ab8f5; padding: 14px 16px 10px; border-bottom: 1px solid #333; letter-spacing: 0.5px; }
@@ -18,53 +18,84 @@
   .section-title { font-size: 11px; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
 
   .field { margin-bottom: 10px; }
-  .field label { display: flex; justify-content: space-between; font-size: 12px; color: #bbb; margin-bottom: 4px; }
-  .field label span { color: #7ab8f5; font-weight: 600; }
+  .field > label { display: flex; justify-content: space-between; font-size: 12px; color: #bbb; margin-bottom: 4px; }
+  .field > label span { color: #7ab8f5; font-weight: 600; }
   input[type=range] { width: 100%; accent-color: #7ab8f5; cursor: pointer; }
-  input[type=number] { width: 100%; background: #1a1d23; border: 1px solid #444; color: #e0e0e0; padding: 5px 8px; border-radius: 4px; font-size: 12px; }
-  input[type=number]:focus { outline: none; border-color: #7ab8f5; }
+  input[type=number], input[type=text] {
+    background: #1a1d23; border: 1px solid #444; color: #e0e0e0;
+    padding: 5px 8px; border-radius: 4px; font-size: 12px; width: 100%;
+  }
+  input[type=number]:focus, input[type=text]:focus { outline: none; border-color: #7ab8f5; }
 
+  /* Tab toggle */
+  .tab-row { display: flex; gap: 0; margin-bottom: 10px; border-radius: 5px; overflow: hidden; border: 1px solid #444; }
+  .tab-btn { flex: 1; background: #1a1d23; border: none; color: #888; padding: 6px; font-size: 11px; cursor: pointer; }
+  .tab-btn.active { background: #2a3a50; color: #7ab8f5; font-weight: 600; }
+
+  /* Anchor grid */
+  .anchor-grid { display: grid; grid-template-columns: auto 1fr 1fr; gap: 5px 8px; align-items: center; }
+  .anchor-grid .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .anchor-grid label { font-size: 11px; color: #888; }
+  .anchor-coord { display: flex; gap: 4px; align-items: center; }
+  .anchor-coord span { font-size: 11px; color: #666; white-space: nowrap; }
+  .anchor-coord input { flex: 1; }
+  .anchor-readout { font-size: 11px; color: #556; font-style: italic; margin-top: 4px; }
+
+  /* Per-line controls */
+  .line-ctrl { margin-bottom: 12px; padding: 8px; background: #1a1d23; border-radius: 6px; }
+  .line-ctrl-header { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }
+  .line-ctrl-header .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .line-ctrl-header .lname { font-size: 12px; font-weight: 600; color: #ccc; }
+  .line-ctrl-header .pretension { font-size: 11px; color: #666; margin-left: auto; }
+  .line-ctrl-header .pretension.active { color: #7ab8f5; }
+  .line-ctrl-row { display: flex; gap: 6px; align-items: center; }
+  .line-ctrl-row input[type=range] { flex: 1; }
+  .line-ctrl-row input[type=number] { width: 68px; flex-shrink: 0; }
+  .slack-badge { font-size: 9px; font-weight: 700; color: #e06c6c; background: #3a2020; border-radius: 3px; padding: 1px 5px; margin-left: 4px; }
+
+  /* Results */
   .tension-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
   .tension-card { background: #1a1d23; border-radius: 6px; padding: 7px; text-align: center; }
-  .tension-card .label { font-size: 10px; color: #888; margin-bottom: 2px; }
-  .tension-card .value { font-size: 15px; font-weight: 700; }
+  .tension-card .label { font-size: 10px; color: #888; margin-bottom: 3px; }
+  .tension-card .value { font-size: 16px; font-weight: 700; }
   .t1 .value { color: #e06c6c; }
   .t2 .value { color: #6ce0a0; }
   .t3 .value { color: #6cb8e0; }
 
   .line-details { margin-top: 8px; }
-  .line-row { display: flex; gap: 4px; align-items: center; margin-bottom: 5px; padding: 5px 6px; background: #1a1d23; border-radius: 5px; font-size: 11px; }
-  .line-row .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .line-row { display: flex; gap: 4px; align-items: flex-start; margin-bottom: 5px; padding: 5px 6px; background: #1a1d23; border-radius: 5px; font-size: 11px; }
+  .line-row .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 2px; }
   .line-row .ldata { display: flex; gap: 8px; flex-wrap: wrap; }
   .line-row .ldata span { color: #999; white-space: nowrap; }
   .line-row .ldata span b { color: #ddd; }
-  .slack-tag { font-size: 9px; font-weight: 700; color: #e06c6c; background: #3a2020; border-radius: 3px; padding: 1px 4px; margin-left: 2px; }
 
   .pos-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 8px; }
   .pos-card { background: #1a1d23; border-radius: 6px; padding: 7px; text-align: center; }
   .pos-card .label { font-size: 10px; color: #888; margin-bottom: 2px; }
   .pos-card .value { font-size: 13px; font-weight: 600; color: #e0c06c; }
 
-  .query-row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
-  .query-row label { font-size: 12px; color: #bbb; white-space: nowrap; width: 60px; }
-
   .btn { background: #7ab8f5; color: #1a1d23; border: none; padding: 7px 14px; border-radius: 4px; font-size: 12px; font-weight: 600; cursor: pointer; width: 100%; margin-top: 4px; }
   .btn:hover { background: #5aa0e0; }
   .btn-ghost { background: #2a3a50; color: #7ab8f5; border: 1px solid #7ab8f550; }
   .btn-ghost:hover { background: #3a4a60; }
-  .btn-reset { background: #555; color: #e0e0e0; }
-  .btn-reset:hover { background: #666; }
+  .btn-sm { padding: 5px 10px; font-size: 11px; width: auto; margin-top: 0; }
 
-  .result-box { background: #1a1d23; border-radius: 6px; padding: 10px; margin-top: 8px; font-size: 12px; line-height: 1.9; display: none; border: 1px solid #333; }
-  .result-box.show { display: block; }
-  .result-box .note { font-size: 10px; color: #555; margin-top: 6px; border-top: 1px solid #2d3040; padding-top: 6px; }
-
-  #canvas-wrap { flex: 1; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
-  canvas { display: block; cursor: default; }
+  /* Canvas */
+  #canvas-wrap { flex: 1; display: flex; position: relative; overflow: hidden; }
+  canvas { display: block; cursor: default; flex: 1; }
   canvas.dragging { cursor: grabbing; }
+  canvas.hover-floater { cursor: grab; }
   #hint { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); font-size: 11px; color: #444; pointer-events: none; white-space: nowrap; }
-  #mode-badge { position: absolute; top: 10px; right: 10px; font-size: 11px; background: #22252e; border: 1px solid #333; color: #888; padding: 4px 10px; border-radius: 12px; pointer-events: none; }
-  #residual-badge { position: absolute; top: 10px; left: 10px; font-size: 11px; background: #22252e; border: 1px solid #333; color: #888; padding: 4px 10px; border-radius: 12px; pointer-events: none; }
+  #residual-badge {
+    position: absolute; top: 10px; left: 10px; font-size: 11px;
+    background: #22252e; border: 1px solid #333; color: #888;
+    padding: 4px 10px; border-radius: 12px; pointer-events: none;
+  }
+  #mode-badge {
+    position: absolute; top: 10px; right: 10px; font-size: 11px;
+    background: #22252e; border: 1px solid #333; color: #888;
+    padding: 4px 10px; border-radius: 12px; pointer-events: none;
+  }
 </style>
 </head>
 <body>
@@ -72,56 +103,44 @@
 <div id="sidebar">
   <h1>Mooring Line Equilibrium</h1>
 
+  <!-- ── Anchor Setup ── -->
   <div class="section">
-    <div class="section-title">System Parameters</div>
-    <div class="field">
-      <label>Spring Stiffness k <span id="k-val">500 N/m</span></label>
-      <input type="range" id="k" min="100" max="5000" step="50" value="500">
+    <div class="section-title">Anchor Positions</div>
+    <div class="tab-row">
+      <button class="tab-btn active" id="tab-circle" onclick="setAnchorMode('circle')">Circle Preset</button>
+      <button class="tab-btn" id="tab-manual" onclick="setAnchorMode('manual')">Manual</button>
     </div>
-    <div class="field">
-      <label>Anchor Radius R <span id="R-val">5.0 m</span></label>
-      <input type="range" id="R" min="1" max="20" step="0.5" value="5">
+
+    <div id="anchor-circle">
+      <div class="field">
+        <label>Radius R (m) <span id="circR-val">5.0</span></label>
+        <input type="range" id="circR" min="1" max="20" step="0.5" value="5">
+      </div>
+      <div class="field">
+        <label>Start angle (°) <span id="circA-val">0</span></label>
+        <input type="range" id="circA" min="0" max="359" step="1" value="0">
+      </div>
+      <div class="anchor-readout" id="circle-readout"></div>
     </div>
-    <div class="field">
-      <label>Pretension T₀ <span id="T0-val">200 N</span></label>
-      <input type="range" id="T0" min="0" max="2000" step="10" value="200">
-    </div>
-    <div class="field">
-      <label>Floater Radius r <span id="r-val">0.5 m</span></label>
-      <input type="range" id="floaterR" min="0.1" max="2" step="0.1" value="0.5">
+
+    <div id="anchor-manual" style="display:none;">
+      <div class="anchor-grid" id="anchor-manual-grid"></div>
     </div>
   </div>
 
+  <!-- ── Mooring Lines ── -->
   <div class="section">
-    <div class="section-title">External Force</div>
+    <div class="section-title">Mooring Lines</div>
     <div class="field">
-      <label>Fx <span id="Fx-val">0 N</span></label>
-      <input type="range" id="Fx" min="-2000" max="2000" step="10" value="0">
+      <label>Stiffness k <span id="k-val">500 N/m</span></label>
+      <input type="range" id="k" min="10" max="5000" step="10" value="500">
     </div>
-    <div class="field">
-      <label>Fy <span id="Fy-val">0 N</span></label>
-      <input type="range" id="Fy" min="-2000" max="2000" step="10" value="0">
-    </div>
-    <button class="btn btn-reset" id="btn-reset-force">Reset Force &amp; Position</button>
+    <div id="line-controls"></div>
   </div>
 
+  <!-- ── Results ── -->
   <div class="section">
-    <div class="section-title">Tension Query — Given T₁ = ?</div>
-    <p style="font-size:11px;color:#666;margin-bottom:8px;">Finds floater position along anchor-1 axis (no ext. force assumption) and reports T₂, T₃ plus the external force required to hold that state.</p>
-    <div class="query-row">
-      <label>T₁ (N)</label>
-      <input type="number" id="query-T1" min="0" placeholder="e.g. 400">
-    </div>
-    <button class="btn" onclick="runQuery()">Solve</button>
-    <div class="result-box" id="query-result">
-      <div id="qr-content"></div>
-      <button class="btn btn-ghost" id="btn-apply-query" style="margin-top:8px;">Apply to Simulation</button>
-      <div class="note">Spring 1 anchor is at 0° (right). By symmetry T₂ = T₃ when floater lies on that axis.</div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-title">Current State</div>
+    <div class="section-title">Results — Equilibrium State</div>
     <div class="tension-grid">
       <div class="tension-card t1"><div class="label">T₁ (N)</div><div class="value" id="T1-disp">—</div></div>
       <div class="tension-card t2"><div class="label">T₂ (N)</div><div class="value" id="T2-disp">—</div></div>
@@ -129,18 +148,24 @@
     </div>
     <div class="line-details" id="line-details"></div>
     <div class="pos-grid">
-      <div class="pos-card"><div class="label">x (m)</div><div class="value" id="px-disp">0.000</div></div>
-      <div class="pos-card"><div class="label">y (m)</div><div class="value" id="py-disp">0.000</div></div>
+      <div class="pos-card"><div class="label">x (m)</div><div class="value" id="px-disp">—</div></div>
+      <div class="pos-card"><div class="label">y (m)</div><div class="value" id="py-disp">—</div></div>
     </div>
   </div>
 
+  <!-- ── Display ── -->
   <div class="section">
     <div class="section-title">Display</div>
     <div class="field">
-      <label>Show force vectors <input type="checkbox" id="showForces" checked style="width:auto;margin-left:8px;"></label>
+      <label>Floater radius (m) <span id="fr-val">0.5</span></label>
+      <input type="range" id="floaterR" min="0.1" max="2" step="0.1" value="0.5">
+    </div>
+    <div class="field" style="display:flex;align-items:center;gap:8px;">
+      <label style="font-size:12px;color:#bbb;flex:1;">Show force vectors</label>
+      <input type="checkbox" id="showForces" checked>
     </div>
     <div class="field">
-      <label>Force vector scale <span id="fscale-val">1.0×</span></label>
+      <label>Force scale <span id="fscale-val">1.0×</span></label>
       <input type="range" id="fscale" min="0.1" max="5" step="0.1" value="1">
     </div>
     <button class="btn btn-ghost" onclick="fitView()">Fit View</button>
@@ -149,57 +174,65 @@
 
 <div id="canvas-wrap">
   <canvas id="canvas"></canvas>
+  <div id="residual-badge">|F_net| = 0.00 N</div>
   <div id="mode-badge">Equilibrium</div>
-  <div id="residual-badge">|F_net| = 0.0 N</div>
-  <div id="hint">Drag floater · Scroll to zoom</div>
+  <div id="hint">Drag floater to explore · Scroll to zoom</div>
 </div>
 
 <script>
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
-// ── State ─────────────────────────────────────────────────────────────────────
-let params = { k: 500, R: 5, T0: 200, floaterR: 0.5 };
-let externalForce = { x: 0, y: 0 };
-let floaterPos = { x: 0, y: 0 };
+// ── System State ──────────────────────────────────────────────────────────────
+// Anchors: array of {x, y} in metres
+let anchors = [
+  { x: 5, y: 0 },
+  { x: -2.5, y: 4.330127 },
+  { x: -2.5, y: -4.330127 }
+];
+
+// Lines: one per anchor, {k, L0}
+// Default: L0 = dist(anchor, origin) - 200/500 = 5 - 0.4 = 4.6 m (gives ~200 N pretension at origin)
+let lines = [
+  { k: 500, L0: 4.6 },
+  { k: 500, L0: 4.6 },
+  { k: 500, L0: 4.6 }
+];
+
+let floaterR = 0.5;
 let showForces = true;
 let forceScale = 1;
 
-// In drag mode the floater is positioned freely; equilibrium mode re-solves
-let isDragging = false;
+// Floater position (world coords, metres)
+let floaterPos = { x: 0, y: 0 };
 
-// Ghost state from query (drawn as dashed overlay, doesn't change sim)
-let queryGhost = null; // { pos, T, Freq } or null
+// Drag state
+let drag = null;
+let isDragging = false;
 
 // Camera
 let cam = { x: 0, y: 0, zoom: 50 };
 
-// Drag state
-let drag = null;
+// Anchor mode: 'circle' | 'manual'
+let anchorMode = 'circle';
+let circleR = 5, circleStartAngleDeg = 0;
 
-const ANCHOR_ANGLES_DEG = [0, 120, 240];
-const SPRING_COLORS = ['#e06c6c', '#6ce0a0', '#6cb8e0'];
+const COLORS = ['#e06c6c', '#6ce0a0', '#6cb8e0'];
 
 // ── Physics ───────────────────────────────────────────────────────────────────
-function anchorPos(i) {
-  const a = ANCHOR_ANGLES_DEG[i] * Math.PI / 180;
-  return { x: params.R * Math.cos(a), y: params.R * Math.sin(a) };
-}
-
-function naturalLength() {
-  return params.R - params.T0 / params.k;
+function anchorDist(i, pos) {
+  const a = anchors[i];
+  const dx = a.x - pos.x, dy = a.y - pos.y;
+  return Math.sqrt(dx * dx + dy * dy);
 }
 
 function springTension(i, pos) {
-  const a = anchorPos(i);
-  const dx = a.x - pos.x, dy = a.y - pos.y;
-  const d = Math.sqrt(dx * dx + dy * dy);
-  const L0 = naturalLength();
-  return Math.max(0, params.k * (d - L0));
+  const d = anchorDist(i, pos);
+  return Math.max(0, lines[i].k * (d - lines[i].L0));
 }
 
-function springForceOnFloater(i, pos) {
-  const a = anchorPos(i);
+function springForce(i, pos) {
+  const a = anchors[i];
   const dx = a.x - pos.x, dy = a.y - pos.y;
   const d = Math.sqrt(dx * dx + dy * dy);
   if (d < 1e-9) return { x: 0, y: 0 };
@@ -207,46 +240,33 @@ function springForceOnFloater(i, pos) {
   return { x: T * dx / d, y: T * dy / d };
 }
 
-function totalSpringForce(pos) {
+function totalForce(pos) {
   let fx = 0, fy = 0;
-  for (let i = 0; i < 3; i++) {
-    const f = springForceOnFloater(i, pos);
+  for (let i = 0; i < anchors.length; i++) {
+    const f = springForce(i, pos);
     fx += f.x; fy += f.y;
   }
   return { x: fx, y: fy };
 }
 
-function totalForce(pos) {
-  const sf = totalSpringForce(pos);
-  return { x: sf.x + externalForce.x, y: sf.y + externalForce.y };
-}
+// ── Solver — Newton-Raphson with damped steps ─────────────────────────────────
+function solveEquilibrium(guess) {
+  let pos = guess ? { ...guess } : { ...floaterPos };
+  const eps = 1e-6, maxIter = 400, tol = 1e-8;
 
-// Angle of mooring line i in degrees (direction from floater toward anchor)
-function lineAngleDeg(i, pos) {
-  const a = anchorPos(i);
-  const dx = a.x - pos.x, dy = a.y - pos.y;
-  return Math.atan2(dy, dx) * 180 / Math.PI;
-}
-
-function lineLength(i, pos) {
-  const a = anchorPos(i);
-  const dx = a.x - pos.x, dy = a.y - pos.y;
-  return Math.sqrt(dx * dx + dy * dy);
-}
-
-// ── Solver (Newton-Raphson with numerical Jacobian, damped) ───────────────────
-function solveEquilibrium(initialGuess) {
-  let pos = initialGuess ? { ...initialGuess } : { ...floaterPos };
-  const eps = 1e-6, maxIter = 300, tol = 1e-7;
+  // Bounding box: 3× the max anchor distance so we don't drift to infinity
+  const maxDist = anchors.reduce((m, a) => Math.max(m, Math.sqrt(a.x*a.x + a.y*a.y)), 0);
+  const bound = maxDist * 3 || 50;
 
   for (let iter = 0; iter < maxIter; iter++) {
     const F = totalForce(pos);
     if (Math.abs(F.x) < tol && Math.abs(F.y) < tol) break;
 
-    const Fxp = totalForce({ x: pos.x + eps, y: pos.y });
-    const Fyp = totalForce({ x: pos.x, y: pos.y + eps });
-    const J11 = (Fxp.x - F.x) / eps, J12 = (Fyp.x - F.x) / eps;
-    const J21 = (Fxp.y - F.y) / eps, J22 = (Fyp.y - F.y) / eps;
+    // Numerical Jacobian
+    const Fpx = totalForce({ x: pos.x + eps, y: pos.y });
+    const Fpy = totalForce({ x: pos.x, y: pos.y + eps });
+    const J11 = (Fpx.x - F.x) / eps, J12 = (Fpy.x - F.x) / eps;
+    const J21 = (Fpx.y - F.y) / eps, J22 = (Fpy.y - F.y) / eps;
 
     const det = J11 * J22 - J12 * J21;
     if (Math.abs(det) < 1e-14) break;
@@ -254,256 +274,179 @@ function solveEquilibrium(initialGuess) {
     let dx = -(J22 * F.x - J12 * F.y) / det;
     let dy = -(-J21 * F.x + J11 * F.y) / det;
 
-    // Damping: limit step size to 0.5 m
+    // Damp: limit step to 0.3 m
     const stepLen = Math.sqrt(dx*dx + dy*dy);
-    if (stepLen > 0.5) { dx *= 0.5 / stepLen; dy *= 0.5 / stepLen; }
+    if (stepLen > 0.3) { dx *= 0.3 / stepLen; dy *= 0.3 / stepLen; }
 
     pos.x += dx;
     pos.y += dy;
 
-    // Keep inside the anchor circle
-    const r2 = pos.x * pos.x + pos.y * pos.y;
-    const maxR = params.R * 0.999;
-    if (r2 > maxR * maxR) {
-      const r = Math.sqrt(r2);
-      pos.x *= maxR / r; pos.y *= maxR / r;
-    }
+    // Soft bounding
+    const r = Math.sqrt(pos.x*pos.x + pos.y*pos.y);
+    if (r > bound) { pos.x *= bound / r; pos.y *= bound / r; }
   }
   return pos;
 }
 
-// ── Tension Query (pure — does NOT mutate global state) ───────────────────────
-// Finds the floater position along anchor-0 axis where T1 = targetT1,
-// then reports T2, T3 at that position, and the external force needed
-// to hold the floater there in static equilibrium.
-function computeQuery(targetT1) {
-  const L0 = naturalLength();
-  const angle0 = ANCHOR_ANGLES_DEG[0] * Math.PI / 180;
-  const dir = { x: Math.cos(angle0), y: Math.sin(angle0) };
-
-  // T1 as function of displacement s along anchor-0 axis:
-  // anchor 0 is at (R,0). Floater at s*(cos0°,sin0°) = (s,0).
-  // d = R - s (for s < R). T1 = k*(R-s - L0) = T0 - k*s  for s > 0 toward anchor.
-  // Wait — floater moves TOWARD anchor 0 means s > 0 → distance = R - s → shorter spring → LESS tension.
-  // Floater moves AWAY from anchor 0 means s < 0 → distance = R + |s| → longer spring → MORE tension.
-  // So to increase T1 above T0, floater must move AWAY from anchor 0 (s < 0).
-
-  // Binary search: s ranges from -R*0.99 to +R*0.99
-  // Evaluate T1 at each end
-  const posAtS = s => ({ x: dir.x * s, y: dir.y * s });
-  const T1atS = s => springTension(0, posAtS(s));
-
-  const lo_s = -params.R * 0.99, hi_s = params.R * 0.99;
-  const T1_lo = T1atS(lo_s), T1_hi = T1atS(hi_s);
-
-  // If targetT1 is outside achievable range
-  const T1max = Math.max(T1_lo, T1_hi);
-  if (targetT1 > T1max) {
-    return { error: `T₁ = ${targetT1} N exceeds max achievable (${T1max.toFixed(1)} N) along this axis.` };
-  }
-
-  // We need the side of the axis where T1 increases with |s|
-  // T1 increases when floater moves AWAY from anchor 0 (negative s along anchor-0 direction)
-  let a = lo_s, b = hi_s;
-  // Ensure T1(a) >= targetT1 >= T1(b) or vice-versa — find bracketing interval
-  // T1_lo = T1 at s=-R*0.99 (floater far from anchor 0, high T1)
-  // T1_hi = T1 at s=+R*0.99 (floater close to anchor 0, low T1)
-  // So T1 decreases as s increases. Binary search accordingly.
-  let sLo = lo_s, sHi = hi_s;
-  if (T1atS(sLo) < T1atS(sHi)) { [sLo, sHi] = [sHi, sLo]; }
-
-  for (let i = 0; i < 100; i++) {
-    const mid = (sLo + sHi) / 2;
-    if (T1atS(mid) > targetT1) sHi = mid; else sLo = mid;
-  }
-  const s_eq = (sLo + sHi) / 2;
-  const pos = posAtS(s_eq);
-
-  const T = [0, 1, 2].map(i => springTension(i, pos));
-  // Required external force = -(sum of spring forces) to maintain equilibrium
-  const sf = totalSpringForce(pos);
-  const Freq = { x: -sf.x, y: -sf.y };
-
-  return { pos, T, Freq, s: s_eq };
+// Centroid of anchors — good starting guess
+function anchorCentroid() {
+  let x = 0, y = 0;
+  for (const a of anchors) { x += a.x; y += a.y; }
+  return { x: x / anchors.length, y: y / anchors.length };
 }
 
 // ── Coordinate transforms ─────────────────────────────────────────────────────
-function worldToCanvas(wx, wy) {
-  const cx = canvas.width / 2, cy = canvas.height / 2;
-  return { x: cx + (wx - cam.x) * cam.zoom, y: cy - (wy - cam.y) * cam.zoom };
+function w2c(wx, wy) {
+  return {
+    x: canvas.width  / 2 + (wx - cam.x) * cam.zoom,
+    y: canvas.height / 2 - (wy - cam.y) * cam.zoom
+  };
 }
-function canvasToWorld(cx, cy) {
-  const ccx = canvas.width / 2, ccy = canvas.height / 2;
-  return { x: (cx - ccx) / cam.zoom + cam.x, y: -(cy - ccy) / cam.zoom + cam.y };
+function c2w(cx, cy) {
+  return {
+    x: (cx - canvas.width  / 2) / cam.zoom + cam.x,
+    y: -(cy - canvas.height / 2) / cam.zoom + cam.y
+  };
 }
 
 // ── Drawing ───────────────────────────────────────────────────────────────────
-function drawArrow(x1, y1, x2, y2, color, width) {
-  width = width || 2;
-  const dx = x2 - x1, dy = y2 - y1;
-  const len = Math.sqrt(dx*dx + dy*dy);
+function drawArrow(x1, y1, x2, y2, color, lw) {
+  lw = lw || 2;
+  const dx = x2-x1, dy = y2-y1, len = Math.sqrt(dx*dx+dy*dy);
   if (len < 3) return;
-  const ux = dx / len, uy = dy / len;
-  const hw = Math.max(7, width * 3), hl = Math.max(11, width * 4.5);
-
-  ctx.beginPath();
-  ctx.moveTo(x1, y1);
-  ctx.lineTo(x2 - ux * hl, y2 - uy * hl);
-  ctx.strokeStyle = color; ctx.lineWidth = width; ctx.stroke();
-
+  const ux = dx/len, uy = dy/len;
+  const hw = Math.max(6, lw*3), hl = Math.max(10, lw*4.5);
+  ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2-ux*hl, y2-uy*hl);
+  ctx.strokeStyle = color; ctx.lineWidth = lw; ctx.stroke();
   ctx.beginPath();
   ctx.moveTo(x2, y2);
-  ctx.lineTo(x2 - ux*hl - uy*hw/2, y2 - uy*hl + ux*hw/2);
-  ctx.lineTo(x2 - ux*hl + uy*hw/2, y2 - uy*hl - ux*hw/2);
+  ctx.lineTo(x2-ux*hl-uy*hw/2, y2-uy*hl+ux*hw/2);
+  ctx.lineTo(x2-ux*hl+uy*hw/2, y2-uy*hl-ux*hw/2);
   ctx.closePath(); ctx.fillStyle = color; ctx.fill();
 }
 
 function drawGrid() {
-  const step = 1;
-  if (step * cam.zoom < 8) return;
-  const left = canvasToWorld(0, 0).x, right = canvasToWorld(canvas.width, 0).x;
-  const top = canvasToWorld(0, 0).y, bottom = canvasToWorld(0, canvas.height).y;
-
-  ctx.strokeStyle = '#23262f'; ctx.lineWidth = 1;
-  for (let wx = Math.floor(left); wx <= right + 1; wx++) {
-    const p = worldToCanvas(wx, 0);
+  if (cam.zoom < 8) return;
+  const left = c2w(0, 0).x, right = c2w(canvas.width, 0).x;
+  const top  = c2w(0, 0).y, bottom = c2w(0, canvas.height).y;
+  ctx.strokeStyle = '#22252f'; ctx.lineWidth = 1;
+  for (let wx = Math.floor(left); wx <= right+1; wx++) {
+    const p = w2c(wx, 0);
     ctx.beginPath(); ctx.moveTo(p.x, 0); ctx.lineTo(p.x, canvas.height); ctx.stroke();
   }
-  for (let wy = Math.floor(bottom); wy <= top + 1; wy++) {
-    const p = worldToCanvas(0, wy);
+  for (let wy = Math.floor(bottom); wy <= top+1; wy++) {
+    const p = w2c(0, wy);
     ctx.beginPath(); ctx.moveTo(0, p.y); ctx.lineTo(canvas.width, p.y); ctx.stroke();
   }
-  ctx.strokeStyle = '#2e3345'; ctx.lineWidth = 1;
-  const ox = worldToCanvas(0, 0);
-  ctx.beginPath(); ctx.moveTo(ox.x, 0); ctx.lineTo(ox.x, canvas.height); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(0, ox.y); ctx.lineTo(canvas.width, ox.y); ctx.stroke();
+  ctx.strokeStyle = '#2d3245'; ctx.lineWidth = 1;
+  const o = w2c(0, 0);
+  ctx.beginPath(); ctx.moveTo(o.x, 0); ctx.lineTo(o.x, canvas.height); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(0, o.y); ctx.lineTo(canvas.width, o.y); ctx.stroke();
 }
 
-function drawAnchorRing() {
-  const c = worldToCanvas(0, 0);
-  const rPx = params.R * cam.zoom;
-  ctx.beginPath(); ctx.arc(c.x, c.y, rPx, 0, Math.PI * 2);
-  ctx.strokeStyle = '#2a2d3a'; ctx.lineWidth = 1; ctx.setLineDash([4, 6]); ctx.stroke();
+function drawNaturalLengthArc(i) {
+  const L0 = lines[i].L0;
+  if (L0 <= 0) return;
+  const a = anchors[i];
+  const ap = w2c(a.x, a.y);
+  const rpx = L0 * cam.zoom;
+  ctx.beginPath(); ctx.arc(ap.x, ap.y, rpx, 0, Math.PI * 2);
+  ctx.strokeStyle = COLORS[i] + '20'; ctx.lineWidth = 1; ctx.setLineDash([3,8]); ctx.stroke();
+  ctx.setLineDash([]);
+}
+
+function drawMooringLine(i, pos) {
+  const a = anchors[i];
+  const ap = w2c(a.x, a.y);
+  const fp = w2c(pos.x, pos.y);
+  const T = springTension(i, pos);
+  const slack = T < 0.01;
+
+  if (slack) {
+    ctx.setLineDash([4, 5]);
+    ctx.strokeStyle = COLORS[i] + '44';
+    ctx.lineWidth = 1;
+  } else {
+    ctx.setLineDash([]);
+    ctx.strokeStyle = COLORS[i];
+    ctx.lineWidth = Math.max(1.5, Math.min(5, T / 80));
+  }
+  ctx.beginPath(); ctx.moveTo(fp.x, fp.y); ctx.lineTo(ap.x, ap.y); ctx.stroke();
   ctx.setLineDash([]);
 }
 
 function drawAnchor(i) {
-  const a = anchorPos(i);
-  const ap = worldToCanvas(a.x, a.y);
-  ctx.beginPath(); ctx.arc(ap.x, ap.y, 11, 0, Math.PI * 2);
-  ctx.fillStyle = SPRING_COLORS[i] + '22'; ctx.fill();
-  ctx.strokeStyle = SPRING_COLORS[i]; ctx.lineWidth = 2; ctx.stroke();
+  const a = anchors[i];
+  const ap = w2c(a.x, a.y);
+  // Ground hatch marks (indicate fixed point)
+  const ang = Math.atan2(a.y, a.x); // direction from origin to anchor
+  const perpX = Math.sin(ang), perpY = -Math.cos(ang);
+  ctx.strokeStyle = COLORS[i] + '88'; ctx.lineWidth = 1.5;
+  for (let t = -1; t <= 1; t++) {
+    const ox = ap.x + perpX * t * 6, oy = ap.y + perpY * t * 6;
+    const dir = { x: Math.cos(ang + 0.5), y: Math.sin(ang + 0.5) };
+    ctx.beginPath(); ctx.moveTo(ox, oy); ctx.lineTo(ox - dir.x*8, oy - dir.y*8); ctx.stroke();
+  }
+  // Circle
+  ctx.beginPath(); ctx.arc(ap.x, ap.y, 10, 0, Math.PI * 2);
+  ctx.fillStyle = COLORS[i] + '22'; ctx.fill();
+  ctx.strokeStyle = COLORS[i]; ctx.lineWidth = 2; ctx.stroke();
   // Cross
-  ctx.strokeStyle = SPRING_COLORS[i]; ctx.lineWidth = 1.5;
+  ctx.strokeStyle = COLORS[i]; ctx.lineWidth = 1.5;
   ctx.beginPath(); ctx.moveTo(ap.x-7, ap.y); ctx.lineTo(ap.x+7, ap.y); ctx.stroke();
   ctx.beginPath(); ctx.moveTo(ap.x, ap.y-7); ctx.lineTo(ap.x, ap.y+7); ctx.stroke();
-  // Label (outside the anchor ring)
-  const ang = ANCHOR_ANGLES_DEG[i] * Math.PI / 180;
-  const lx = worldToCanvas(a.x + Math.cos(ang) * 0.6, a.y + Math.sin(ang) * 0.6);
-  ctx.fillStyle = SPRING_COLORS[i]; ctx.font = 'bold 11px Segoe UI'; ctx.textAlign = 'center';
-  ctx.fillText(`A${i+1}`, lx.x, lx.y + 4);
+  // Label: offset outward from centroid
+  const cx = anchors.reduce((s,a)=>s+a.x,0)/anchors.length;
+  const cy = anchors.reduce((s,a)=>s+a.y,0)/anchors.length;
+  const dx = a.x - cx, dy = a.y - cy;
+  const dl = Math.sqrt(dx*dx+dy*dy) || 1;
+  const lp = w2c(a.x + dx/dl*0.7, a.y + dy/dl*0.7);
+  ctx.fillStyle = COLORS[i]; ctx.font = 'bold 11px Segoe UI'; ctx.textAlign = 'center';
+  ctx.fillText(`A${i+1}`, lp.x, lp.y + 4);
 }
 
-function drawMooringLine(i, pos, dashed, alpha) {
-  const a = anchorPos(i);
-  const ap = worldToCanvas(a.x, a.y);
-  const fp = worldToCanvas(pos.x, pos.y);
-  const T = springTension(i, pos);
-  const slack = T < 0.01;
-
-  ctx.globalAlpha = alpha !== undefined ? alpha : 1;
-  if (slack || dashed) {
-    ctx.setLineDash(slack ? [4, 5] : [6, 6]);
-    ctx.strokeStyle = SPRING_COLORS[i] + (slack ? '55' : 'aa');
-    ctx.lineWidth = 1.2;
-  } else {
-    ctx.setLineDash([]);
-    ctx.strokeStyle = SPRING_COLORS[i];
-    ctx.lineWidth = Math.max(1.5, Math.min(5, T / 80));
-  }
-  ctx.beginPath(); ctx.moveTo(fp.x, fp.y); ctx.lineTo(ap.x, ap.y); ctx.stroke();
-  ctx.setLineDash([]); ctx.globalAlpha = 1;
-}
-
-function drawForceVectors(pos) {
-  const fp = worldToCanvas(pos.x, pos.y);
-  const fscale = forceScale * cam.zoom * 0.003;
-
-  for (let i = 0; i < 3; i++) {
-    const f = springForceOnFloater(i, pos);
-    const len = Math.sqrt(f.x*f.x + f.y*f.y);
-    if (len < 0.01) continue;
-    const ex = fp.x + f.x * fscale, ey = fp.y - f.y * fscale;
-    drawArrow(fp.x, fp.y, ex, ey, SPRING_COLORS[i], 2);
-    const T = springTension(i, pos);
-    const mx = fp.x + f.x * fscale * 0.55, my = fp.y - f.y * fscale * 0.55;
-    ctx.fillStyle = SPRING_COLORS[i]; ctx.font = 'bold 10px Segoe UI'; ctx.textAlign = 'center';
-    ctx.fillText(`${T.toFixed(0)} N`, mx, my - 8);
-  }
-
-  const ef = externalForce;
-  const eLen = Math.sqrt(ef.x*ef.x + ef.y*ef.y);
-  if (eLen > 0.5) {
-    const ex = fp.x + ef.x * fscale, ey = fp.y - ef.y * fscale;
-    drawArrow(fp.x, fp.y, ex, ey, '#f5c842', 3);
-    const mx = fp.x + ef.x * fscale * 0.5, my = fp.y - ef.y * fscale * 0.5;
-    ctx.fillStyle = '#f5c842'; ctx.font = 'bold 10px Segoe UI'; ctx.textAlign = 'center';
-    ctx.fillText(`Fext = ${eLen.toFixed(0)} N`, mx, my - 8);
-  }
-
-  // Net force residual (should be ~0 at equilibrium)
-  const net = totalForce(pos);
-  const netLen = Math.sqrt(net.x*net.x + net.y*net.y);
-  if (netLen > 0.5) {
-    const ex = fp.x + net.x * fscale, ey = fp.y - net.y * fscale;
-    drawArrow(fp.x, fp.y, ex, ey, '#ff880088', 1.5);
-  }
-}
-
-function drawFloater(pos, ghost) {
-  const fp = worldToCanvas(pos.x, pos.y);
-  const rpx = params.floaterR * cam.zoom;
-
-  if (ghost) {
-    ctx.globalAlpha = 0.35;
-    ctx.beginPath(); ctx.arc(fp.x, fp.y, rpx, 0, Math.PI * 2);
-    ctx.strokeStyle = '#f5c842'; ctx.lineWidth = 2; ctx.setLineDash([5,5]); ctx.stroke();
-    ctx.setLineDash([]); ctx.globalAlpha = 1;
-    ctx.fillStyle = '#f5c842aa'; ctx.font = 'bold 10px Segoe UI'; ctx.textAlign = 'center';
-    ctx.fillText('Query pos', fp.x, fp.y + rpx + 14);
-    return;
-  }
-
-  // Water ripple
-  ctx.beginPath(); ctx.arc(fp.x, fp.y, rpx + 7, 0, Math.PI * 2);
-  ctx.strokeStyle = 'rgba(100,180,255,0.12)'; ctx.lineWidth = 7; ctx.stroke();
-
-  ctx.beginPath(); ctx.arc(fp.x, fp.y, rpx, 0, Math.PI * 2);
-  const grad = ctx.createRadialGradient(fp.x - rpx*0.3, fp.y - rpx*0.3, rpx*0.1, fp.x, fp.y, rpx);
-  grad.addColorStop(0, '#a0c8f0'); grad.addColorStop(1, '#3a6080');
-  ctx.fillStyle = grad; ctx.fill();
+function drawFloater(pos) {
+  const fp = w2c(pos.x, pos.y);
+  const rpx = floaterR * cam.zoom;
+  // Ripple
+  ctx.beginPath(); ctx.arc(fp.x, fp.y, rpx + 7, 0, Math.PI*2);
+  ctx.strokeStyle = 'rgba(100,180,255,0.1)'; ctx.lineWidth = 7; ctx.stroke();
+  // Body
+  ctx.beginPath(); ctx.arc(fp.x, fp.y, rpx, 0, Math.PI*2);
+  const g = ctx.createRadialGradient(fp.x-rpx*0.3, fp.y-rpx*0.3, rpx*0.1, fp.x, fp.y, rpx);
+  g.addColorStop(0, '#a0c8f0'); g.addColorStop(1, '#2a5070');
+  ctx.fillStyle = g; ctx.fill();
   ctx.strokeStyle = '#7ab8f5'; ctx.lineWidth = 2; ctx.stroke();
-
   ctx.fillStyle = '#e0e0e0'; ctx.font = 'bold 11px Segoe UI'; ctx.textAlign = 'center';
   ctx.fillText('Floater', fp.x, fp.y + rpx + 15);
 }
 
-function drawNaturalLengthCircles() {
-  const L0 = naturalLength();
-  if (L0 <= 0) return;
-  const L0px = L0 * cam.zoom;
-  for (let i = 0; i < 3; i++) {
-    const a = anchorPos(i);
-    const ap = worldToCanvas(a.x, a.y);
-    ctx.beginPath(); ctx.arc(ap.x, ap.y, L0px, 0, Math.PI * 2);
-    ctx.strokeStyle = SPRING_COLORS[i] + '18'; ctx.lineWidth = 1; ctx.setLineDash([3,8]); ctx.stroke();
-    ctx.setLineDash([]);
+function drawForceVectors(pos) {
+  const fp = w2c(pos.x, pos.y);
+  const fscale = forceScale * cam.zoom * 0.003;
+  for (let i = 0; i < anchors.length; i++) {
+    const f = springForce(i, pos);
+    const len = Math.sqrt(f.x*f.x + f.y*f.y);
+    if (len < 0.01) continue;
+    const ex = fp.x + f.x*fscale, ey = fp.y - f.y*fscale;
+    drawArrow(fp.x, fp.y, ex, ey, COLORS[i], 2);
+    const T = springTension(i, pos);
+    ctx.fillStyle = COLORS[i]; ctx.font = 'bold 10px Segoe UI'; ctx.textAlign = 'center';
+    ctx.fillText(`${T.toFixed(0)} N`, fp.x + f.x*fscale*0.5, fp.y - f.y*fscale*0.5 - 8);
+  }
+  // Net residual (should be ~0)
+  const net = totalForce(pos);
+  const netLen = Math.sqrt(net.x*net.x + net.y*net.y);
+  if (netLen > 0.5) {
+    const ex = fp.x + net.x*fscale, ey = fp.y - net.y*fscale;
+    drawArrow(fp.x, fp.y, ex, ey, '#ff880080', 1.5);
+    ctx.fillStyle = '#ff880080'; ctx.font = '10px Segoe UI'; ctx.textAlign = 'center';
+    ctx.fillText(`net ${netLen.toFixed(1)} N`, fp.x + net.x*fscale*0.5, fp.y - net.y*fscale*0.5 - 8);
   }
 }
 
 function drawScaleBar() {
-  const m = 1;
-  const px = m * cam.zoom;
+  const px = cam.zoom; // 1 metre
   const x = 16, y = canvas.height - 16;
   ctx.strokeStyle = '#666'; ctx.lineWidth = 2;
   ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x+px, y); ctx.stroke();
@@ -518,129 +461,230 @@ function render() {
   ctx.fillStyle = '#1a1d23'; ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   drawGrid();
-  drawAnchorRing();
-  drawNaturalLengthCircles();
 
-  // Draw query ghost first (behind sim)
-  if (queryGhost) {
-    for (let i = 0; i < 3; i++) drawMooringLine(i, queryGhost.pos, true, 0.4);
-    drawFloater(queryGhost.pos, true);
-  }
+  // Natural length arcs
+  for (let i = 0; i < anchors.length; i++) drawNaturalLengthArc(i);
+
+  // Mooring lines (behind anchors)
+  for (let i = 0; i < anchors.length; i++) drawMooringLine(i, floaterPos);
 
   // Anchors
-  for (let i = 0; i < 3; i++) drawAnchor(i);
-
-  // Mooring lines
-  for (let i = 0; i < 3; i++) drawMooringLine(i, floaterPos, false, 1);
+  for (let i = 0; i < anchors.length; i++) drawAnchor(i);
 
   // Force vectors
   if (showForces) drawForceVectors(floaterPos);
 
-  // Floater
-  drawFloater(floaterPos, false);
+  // Floater (on top)
+  drawFloater(floaterPos);
 
   drawScaleBar();
-  updateUI();
+  updateResultsUI();
 }
 
 // ── UI Updates ────────────────────────────────────────────────────────────────
-function updateUI() {
-  const T = [0, 1, 2].map(i => springTension(i, floaterPos));
-  const L0 = naturalLength();
-
-  document.getElementById('T1-disp').textContent = T[0].toFixed(1);
-  document.getElementById('T2-disp').textContent = T[1].toFixed(1);
-  document.getElementById('T3-disp').textContent = T[2].toFixed(1);
+function updateResultsUI() {
+  const T = anchors.map((_, i) => springTension(i, floaterPos));
+  document.getElementById('T1-disp').textContent = T[0] !== undefined ? T[0].toFixed(1) : '—';
+  document.getElementById('T2-disp').textContent = T[1] !== undefined ? T[1].toFixed(1) : '—';
+  document.getElementById('T3-disp').textContent = T[2] !== undefined ? T[2].toFixed(1) : '—';
   document.getElementById('px-disp').textContent = floaterPos.x.toFixed(3);
   document.getElementById('py-disp').textContent = floaterPos.y.toFixed(3);
 
-  // Net residual badge
   const net = totalForce(floaterPos);
   const netLen = Math.sqrt(net.x*net.x + net.y*net.y);
-  document.getElementById('residual-badge').textContent = `|F_net| = ${netLen.toFixed(2)} N`;
-  document.getElementById('residual-badge').style.color = netLen > 1 ? '#e0a060' : '#60b860';
+  const badge = document.getElementById('residual-badge');
+  badge.textContent = `|F_net| = ${netLen.toFixed(3)} N`;
+  badge.style.color = netLen > 0.5 ? '#e0a060' : '#60b860';
 
-  // Mode badge
   document.getElementById('mode-badge').textContent = isDragging ? 'Free Drag' : 'Equilibrium';
 
-  // Line details
+  // Per-line detail rows
   const det = document.getElementById('line-details');
   det.innerHTML = '';
-  for (let i = 0; i < 3; i++) {
-    const len = lineLength(i, floaterPos);
-    const ang = lineAngleDeg(i, floaterPos);
+  for (let i = 0; i < anchors.length; i++) {
+    const a = anchors[i];
+    const dx = a.x - floaterPos.x, dy = a.y - floaterPos.y;
+    const L = Math.sqrt(dx*dx + dy*dy);
+    const ang = Math.atan2(dy, dx) * 180 / Math.PI;
     const slack = T[i] < 0.01;
-    const el = document.createElement('div');
-    el.className = 'line-row';
-    el.innerHTML = `
-      <div class="dot" style="background:${SPRING_COLORS[i]}"></div>
+    const row = document.createElement('div');
+    row.className = 'line-row';
+    row.innerHTML = `
+      <div class="dot" style="background:${COLORS[i]}"></div>
       <div class="ldata">
-        <span><b>${T[i].toFixed(1)}</b> N ${slack ? '<span class="slack-tag">SLACK</span>' : ''}</span>
-        <span>L = <b>${len.toFixed(3)}</b> m</span>
-        <span>ΔL = <b>${(len - L0).toFixed(3)}</b> m</span>
+        <span><b>${T[i].toFixed(1)}</b> N ${slack ? '<span class="slack-badge">SLACK</span>' : ''}</span>
+        <span>L = <b>${L.toFixed(3)}</b> m</span>
+        <span>L₀ = <b>${lines[i].L0.toFixed(3)}</b> m</span>
+        <span>ΔL = <b>${(L - lines[i].L0).toFixed(3)}</b> m</span>
         <span>θ = <b>${ang.toFixed(1)}°</b></span>
       </div>`;
-    det.appendChild(el);
+    det.appendChild(row);
+  }
+
+  // Update pretension hints in line controls
+  for (let i = 0; i < anchors.length; i++) {
+    const el = document.getElementById(`pretension-hint-${i}`);
+    if (!el) continue;
+    const a = anchors[i];
+    const d0 = Math.sqrt(a.x*a.x + a.y*a.y);
+    const pt = lines[i].k * (d0 - lines[i].L0);
+    if (pt > 0) {
+      el.textContent = `Pretension at origin: ${pt.toFixed(1)} N`;
+      el.className = 'pretension active';
+    } else {
+      el.textContent = 'Slack at origin';
+      el.className = 'pretension';
+    }
   }
 }
 
-// ── Controls ──────────────────────────────────────────────────────────────────
-function setParam(key, value) {
-  params[key] = value;
-  if (!isDragging) {
-    floaterPos = solveEquilibrium(floaterPos);
+// ── Anchor Setup ──────────────────────────────────────────────────────────────
+function applyCircleAnchors() {
+  const R = circleR;
+  const startRad = circleStartAngleDeg * Math.PI / 180;
+  anchors = [0, 1, 2].map(i => {
+    const ang = startRad + i * 2 * Math.PI / 3;
+    return { x: R * Math.cos(ang), y: R * Math.sin(ang) };
+  });
+  document.getElementById('circle-readout').textContent =
+    anchors.map((a, i) => `A${i+1}: (${a.x.toFixed(2)}, ${a.y.toFixed(2)})`).join('  ');
+  rebuildLineCtrls();
+  resolveAndRender();
+}
+
+function setAnchorMode(mode) {
+  anchorMode = mode;
+  document.getElementById('tab-circle').classList.toggle('active', mode === 'circle');
+  document.getElementById('tab-manual').classList.toggle('active', mode === 'manual');
+  document.getElementById('anchor-circle').style.display = mode === 'circle' ? '' : 'none';
+  document.getElementById('anchor-manual').style.display = mode === 'manual' ? '' : 'none';
+  if (mode === 'manual') buildManualAnchorGrid();
+}
+
+function buildManualAnchorGrid() {
+  const grid = document.getElementById('anchor-manual-grid');
+  grid.innerHTML = '';
+  for (let i = 0; i < 3; i++) {
+    // Dot
+    const dot = document.createElement('div');
+    dot.className = 'dot';
+    dot.style.background = COLORS[i];
+    grid.appendChild(dot);
+    // x input
+    const xWrap = document.createElement('div');
+    xWrap.className = 'anchor-coord';
+    xWrap.innerHTML = `<span>x${i+1}</span>`;
+    const xi = document.createElement('input');
+    xi.type = 'number'; xi.step = '0.1'; xi.value = anchors[i].x.toFixed(2);
+    xi.addEventListener('input', () => { anchors[i].x = parseFloat(xi.value)||0; resolveAndRender(); });
+    xWrap.appendChild(xi);
+    grid.appendChild(xWrap);
+    // y input
+    const yWrap = document.createElement('div');
+    yWrap.className = 'anchor-coord';
+    yWrap.innerHTML = `<span>y${i+1}</span>`;
+    const yi = document.createElement('input');
+    yi.type = 'number'; yi.step = '0.1'; yi.value = anchors[i].y.toFixed(2);
+    yi.addEventListener('input', () => { anchors[i].y = parseFloat(yi.value)||0; resolveAndRender(); });
+    yWrap.appendChild(yi);
+    grid.appendChild(yWrap);
   }
+}
+
+// ── Line Controls ─────────────────────────────────────────────────────────────
+function maxL0() {
+  return anchors.reduce((m, a) => Math.max(m, Math.sqrt(a.x*a.x + a.y*a.y)), 0) * 1.2 || 20;
+}
+
+function rebuildLineCtrls() {
+  const container = document.getElementById('line-controls');
+  container.innerHTML = '';
+  for (let i = 0; i < anchors.length; i++) {
+    // Default L0: nominal distance minus a small pretension
+    if (lines[i] === undefined) {
+      const d = Math.sqrt(anchors[i].x**2 + anchors[i].y**2);
+      const kv = lines[0] ? lines[0].k : 500;
+      lines[i] = { k: kv, L0: Math.max(0, d - 200 / kv) };
+    }
+
+    const ml = maxL0();
+    const wrap = document.createElement('div');
+    wrap.className = 'line-ctrl';
+
+    const hdr = document.createElement('div');
+    hdr.className = 'line-ctrl-header';
+    hdr.innerHTML = `
+      <div class="dot" style="background:${COLORS[i]}"></div>
+      <span class="lname">Line ${i+1}</span>
+      <span class="pretension" id="pretension-hint-${i}"></span>`;
+    wrap.appendChild(hdr);
+
+    const row = document.createElement('div');
+    row.className = 'line-ctrl-row';
+
+    const slider = document.createElement('input');
+    slider.type = 'range';
+    slider.min = 0; slider.max = ml.toFixed(2); slider.step = 0.01;
+    slider.value = lines[i].L0.toFixed(2);
+    slider.id = `l0-slider-${i}`;
+
+    const numIn = document.createElement('input');
+    numIn.type = 'number';
+    numIn.min = 0; numIn.max = ml.toFixed(2); numIn.step = 0.01;
+    numIn.value = lines[i].L0.toFixed(2);
+    numIn.id = `l0-num-${i}`;
+
+    slider.addEventListener('input', () => {
+      const v = parseFloat(slider.value);
+      lines[i].L0 = v;
+      numIn.value = v.toFixed(2);
+      resolveAndRender();
+    });
+    numIn.addEventListener('input', () => {
+      const v = parseFloat(numIn.value);
+      if (isNaN(v)) return;
+      lines[i].L0 = Math.max(0, Math.min(ml, v));
+      slider.value = lines[i].L0.toFixed(2);
+      resolveAndRender();
+    });
+
+    row.appendChild(slider);
+    row.appendChild(numIn);
+    wrap.appendChild(row);
+    container.appendChild(wrap);
+  }
+}
+
+// ── Solve & Render ────────────────────────────────────────────────────────────
+function resolveAndRender(guess) {
+  const g = guess || floaterPos;
+  floaterPos = solveEquilibrium(g);
   render();
 }
 
+// ── Controls wiring ───────────────────────────────────────────────────────────
+document.getElementById('circR').addEventListener('input', function() {
+  circleR = parseFloat(this.value);
+  document.getElementById('circR-val').textContent = circleR.toFixed(1);
+  applyCircleAnchors();
+  fitView();
+});
+document.getElementById('circA').addEventListener('input', function() {
+  circleStartAngleDeg = parseFloat(this.value);
+  document.getElementById('circA-val').textContent = circleStartAngleDeg;
+  applyCircleAnchors();
+});
 document.getElementById('k').addEventListener('input', function() {
   const v = parseFloat(this.value);
   document.getElementById('k-val').textContent = v + ' N/m';
-  setParam('k', v);
-});
-document.getElementById('R').addEventListener('input', function() {
-  const v = parseFloat(this.value);
-  document.getElementById('R-val').textContent = v.toFixed(1) + ' m';
-  setParam('R', v);
-  fitView();
-});
-document.getElementById('T0').addEventListener('input', function() {
-  const v = parseFloat(this.value);
-  document.getElementById('T0-val').textContent = v + ' N';
-  setParam('T0', v);
+  lines.forEach(l => l.k = v);
+  resolveAndRender();
 });
 document.getElementById('floaterR').addEventListener('input', function() {
-  const v = parseFloat(this.value);
-  document.getElementById('r-val').textContent = v.toFixed(1) + ' m';
-  params.floaterR = v; render();
-});
-
-document.getElementById('Fx').addEventListener('input', function() {
-  externalForce.x = parseFloat(this.value);
-  document.getElementById('Fx-val').textContent = externalForce.x.toFixed(0) + ' N';
-  if (!isDragging) floaterPos = solveEquilibrium(floaterPos);
+  floaterR = parseFloat(this.value);
+  document.getElementById('fr-val').textContent = floaterR.toFixed(1);
   render();
 });
-document.getElementById('Fy').addEventListener('input', function() {
-  externalForce.y = parseFloat(this.value);
-  document.getElementById('Fy-val').textContent = externalForce.y.toFixed(0) + ' N';
-  if (!isDragging) floaterPos = solveEquilibrium(floaterPos);
-  render();
-});
-
-document.getElementById('btn-reset-force').addEventListener('click', () => {
-  externalForce = { x: 0, y: 0 };
-  document.getElementById('Fx').value = 0;
-  document.getElementById('Fy').value = 0;
-  document.getElementById('Fx-val').textContent = '0 N';
-  document.getElementById('Fy-val').textContent = '0 N';
-  isDragging = false;
-  floaterPos = solveEquilibrium({ x: 0, y: 0 });
-  queryGhost = null;
-  document.getElementById('query-result').classList.remove('show');
-  render();
-});
-
 document.getElementById('showForces').addEventListener('change', function() {
   showForces = this.checked; render();
 });
@@ -650,63 +694,23 @@ document.getElementById('fscale').addEventListener('input', function() {
   render();
 });
 
-// ── Tension Query ─────────────────────────────────────────────────────────────
-let lastQueryResult = null;
-
-function runQuery() {
-  const targetT1 = parseFloat(document.getElementById('query-T1').value);
-  if (isNaN(targetT1) || targetT1 < 0) return;
-
-  const res = computeQuery(targetT1);
-  const resultBox = document.getElementById('query-result');
-  const content = document.getElementById('qr-content');
-  resultBox.classList.add('show');
-
-  if (res.error) {
-    content.innerHTML = `<span style="color:#e06c6c">${res.error}</span>`;
-    document.getElementById('btn-apply-query').style.display = 'none';
-    queryGhost = null;
-    render();
-    return;
-  }
-
-  const fMag = Math.sqrt(res.Freq.x * res.Freq.x + res.Freq.y * res.Freq.y);
-  const fAng = Math.atan2(res.Freq.y, res.Freq.x) * 180 / Math.PI;
-  content.innerHTML = `
-    <span style="color:#e06c6c">T₁ = ${res.T[0].toFixed(2)} N</span><br>
-    <span style="color:#6ce0a0">T₂ = ${res.T[1].toFixed(2)} N</span><br>
-    <span style="color:#6cb8e0">T₃ = ${res.T[2].toFixed(2)} N</span><br>
-    <span style="color:#e0c06c">x = ${res.pos.x.toFixed(3)} m, y = ${res.pos.y.toFixed(3)} m</span><br>
-    <span style="color:#f5c842">F_req = ${fMag.toFixed(1)} N @ ${fAng.toFixed(1)}°</span>
-  `;
-  document.getElementById('btn-apply-query').style.display = '';
-  lastQueryResult = res;
-
-  // Show ghost on canvas (no state mutation)
-  queryGhost = res;
-  render();
-}
-
-document.getElementById('btn-apply-query').addEventListener('click', () => {
-  if (!lastQueryResult) return;
-  externalForce = { ...lastQueryResult.Freq };
-  document.getElementById('Fx').value = externalForce.x;
-  document.getElementById('Fy').value = externalForce.y;
-  document.getElementById('Fx-val').textContent = externalForce.x.toFixed(0) + ' N';
-  document.getElementById('Fy-val').textContent = externalForce.y.toFixed(0) + ' N';
-  isDragging = false;
-  // Solve starting from the query position
-  floaterPos = solveEquilibrium(lastQueryResult.pos);
-  queryGhost = null;
-  render();
-});
-
-// ── Canvas resize & fit view ──────────────────────────────────────────────────
+// ── View ──────────────────────────────────────────────────────────────────────
 function fitView() {
-  const margin = 1.3; // 30% padding around anchor ring
-  const w = canvas.width, h = canvas.height;
-  cam.zoom = Math.min(w, h) * 0.5 / (params.R * margin);
-  cam.x = 0; cam.y = 0;
+  // Bounding box of all anchors + floater
+  const pts = [...anchors, floaterPos];
+  let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+  for (const p of pts) {
+    minX = Math.min(minX, p.x); maxX = Math.max(maxX, p.x);
+    minY = Math.min(minY, p.y); maxY = Math.max(maxY, p.y);
+  }
+  const spanX = (maxX - minX) || 2, spanY = (maxY - minY) || 2;
+  const margin = 1.5;
+  cam.x = (minX + maxX) / 2;
+  cam.y = (minY + maxY) / 2;
+  cam.zoom = Math.min(
+    canvas.width  / (spanX * margin),
+    canvas.height / (spanY * margin)
+  );
   render();
 }
 
@@ -719,63 +723,82 @@ function resize() {
 window.addEventListener('resize', resize);
 
 // ── Drag floater ──────────────────────────────────────────────────────────────
-function startDrag(wx, wy) {
+function ptInFloater(wx, wy) {
   const dx = wx - floaterPos.x, dy = wy - floaterPos.y;
-  const r = params.floaterR + 0.3 / cam.zoom * 20;
-  if (dx*dx + dy*dy < r*r) {
-    drag = { startWorld: { x: wx, y: wy }, startFloater: { ...floaterPos } };
+  const r = floaterR + Math.max(0.3, 15 / cam.zoom);
+  return dx*dx + dy*dy < r*r;
+}
+
+canvas.addEventListener('mousemove', e => {
+  const w = c2w(e.offsetX, e.offsetY);
+  if (drag) {
+    floaterPos.x = drag.sf.x + (w.x - drag.sw.x);
+    floaterPos.y = drag.sf.y + (w.y - drag.sw.y);
+    render();
+  } else {
+    canvas.className = ptInFloater(w.x, w.y) ? 'hover-floater' : '';
+  }
+});
+canvas.addEventListener('mousedown', e => {
+  const w = c2w(e.offsetX, e.offsetY);
+  if (ptInFloater(w.x, w.y)) {
+    drag = { sw: w, sf: { ...floaterPos } };
     isDragging = true;
     canvas.classList.add('dragging');
   }
-}
-function moveDrag(wx, wy) {
-  if (!drag) return;
-  floaterPos.x = drag.startFloater.x + (wx - drag.startWorld.x);
-  floaterPos.y = drag.startFloater.y + (wy - drag.startWorld.y);
-  const r2 = floaterPos.x*floaterPos.x + floaterPos.y*floaterPos.y;
-  const maxR = params.R * 0.999;
-  if (r2 > maxR*maxR) { const r = Math.sqrt(r2); floaterPos.x *= maxR/r; floaterPos.y *= maxR/r; }
-  render();
-}
-function endDrag() {
+});
+canvas.addEventListener('mouseup', () => {
   drag = null;
-  canvas.classList.remove('dragging');
-  // After releasing, solve from the dragged position so display shows equilibrium
   if (isDragging) {
     isDragging = false;
     floaterPos = solveEquilibrium(floaterPos);
     render();
   }
-}
-
-canvas.addEventListener('mousedown', e => { startDrag(...Object.values(canvasToWorld(e.offsetX, e.offsetY))); });
-canvas.addEventListener('mousemove', e => { if (drag) moveDrag(...Object.values(canvasToWorld(e.offsetX, e.offsetY))); });
-canvas.addEventListener('mouseup', endDrag);
-canvas.addEventListener('mouseleave', endDrag);
+});
+canvas.addEventListener('mouseleave', () => {
+  drag = null;
+  if (isDragging) {
+    isDragging = false;
+    floaterPos = solveEquilibrium(floaterPos);
+    render();
+  }
+});
 
 canvas.addEventListener('touchstart', e => {
   e.preventDefault();
   const t = e.touches[0], rect = canvas.getBoundingClientRect();
-  const w = canvasToWorld(t.clientX - rect.left, t.clientY - rect.top);
-  startDrag(w.x, w.y);
+  const w = c2w(t.clientX - rect.left, t.clientY - rect.top);
+  if (ptInFloater(w.x, w.y)) {
+    drag = { sw: w, sf: { ...floaterPos } };
+    isDragging = true;
+  }
 }, { passive: false });
 canvas.addEventListener('touchmove', e => {
   e.preventDefault();
+  if (!drag) return;
   const t = e.touches[0], rect = canvas.getBoundingClientRect();
-  const w = canvasToWorld(t.clientX - rect.left, t.clientY - rect.top);
-  moveDrag(w.x, w.y);
+  const w = c2w(t.clientX - rect.left, t.clientY - rect.top);
+  floaterPos.x = drag.sf.x + (w.x - drag.sw.x);
+  floaterPos.y = drag.sf.y + (w.y - drag.sw.y);
+  render();
 }, { passive: false });
-canvas.addEventListener('touchend', endDrag);
+canvas.addEventListener('touchend', () => {
+  drag = null;
+  if (isDragging) { isDragging = false; floaterPos = solveEquilibrium(floaterPos); render(); }
+});
 
-// ── Scroll to zoom ─────────────────────────────────────────────────────────────
 canvas.addEventListener('wheel', e => {
   e.preventDefault();
-  const factor = e.deltaY < 0 ? 1.1 : 0.9;
-  cam.zoom = Math.max(8, Math.min(600, cam.zoom * factor));
+  cam.zoom = Math.max(8, Math.min(800, cam.zoom * (e.deltaY < 0 ? 1.1 : 0.9)));
   render();
 }, { passive: false });
 
 // ── Init ──────────────────────────────────────────────────────────────────────
+// Build initial circle readout
+document.getElementById('circle-readout').textContent =
+  anchors.map((a, i) => `A${i+1}: (${a.x.toFixed(2)}, ${a.y.toFixed(2)})`).join('  ');
+
+rebuildLineCtrls();
 resize();
 </script>
 </body>
