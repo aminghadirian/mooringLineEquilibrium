@@ -5,97 +5,88 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mooring Line Equilibrium</title>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: #1a1d23; color: #e0e0e0; font-family: 'Segoe UI', sans-serif; display: flex; height: 100vh; overflow: hidden; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #1a1d23; color: #e0e0e0; font-family: 'Segoe UI', sans-serif; display: flex; height: 100vh; overflow: hidden; }
 
-  #sidebar {
-    width: 320px; min-width: 320px; background: #22252e; border-right: 1px solid #333;
-    display: flex; flex-direction: column; overflow-y: auto;
-  }
-  #sidebar h1 { font-size: 14px; font-weight: 600; color: #7ab8f5; padding: 14px 16px 10px; border-bottom: 1px solid #333; letter-spacing: 0.5px; }
+#sidebar { width: 330px; min-width: 330px; background: #22252e; border-right: 1px solid #333; display: flex; flex-direction: column; overflow-y: auto; }
+#sidebar h1 { font-size: 14px; font-weight: 600; color: #7ab8f5; padding: 14px 16px 10px; border-bottom: 1px solid #333; letter-spacing: 0.5px; }
 
-  .section { padding: 12px 16px; border-bottom: 1px solid #2d3040; }
-  .section-title { font-size: 11px; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+.section { padding: 12px 16px; border-bottom: 1px solid #2d3040; }
+.section-hdr { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.section-title { font-size: 11px; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: 1px; }
 
-  .field { margin-bottom: 10px; }
-  .field > label { display: flex; justify-content: space-between; font-size: 12px; color: #bbb; margin-bottom: 4px; }
-  .field > label span { color: #7ab8f5; font-weight: 600; }
-  input[type=range] { width: 100%; accent-color: #7ab8f5; cursor: pointer; }
-  input[type=number], input[type=text] {
-    background: #1a1d23; border: 1px solid #444; color: #e0e0e0;
-    padding: 5px 8px; border-radius: 4px; font-size: 12px; width: 100%;
-  }
-  input[type=number]:focus, input[type=text]:focus { outline: none; border-color: #7ab8f5; }
+/* Number fields */
+input[type=number] { background: #1a1d23; border: 1px solid #3a3d4a; color: #e0e0e0; padding: 5px 7px; border-radius: 4px; font-size: 12px; width: 100%; }
+input[type=number]:focus { outline: none; border-color: #7ab8f5; }
+select { background: #1a1d23; border: 1px solid #3a3d4a; color: #e0e0e0; padding: 5px 7px; border-radius: 4px; font-size: 12px; width: 100%; cursor: pointer; }
+select:focus { outline: none; border-color: #7ab8f5; }
 
-  /* Tab toggle */
-  .tab-row { display: flex; gap: 0; margin-bottom: 10px; border-radius: 5px; overflow: hidden; border: 1px solid #444; }
-  .tab-btn { flex: 1; background: #1a1d23; border: none; color: #888; padding: 6px; font-size: 11px; cursor: pointer; }
-  .tab-btn.active { background: #2a3a50; color: #7ab8f5; font-weight: 600; }
+/* Labelled field row */
+.frow { display: flex; gap: 8px; align-items: center; margin-bottom: 7px; }
+.frow .flbl { font-size: 11px; color: #888; white-space: nowrap; min-width: 56px; }
+.frow.two > * { flex: 1; }
+.frow.two .flbl { flex: 0 0 auto; }
 
-  /* Anchor grid */
-  .anchor-grid { display: grid; grid-template-columns: auto 1fr 1fr; gap: 5px 8px; align-items: center; }
-  .anchor-grid .dot { width: 10px; height: 10px; border-radius: 50%; }
-  .anchor-grid label { font-size: 11px; color: #888; }
-  .anchor-coord { display: flex; gap: 4px; align-items: center; }
-  .anchor-coord span { font-size: 11px; color: #666; white-space: nowrap; }
-  .anchor-coord input { flex: 1; }
-  .anchor-readout { font-size: 11px; color: #556; font-style: italic; margin-top: 4px; }
+/* Floater toggle */
+.tog-row { display: flex; gap: 0; border-radius: 5px; overflow: hidden; border: 1px solid #3a3d4a; }
+.tog-btn { flex: 1; background: #1a1d23; border: none; color: #888; padding: 6px; font-size: 12px; cursor: pointer; }
+.tog-btn.active { background: #2a3a50; color: #7ab8f5; font-weight: 600; }
 
-  /* Per-line controls */
-  .line-ctrl { margin-bottom: 12px; padding: 8px; background: #1a1d23; border-radius: 6px; }
-  .line-ctrl-header { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }
-  .line-ctrl-header .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
-  .line-ctrl-header .lname { font-size: 12px; font-weight: 600; color: #ccc; }
-  .line-ctrl-header .floater-tag { font-size: 10px; color: #7ab8f5; background: #1e3a5a; border: 1px solid #7ab8f540; border-radius: 10px; padding: 1px 7px; margin-left: auto; white-space: nowrap; }
-  .line-ctrl-row { display: flex; gap: 6px; align-items: center; }
-  .line-ctrl-row label { font-size: 10px; color: #666; white-space: nowrap; }
-  .line-ctrl-row input[type=range] { flex: 1; }
-  .line-ctrl-row input[type=number] { width: 72px; flex-shrink: 0; }
-  .slack-badge { font-size: 9px; font-weight: 700; color: #e06c6c; background: #3a2020; border-radius: 3px; padding: 1px 5px; margin-left: 4px; }
+/* Line cards */
+.line-card { background: #1a1d23; border-radius: 6px; padding: 9px 9px 7px; margin-bottom: 8px; border: 1px solid #2a2d3a; }
+.lcard-hdr { display: flex; align-items: center; gap: 7px; margin-bottom: 8px; }
+.lcard-hdr .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.lcard-hdr .lname { font-size: 12px; font-weight: 600; color: #ccc; flex: 1; }
+.del-btn { background: none; border: none; color: #555; font-size: 14px; cursor: pointer; padding: 0 2px; line-height: 1; }
+.del-btn:hover { color: #e06c6c; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 6px; }
+.grid2 label, .grid1 label { display: block; font-size: 10px; color: #666; margin-bottom: 2px; }
+.grid1 { margin-bottom: 6px; }
 
-  /* Results */
-  .tension-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
-  .tension-card { background: #1a1d23; border-radius: 6px; padding: 7px; text-align: center; }
-  .tension-card .label { font-size: 10px; color: #888; margin-bottom: 3px; }
-  .tension-card .value { font-size: 16px; font-weight: 700; }
-  .t1 .value { color: #e06c6c; }
-  .t2 .value { color: #6ce0a0; }
-  .t3 .value { color: #6cb8e0; }
+/* Add button */
+.add-btn { background: #2a3a50; color: #7ab8f5; border: 1px dashed #7ab8f550; padding: 6px; border-radius: 4px; font-size: 11px; cursor: pointer; width: 100%; }
+.add-btn:hover { background: #3a4a60; }
 
-  .line-details { margin-top: 8px; }
-  .line-row { display: flex; gap: 4px; align-items: flex-start; margin-bottom: 5px; padding: 5px 6px; background: #1a1d23; border-radius: 5px; font-size: 11px; }
-  .line-row .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 2px; }
-  .line-row .ldata { display: flex; gap: 8px; flex-wrap: wrap; }
-  .line-row .ldata span { color: #999; white-space: nowrap; }
-  .line-row .ldata span b { color: #ddd; }
+/* Catenary status */
+.cat-status { font-size: 11px; margin-top: 8px; padding: 6px 8px; border-radius: 4px; background: #1a1d23; }
+.cat-status.ok { color: #6ce0a0; }
+.cat-status.warn { color: #e0a060; }
+.cat-status.err { color: #e06c6c; }
 
-  .pos-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 8px; }
-  .pos-card { background: #1a1d23; border-radius: 6px; padding: 7px; text-align: center; }
-  .pos-card .label { font-size: 10px; color: #888; margin-bottom: 2px; }
-  .pos-card .value { font-size: 13px; font-weight: 600; color: #e0c06c; }
+/* Results */
+.res-floater { background: #1a1d23; border-radius: 6px; padding: 8px; margin-bottom: 8px; }
+.res-floater .fhdr { font-size: 11px; font-weight: 600; margin-bottom: 6px; }
+.res-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.res-val { text-align: center; flex: 1; }
+.res-val .rlbl { font-size: 10px; color: #888; }
+.res-val .rval { font-size: 14px; font-weight: 700; }
 
-  .btn { background: #7ab8f5; color: #1a1d23; border: none; padding: 7px 14px; border-radius: 4px; font-size: 12px; font-weight: 600; cursor: pointer; width: 100%; margin-top: 4px; }
-  .btn:hover { background: #5aa0e0; }
-  .btn-ghost { background: #2a3a50; color: #7ab8f5; border: 1px solid #7ab8f550; }
-  .btn-ghost:hover { background: #3a4a60; }
-  .btn-sm { padding: 5px 10px; font-size: 11px; width: auto; margin-top: 0; }
+.line-res-list { margin-top: 6px; }
+.line-res { display: flex; gap: 4px; align-items: flex-start; margin-bottom: 4px; padding: 4px 6px; background: #1a1d23; border-radius: 4px; font-size: 11px; }
+.line-res .dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; margin-top: 2px; }
+.line-res .rdata { display: flex; gap: 8px; flex-wrap: wrap; }
+.line-res .rdata span { color: #999; }
+.line-res .rdata span b { color: #ddd; }
+.slack-tag { font-size: 9px; font-weight: 700; color: #e06c6c; background: #3a2020; border-radius: 3px; padding: 1px 4px; }
 
-  /* Canvas */
-  #canvas-wrap { flex: 1; display: flex; position: relative; overflow: hidden; }
-  canvas { display: block; cursor: default; flex: 1; }
-  canvas.dragging { cursor: grabbing; }
-  canvas.hover-floater { cursor: grab; }
-  #hint { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); font-size: 11px; color: #444; pointer-events: none; white-space: nowrap; }
-  #residual-badge {
-    position: absolute; top: 10px; left: 10px; font-size: 11px;
-    background: #22252e; border: 1px solid #333; color: #888;
-    padding: 4px 10px; border-radius: 12px; pointer-events: none;
-  }
-  #mode-badge {
-    position: absolute; top: 10px; right: 10px; font-size: 11px;
-    background: #22252e; border: 1px solid #333; color: #888;
-    padding: 4px 10px; border-radius: 12px; pointer-events: none;
-  }
+/* Canvas */
+#canvas-wrap { flex: 1; display: flex; position: relative; overflow: hidden; }
+canvas { display: block; flex: 1; cursor: default; }
+canvas.hover-f { cursor: grab; }
+canvas.drag { cursor: grabbing; }
+.badge { position: absolute; font-size: 11px; background: #22252e; border: 1px solid #333; color: #888; padding: 4px 10px; border-radius: 12px; pointer-events: none; }
+#badge-res { top: 10px; left: 10px; }
+#badge-mode { top: 10px; right: 10px; }
+#hint { bottom: 10px; left: 50%; transform: translateX(-50%); font-size: 11px; color: #444; white-space: nowrap; }
+
+/* Display section */
+.field { margin-bottom: 8px; }
+.field label { display: flex; justify-content: space-between; font-size: 12px; color: #bbb; margin-bottom: 3px; }
+.field label span { color: #7ab8f5; font-weight: 600; }
+input[type=range] { width: 100%; accent-color: #7ab8f5; cursor: pointer; }
+.btn-ghost { background: #2a3a50; color: #7ab8f5; border: 1px solid #7ab8f550; padding: 6px 14px; border-radius: 4px; font-size: 12px; font-weight: 600; cursor: pointer; width: 100%; margin-top: 4px; }
+.btn-ghost:hover { background: #3a4a60; }
+input[type=checkbox] { accent-color: #7ab8f5; }
 </style>
 </head>
 <body>
@@ -103,222 +94,258 @@
 <div id="sidebar">
   <h1>Mooring Line Equilibrium</h1>
 
-  <!-- ── Anchor Setup ── -->
+  <!-- Configuration -->
   <div class="section">
-    <div class="section-title">Anchor Positions</div>
-    <div class="tab-row">
-      <button class="tab-btn active" id="tab-circle" onclick="setAnchorMode('circle')">Circle Preset</button>
-      <button class="tab-btn" id="tab-manual" onclick="setAnchorMode('manual')">Manual</button>
-    </div>
-
-    <div id="anchor-circle">
-      <div class="field">
-        <label>Radius R (m) <span id="circR-val">5.0</span></label>
-        <input type="range" id="circR" min="1" max="20" step="0.5" value="5">
+    <div class="section-title" style="margin-bottom:10px;">Configuration</div>
+    <div class="frow">
+      <span class="flbl">Floaters</span>
+      <div class="tog-row" style="flex:1;">
+        <button class="tog-btn active" id="tog1" onclick="setNumFloaters(1)">1 Floater</button>
+        <button class="tog-btn" id="tog2" onclick="setNumFloaters(2)">2 Floaters</button>
       </div>
-      <div class="field">
-        <label>Start angle (°) <span id="circA-val">0</span></label>
-        <input type="range" id="circA" min="0" max="359" step="1" value="0">
+    </div>
+  </div>
+
+  <!-- Spring mooring lines -->
+  <div class="section">
+    <div class="section-hdr">
+      <div class="section-title">Spring Mooring Lines</div>
+      <button class="add-btn" style="width:auto;padding:4px 10px;" onclick="addLine()">+ Add Line</button>
+    </div>
+    <div id="line-list"></div>
+  </div>
+
+  <!-- Catenary connection -->
+  <div class="section" id="cat-section" style="display:none;">
+    <div class="section-title" style="margin-bottom:10px;">Catenary — Floater 1 to Floater 2</div>
+    <div class="grid2">
+      <div>
+        <label>Length L (m)</label>
+        <input type="number" id="cat-L" min="0.01" step="0.1" value="8">
       </div>
-      <div class="anchor-readout" id="circle-readout"></div>
+      <div>
+        <label>Unit weight w (N/m)</label>
+        <input type="number" id="cat-w" min="0" step="1" value="50">
+      </div>
     </div>
-
-    <div id="anchor-manual" style="display:none;">
-      <div class="anchor-grid" id="anchor-manual-grid"></div>
-    </div>
+    <div class="cat-status" id="cat-status">—</div>
   </div>
 
-  <!-- ── Mooring Lines ── -->
+  <!-- Results -->
   <div class="section">
-    <div class="section-title">Mooring Lines</div>
-    <div id="line-controls"></div>
+    <div class="section-title" style="margin-bottom:10px;">Results — Equilibrium</div>
+    <div id="results-floaters"></div>
+    <div class="line-res-list" id="line-res-list"></div>
   </div>
 
-  <!-- ── Results ── -->
+  <!-- Display -->
   <div class="section">
-    <div class="section-title">Results — Equilibrium State</div>
-    <div class="tension-grid">
-      <div class="tension-card t1"><div class="label">T₁ (N)</div><div class="value" id="T1-disp">—</div></div>
-      <div class="tension-card t2"><div class="label">T₂ (N)</div><div class="value" id="T2-disp">—</div></div>
-      <div class="tension-card t3"><div class="label">T₃ (N)</div><div class="value" id="T3-disp">—</div></div>
-    </div>
-    <div class="line-details" id="line-details"></div>
-    <div class="pos-grid">
-      <div class="pos-card"><div class="label">x (m)</div><div class="value" id="px-disp">—</div></div>
-      <div class="pos-card"><div class="label">y (m)</div><div class="value" id="py-disp">—</div></div>
-    </div>
-  </div>
-
-  <!-- ── Display ── -->
-  <div class="section">
-    <div class="section-title">Display</div>
+    <div class="section-title" style="margin-bottom:10px;">Display</div>
     <div class="field">
       <label>Floater radius (m) <span id="fr-val">0.5</span></label>
       <input type="range" id="floaterR" min="0.1" max="2" step="0.1" value="0.5">
     </div>
-    <div class="field" style="display:flex;align-items:center;gap:8px;">
-      <label style="font-size:12px;color:#bbb;flex:1;">Show force vectors</label>
+    <div class="frow" style="margin-bottom:8px;">
+      <label style="font-size:12px;color:#bbb;flex:1;">Force vectors</label>
       <input type="checkbox" id="showForces" checked>
     </div>
     <div class="field">
       <label>Force scale <span id="fscale-val">1.0×</span></label>
       <input type="range" id="fscale" min="0.1" max="5" step="0.1" value="1">
     </div>
-    <button class="btn btn-ghost" onclick="fitView()">Fit View</button>
+    <button class="btn-ghost" onclick="fitView()">Fit View</button>
   </div>
 </div>
 
 <div id="canvas-wrap">
   <canvas id="canvas"></canvas>
-  <div id="residual-badge">|F_net| = 0.00 N</div>
-  <div id="mode-badge">Equilibrium</div>
-  <div id="hint">Drag floater to explore · Scroll to zoom</div>
+  <div class="badge" id="badge-res">|F_net| = 0.000 N</div>
+  <div class="badge" id="badge-mode">Equilibrium</div>
+  <div class="badge" id="hint">Drag floater · Scroll to zoom</div>
 </div>
 
 <script>
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
-// ── System State ──────────────────────────────────────────────────────────────
-// Anchors: array of {x, y} in metres
-let anchors = [
-  { x: 5, y: 0 },
-  { x: -2.5, y: 4.330127 },
-  { x: -2.5, y: -4.330127 }
+// ── State ─────────────────────────────────────────────────────────────────────
+let numFloaters = 1;
+// floaters[i] = {x, y}  — positions solved by equilibrium
+let floaters = [{ x: 0, y: 0 }, { x: 4, y: 0 }];
+
+// Spring mooring lines — each has its own anchor position
+let lines = [
+  { ax: 5,    ay:  0,         k: 500, L0: 4.6, floaterIdx: 0 },
+  { ax: -2.5, ay:  4.330127,  k: 500, L0: 4.6, floaterIdx: 0 },
+  { ax: -2.5, ay: -4.330127,  k: 500, L0: 4.6, floaterIdx: 0 }
 ];
 
-// Lines: one per anchor, {k, L0, floaterIdx}
-// floaterIdx = which floater this line connects to (0-based). Always 0 for single-floater model.
-// Default: L0 = dist(anchor, origin) - 200/500 = 5 - 0.4 = 4.6 m (gives ~200 N pretension at origin)
-let lines = [
-  { k: 500, L0: 4.6, floaterIdx: 0 },
-  { k: 500, L0: 4.6, floaterIdx: 0 },
-  { k: 500, L0: 4.6, floaterIdx: 0 }
-];
-// Floater names (one entry per floater, expandable for multi-floater)
-const FLOATER_NAMES = ['Floater 1'];
+// Catenary between floaters (active only when numFloaters === 2)
+let cat = { L: 8, w: 50 };
 
 let floaterR = 0.5;
 let showForces = true;
 let forceScale = 1;
-
-// Floater position (world coords, metres)
-let floaterPos = { x: 0, y: 0 };
-
-// Drag state
-let drag = null;
 let isDragging = false;
+let drag = null; // { floaterIdx, sw:{x,y}, sf:{x,y} }
 
-// Camera
 let cam = { x: 0, y: 0, zoom: 50 };
 
-// Anchor mode: 'circle' | 'manual'
-let anchorMode = 'circle';
-let circleR = 5, circleStartAngleDeg = 0;
+const FLOATER_COLORS = ['#7ab8f5', '#f5a742'];
+// 6 distinct colors for mooring lines (expand as needed)
+const LINE_COLORS = ['#e06c6c','#6ce0a0','#6cb8e0','#c06ce0','#e0b06c','#6ce0c8','#a0e06c','#e06ca0'];
+function lColor(i) { return LINE_COLORS[i % LINE_COLORS.length]; }
 
-const COLORS = ['#e06c6c', '#6ce0a0', '#6cb8e0'];
-
-// ── Physics ───────────────────────────────────────────────────────────────────
-function anchorDist(i, pos) {
-  const a = anchors[i];
-  const dx = a.x - pos.x, dy = a.y - pos.y;
-  return Math.sqrt(dx * dx + dy * dy);
-}
-
-function springTension(i, pos) {
-  const d = anchorDist(i, pos);
-  return Math.max(0, lines[i].k * (d - lines[i].L0));
-}
-
-function springForce(i, pos) {
-  const a = anchors[i];
-  const dx = a.x - pos.x, dy = a.y - pos.y;
-  const d = Math.sqrt(dx * dx + dy * dy);
-  if (d < 1e-9) return { x: 0, y: 0 };
-  const T = springTension(i, pos);
-  return { x: T * dx / d, y: T * dy / d };
-}
-
-function totalForce(pos) {
-  let fx = 0, fy = 0;
-  for (let i = 0; i < anchors.length; i++) {
-    const f = springForce(i, pos);
-    fx += f.x; fy += f.y;
+// ── Catenary physics ──────────────────────────────────────────────────────────
+// Horizontal tension in catenary of total length L, unit weight w,
+// horizontal span d between endpoints at equal elevation.
+// Solves: (2H/w)*sinh(wd/(2H)) = L  →  sinh(λ)/λ = L/d  where λ = wd/(2H)
+function catenaryH(d, L, w) {
+  if (d <= 1e-9) return 0;
+  if (w <= 0) return 0;
+  if (L <= d + 1e-9) return 1e7; // near-taut: very large tension
+  const ratio = L / d;
+  // sinh(λ)/λ = ratio, λ > 0
+  // For small λ: sinh(λ)/λ ≈ 1 + λ²/6 + …  → all λ ≥ 0 give ≥ 1
+  let lo = 1e-9, hi = 300;
+  // Ensure hi bracket: sinh(hi)/hi >> ratio
+  for (let i = 0; i < 50; i++) {
+    if (Math.sinh(Math.min(hi, 700)) / hi >= ratio) break;
+    hi *= 2;
   }
-  return { x: fx, y: fy };
+  for (let i = 0; i < 200; i++) {
+    const mid = (lo + hi) / 2;
+    const sv = mid < 700 ? Math.sinh(mid) / mid : Infinity;
+    if (sv < ratio) lo = mid; else hi = mid;
+  }
+  const lambda = (lo + hi) / 2;
+  return w * d / (2 * lambda);
 }
 
-// ── Solver — Newton-Raphson with damped steps ─────────────────────────────────
-function solveEquilibrium(guess) {
-  let pos = guess ? { ...guess } : { ...floaterPos };
-  const eps = 1e-6, maxIter = 400, tol = 1e-8;
+// Vertical sag at mid-span
+function catenarySag(d, L, w) {
+  const H = catenaryH(d, L, w);
+  if (!isFinite(H) || H > 1e6) return 0;
+  const arg = w * d / (2 * H);
+  return H / w * (Math.cosh(arg) - 1);
+}
 
-  // Bounding box: 3× the max anchor distance so we don't drift to infinity
-  const maxDist = anchors.reduce((m, a) => Math.max(m, Math.sqrt(a.x*a.x + a.y*a.y)), 0);
-  const bound = maxDist * 3 || 50;
+// ── Force model ───────────────────────────────────────────────────────────────
+// Returns array of {x,y} forces on each floater given their positions
+function computeForces(fpos) {
+  const N = fpos.length;
+  const F = Array.from({ length: N }, () => ({ x: 0, y: 0 }));
+
+  // Spring mooring lines
+  for (const ln of lines) {
+    const fi = Math.min(ln.floaterIdx, N - 1);
+    const p = fpos[fi];
+    const dx = ln.ax - p.x, dy = ln.ay - p.y;
+    const d = Math.sqrt(dx * dx + dy * dy);
+    if (d < 1e-9) continue;
+    const T = Math.max(0, ln.k * (d - ln.L0));
+    F[fi].x += T * dx / d;
+    F[fi].y += T * dy / d;
+  }
+
+  // Catenary between floater 0 and floater 1
+  if (N >= 2) {
+    const p0 = fpos[0], p1 = fpos[1];
+    const dx = p1.x - p0.x, dy = p1.y - p0.y;
+    const d = Math.sqrt(dx * dx + dy * dy);
+    if (d > 1e-9) {
+      const H = catenaryH(d, cat.L, cat.w);
+      const hv = Math.min(H, 1e6);
+      const ux = dx / d, uy = dy / d;
+      F[0].x += hv * ux;   F[0].y += hv * uy;
+      F[1].x -= hv * ux;   F[1].y -= hv * uy;
+    }
+  }
+  return F;
+}
+
+// Flat state ↔ positions
+function stateToPos(s) {
+  const p = [];
+  for (let i = 0; i < s.length; i += 2) p.push({ x: s[i], y: s[i + 1] });
+  return p;
+}
+function posToState(p) { return p.flatMap(f => [f.x, f.y]); }
+
+// Gaussian elimination (in-place on augmented matrix)
+function solveLinear(A, b) {
+  const n = b.length;
+  const M = A.map((row, i) => [...row, b[i]]);
+  for (let c = 0; c < n; c++) {
+    let maxR = c;
+    for (let r = c + 1; r < n; r++) if (Math.abs(M[r][c]) > Math.abs(M[maxR][c])) maxR = r;
+    [M[c], M[maxR]] = [M[maxR], M[c]];
+    if (Math.abs(M[c][c]) < 1e-15) continue;
+    for (let r = 0; r < n; r++) {
+      if (r === c) continue;
+      const f = M[r][c] / M[c][c];
+      for (let k = c; k <= n; k++) M[r][k] -= f * M[c][k];
+    }
+  }
+  return M.map((row, i) => (Math.abs(row[i]) > 1e-15 ? row[n] / row[i] : 0));
+}
+
+// ── Solver ────────────────────────────────────────────────────────────────────
+function solveEquilibrium(guesses) {
+  // guesses: [{x,y}, ...] for each active floater
+  let state = posToState(guesses);
+  const n = state.length;
+  const maxDist = Math.max(...lines.map(l => Math.sqrt(l.ax*l.ax + l.ay*l.ay)), 5);
+  const bound = maxDist * 4;
+  const eps = 1e-6, tol = 1e-8, maxIter = 500;
 
   for (let iter = 0; iter < maxIter; iter++) {
-    const F = totalForce(pos);
-    if (Math.abs(F.x) < tol && Math.abs(F.y) < tol) break;
+    const forces = computeForces(stateToPos(state));
+    const F = forces.flatMap(f => [f.x, f.y]);
+    const fNorm = Math.sqrt(F.reduce((s, v) => s + v * v, 0));
+    if (fNorm < tol) break;
 
     // Numerical Jacobian
-    const Fpx = totalForce({ x: pos.x + eps, y: pos.y });
-    const Fpy = totalForce({ x: pos.x, y: pos.y + eps });
-    const J11 = (Fpx.x - F.x) / eps, J12 = (Fpy.x - F.x) / eps;
-    const J21 = (Fpx.y - F.y) / eps, J22 = (Fpy.y - F.y) / eps;
+    const J = Array.from({ length: n }, () => new Array(n).fill(0));
+    for (let j = 0; j < n; j++) {
+      const sp = [...state]; sp[j] += eps;
+      const Fp = computeForces(stateToPos(sp)).flatMap(f => [f.x, f.y]);
+      for (let k = 0; k < n; k++) J[k][j] = (Fp[k] - F[k]) / eps;
+    }
 
-    const det = J11 * J22 - J12 * J21;
-    if (Math.abs(det) < 1e-14) break;
+    const delta = solveLinear(J, F.map(v => -v));
+    const dNorm = Math.sqrt(delta.reduce((s, v) => s + v * v, 0));
+    const scale = dNorm > 0.3 ? 0.3 / dNorm : 1;
 
-    let dx = -(J22 * F.x - J12 * F.y) / det;
-    let dy = -(-J21 * F.x + J11 * F.y) / det;
+    for (let j = 0; j < n; j++) state[j] += scale * delta[j];
 
-    // Damp: limit step to 0.3 m
-    const stepLen = Math.sqrt(dx*dx + dy*dy);
-    if (stepLen > 0.3) { dx *= 0.3 / stepLen; dy *= 0.3 / stepLen; }
-
-    pos.x += dx;
-    pos.y += dy;
-
-    // Soft bounding
-    const r = Math.sqrt(pos.x*pos.x + pos.y*pos.y);
-    if (r > bound) { pos.x *= bound / r; pos.y *= bound / r; }
+    // Bound each floater
+    for (let fi = 0; fi < n / 2; fi++) {
+      const r = Math.sqrt(state[fi*2]**2 + state[fi*2+1]**2);
+      if (r > bound) { state[fi*2] *= bound/r; state[fi*2+1] *= bound/r; }
+    }
   }
-  return pos;
+  return stateToPos(state);
 }
 
-// Centroid of anchors — good starting guess
-function anchorCentroid() {
-  let x = 0, y = 0;
-  for (const a of anchors) { x += a.x; y += a.y; }
-  return { x: x / anchors.length, y: y / anchors.length };
-}
-
-// ── Coordinate transforms ─────────────────────────────────────────────────────
+// ── Camera ────────────────────────────────────────────────────────────────────
 function w2c(wx, wy) {
-  return {
-    x: canvas.width  / 2 + (wx - cam.x) * cam.zoom,
-    y: canvas.height / 2 - (wy - cam.y) * cam.zoom
-  };
+  return { x: canvas.width/2 + (wx - cam.x)*cam.zoom, y: canvas.height/2 - (wy - cam.y)*cam.zoom };
 }
 function c2w(cx, cy) {
-  return {
-    x: (cx - canvas.width  / 2) / cam.zoom + cam.x,
-    y: -(cy - canvas.height / 2) / cam.zoom + cam.y
-  };
+  return { x: (cx - canvas.width/2)/cam.zoom + cam.x, y: -(cy - canvas.height/2)/cam.zoom + cam.y };
 }
 
 // ── Drawing ───────────────────────────────────────────────────────────────────
 function drawArrow(x1, y1, x2, y2, color, lw) {
   lw = lw || 2;
-  const dx = x2-x1, dy = y2-y1, len = Math.sqrt(dx*dx+dy*dy);
-  if (len < 3) return;
-  const ux = dx/len, uy = dy/len;
-  const hw = Math.max(6, lw*3), hl = Math.max(10, lw*4.5);
-  ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2-ux*hl, y2-uy*hl);
+  const dx = x2-x1, dy = y2-y1, L = Math.sqrt(dx*dx+dy*dy);
+  if (L < 3) return;
+  const ux = dx/L, uy = dy/L, hw = Math.max(6,lw*3), hl = Math.max(10,lw*4.5);
+  ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2-ux*hl, y2-uy*hl);
   ctx.strokeStyle = color; ctx.lineWidth = lw; ctx.stroke();
   ctx.beginPath();
-  ctx.moveTo(x2, y2);
+  ctx.moveTo(x2,y2);
   ctx.lineTo(x2-ux*hl-uy*hw/2, y2-uy*hl+ux*hw/2);
   ctx.lineTo(x2-ux*hl+uy*hw/2, y2-uy*hl-ux*hw/2);
   ctx.closePath(); ctx.fillStyle = color; ctx.fill();
@@ -326,521 +353,472 @@ function drawArrow(x1, y1, x2, y2, color, lw) {
 
 function drawGrid() {
   if (cam.zoom < 8) return;
-  const left = c2w(0, 0).x, right = c2w(canvas.width, 0).x;
-  const top  = c2w(0, 0).y, bottom = c2w(0, canvas.height).y;
+  const l = c2w(0,0).x, r = c2w(canvas.width,0).x;
+  const t = c2w(0,0).y, b = c2w(0,canvas.height).y;
   ctx.strokeStyle = '#22252f'; ctx.lineWidth = 1;
-  for (let wx = Math.floor(left); wx <= right+1; wx++) {
-    const p = w2c(wx, 0);
-    ctx.beginPath(); ctx.moveTo(p.x, 0); ctx.lineTo(p.x, canvas.height); ctx.stroke();
-  }
-  for (let wy = Math.floor(bottom); wy <= top+1; wy++) {
-    const p = w2c(0, wy);
-    ctx.beginPath(); ctx.moveTo(0, p.y); ctx.lineTo(canvas.width, p.y); ctx.stroke();
-  }
+  for (let x = Math.floor(l); x <= r+1; x++) { const p=w2c(x,0); ctx.beginPath(); ctx.moveTo(p.x,0); ctx.lineTo(p.x,canvas.height); ctx.stroke(); }
+  for (let y = Math.floor(b); y <= t+1; y++) { const p=w2c(0,y); ctx.beginPath(); ctx.moveTo(0,p.y); ctx.lineTo(canvas.width,p.y); ctx.stroke(); }
   ctx.strokeStyle = '#2d3245'; ctx.lineWidth = 1;
-  const o = w2c(0, 0);
-  ctx.beginPath(); ctx.moveTo(o.x, 0); ctx.lineTo(o.x, canvas.height); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(0, o.y); ctx.lineTo(canvas.width, o.y); ctx.stroke();
+  const o = w2c(0,0);
+  ctx.beginPath(); ctx.moveTo(o.x,0); ctx.lineTo(o.x,canvas.height); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(0,o.y); ctx.lineTo(canvas.width,o.y); ctx.stroke();
 }
 
-function drawNaturalLengthArc(i) {
-  const L0 = lines[i].L0;
-  if (L0 <= 0) return;
-  const a = anchors[i];
-  const ap = w2c(a.x, a.y);
-  const rpx = L0 * cam.zoom;
-  ctx.beginPath(); ctx.arc(ap.x, ap.y, rpx, 0, Math.PI * 2);
-  ctx.strokeStyle = COLORS[i] + '20'; ctx.lineWidth = 1; ctx.setLineDash([3,8]); ctx.stroke();
-  ctx.setLineDash([]);
-}
-
-function drawMooringLine(i, pos) {
-  const a = anchors[i];
-  const ap = w2c(a.x, a.y);
-  const fp = w2c(pos.x, pos.y);
-  const T = springTension(i, pos);
-  const slack = T < 0.01;
-
-  if (slack) {
-    ctx.setLineDash([4, 5]);
-    ctx.strokeStyle = COLORS[i] + '44';
-    ctx.lineWidth = 1;
-  } else {
-    ctx.setLineDash([]);
-    ctx.strokeStyle = COLORS[i];
-    ctx.lineWidth = Math.max(1.5, Math.min(5, T / 80));
-  }
-  ctx.beginPath(); ctx.moveTo(fp.x, fp.y); ctx.lineTo(ap.x, ap.y); ctx.stroke();
-  ctx.setLineDash([]);
-
-  // Label at 35% along the line from floater end (avoids overlapping anchors/floater)
+function drawAnchor(ln, lIdx) {
+  const ap = w2c(ln.ax, ln.ay);
+  const col = lColor(lIdx);
+  ctx.beginPath(); ctx.arc(ap.x, ap.y, 10, 0, Math.PI*2);
+  ctx.fillStyle = col+'22'; ctx.fill();
+  ctx.strokeStyle = col; ctx.lineWidth = 2; ctx.stroke();
+  ctx.strokeStyle = col; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(ap.x-7,ap.y); ctx.lineTo(ap.x+7,ap.y); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(ap.x,ap.y-7); ctx.lineTo(ap.x,ap.y+7); ctx.stroke();
   if (cam.zoom > 15) {
-    const t = 0.35;
-    const mx = fp.x + (ap.x - fp.x) * t;
-    const my = fp.y + (ap.y - fp.y) * t;
-    // Small perpendicular offset so label sits beside the line
-    const dx = ap.x - fp.x, dy = ap.y - fp.y;
-    const len = Math.sqrt(dx*dx + dy*dy) || 1;
-    const nx = -dy / len * 10, ny = dx / len * 10;
+    ctx.fillStyle = col; ctx.font = 'bold 10px Segoe UI'; ctx.textAlign = 'center';
+    ctx.fillText(`A${lIdx+1}`, ap.x, ap.y - 14);
+  }
+}
 
-    const fname = FLOATER_NAMES[lines[i].floaterIdx] || `F${lines[i].floaterIdx + 1}`;
-    ctx.fillStyle = COLORS[i] + (slack ? '66' : 'cc');
-    ctx.font = `${Math.max(9, Math.min(11, cam.zoom * 0.18))}px Segoe UI`;
+function drawSpringLine(ln, lIdx, fpos) {
+  const fi = Math.min(ln.floaterIdx, fpos.length - 1);
+  const p = fpos[fi];
+  const fp = w2c(p.x, p.y), ap = w2c(ln.ax, ln.ay);
+  const dx = ln.ax - p.x, dy = ln.ay - p.y;
+  const d = Math.sqrt(dx*dx + dy*dy);
+  const T = Math.max(0, ln.k * (d - ln.L0));
+  const slack = T < 0.01;
+  const col = lColor(lIdx);
+
+  if (slack) { ctx.setLineDash([4,5]); ctx.strokeStyle = col+'44'; ctx.lineWidth = 1; }
+  else { ctx.setLineDash([]); ctx.strokeStyle = col; ctx.lineWidth = Math.max(1.5, Math.min(5, T/80)); }
+  ctx.beginPath(); ctx.moveTo(fp.x,fp.y); ctx.lineTo(ap.x,ap.y); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Line label
+  if (cam.zoom > 18) {
+    const t = 0.4;
+    const mx = fp.x + (ap.x-fp.x)*t, my = fp.y + (ap.y-fp.y)*t;
+    const nx = -(ap.y-fp.y)/(Math.sqrt((ap.x-fp.x)**2+(ap.y-fp.y)**2)||1)*11;
+    const ny =  (ap.x-fp.x)/(Math.sqrt((ap.x-fp.x)**2+(ap.y-fp.y)**2)||1)*11;
+    const fname = `F${ln.floaterIdx+1}`;
+    ctx.fillStyle = col+(slack?'66':'bb');
+    ctx.font = `${Math.max(9, Math.min(11, cam.zoom*0.18))}px Segoe UI`;
     ctx.textAlign = 'center';
-    ctx.fillText(`L${i+1} → ${fname}`, mx + nx, my + ny);
+    ctx.fillText(`L${lIdx+1}→${fname}`, mx+nx, my+ny);
   }
 }
 
-function drawAnchor(i) {
-  const a = anchors[i];
-  const ap = w2c(a.x, a.y);
-  // Ground hatch marks (indicate fixed point)
-  const ang = Math.atan2(a.y, a.x); // direction from origin to anchor
-  const perpX = Math.sin(ang), perpY = -Math.cos(ang);
-  ctx.strokeStyle = COLORS[i] + '88'; ctx.lineWidth = 1.5;
-  for (let t = -1; t <= 1; t++) {
-    const ox = ap.x + perpX * t * 6, oy = ap.y + perpY * t * 6;
-    const dir = { x: Math.cos(ang + 0.5), y: Math.sin(ang + 0.5) };
-    ctx.beginPath(); ctx.moveTo(ox, oy); ctx.lineTo(ox - dir.x*8, oy - dir.y*8); ctx.stroke();
+function drawCatenary(fpos) {
+  if (fpos.length < 2) return;
+  const p0 = fpos[0], p1 = fpos[1];
+  const dx = p1.x-p0.x, dy = p1.y-p0.y;
+  const d = Math.sqrt(dx*dx+dy*dy);
+  const a = w2c(p0.x,p0.y), b = w2c(p1.x,p1.y);
+
+  // Visual sag bow (proportional to excess length L-d)
+  const excess = Math.max(0, cat.L - d);
+  const sagWorld = Math.min(excess * 0.3, d * 0.25);
+  const sagPx = sagWorld * cam.zoom;
+  // Perpendicular direction (right-hand of p0→p1)
+  const len2d = Math.sqrt((b.x-a.x)**2+(b.y-a.y)**2) || 1;
+  const nx = -(b.y-a.y)/len2d, ny = (b.x-a.x)/len2d;
+  const cx = (a.x+b.x)/2 + nx*sagPx;
+  const cy = (a.y+b.y)/2 + ny*sagPx;
+
+  ctx.beginPath();
+  ctx.moveTo(a.x, a.y);
+  ctx.quadraticCurveTo(cx, cy, b.x, b.y);
+  const H = catenaryH(d, cat.L, cat.w);
+  const taut = d >= cat.L - 1e-3;
+  if (taut) { ctx.setLineDash([3,4]); ctx.strokeStyle = '#e0604088'; }
+  else { ctx.setLineDash([]); ctx.strokeStyle = '#f5c842'; }
+  ctx.lineWidth = 2.5; ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Label at midpoint
+  if (cam.zoom > 18) {
+    ctx.fillStyle = '#f5c842cc'; ctx.font = '10px Segoe UI'; ctx.textAlign = 'center';
+    ctx.fillText(`Cat. H=${isFinite(H)&&H<1e6?H.toFixed(0):'∞'} N`, cx, cy - 10);
   }
-  // Circle
-  ctx.beginPath(); ctx.arc(ap.x, ap.y, 10, 0, Math.PI * 2);
-  ctx.fillStyle = COLORS[i] + '22'; ctx.fill();
-  ctx.strokeStyle = COLORS[i]; ctx.lineWidth = 2; ctx.stroke();
-  // Cross
-  ctx.strokeStyle = COLORS[i]; ctx.lineWidth = 1.5;
-  ctx.beginPath(); ctx.moveTo(ap.x-7, ap.y); ctx.lineTo(ap.x+7, ap.y); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(ap.x, ap.y-7); ctx.lineTo(ap.x, ap.y+7); ctx.stroke();
-  // Label: offset outward from centroid
-  const cx = anchors.reduce((s,a)=>s+a.x,0)/anchors.length;
-  const cy = anchors.reduce((s,a)=>s+a.y,0)/anchors.length;
-  const dx = a.x - cx, dy = a.y - cy;
-  const dl = Math.sqrt(dx*dx+dy*dy) || 1;
-  const lp = w2c(a.x + dx/dl*0.7, a.y + dy/dl*0.7);
-  ctx.fillStyle = COLORS[i]; ctx.font = 'bold 11px Segoe UI'; ctx.textAlign = 'center';
-  ctx.fillText(`A${i+1}`, lp.x, lp.y + 4);
 }
 
-function drawFloater(pos) {
-  const fp = w2c(pos.x, pos.y);
+function drawFloater(fi, p) {
+  const fp = w2c(p.x, p.y);
   const rpx = floaterR * cam.zoom;
-  // Ripple
-  ctx.beginPath(); ctx.arc(fp.x, fp.y, rpx + 7, 0, Math.PI*2);
-  ctx.strokeStyle = 'rgba(100,180,255,0.1)'; ctx.lineWidth = 7; ctx.stroke();
-  // Body
-  ctx.beginPath(); ctx.arc(fp.x, fp.y, rpx, 0, Math.PI*2);
-  const g = ctx.createRadialGradient(fp.x-rpx*0.3, fp.y-rpx*0.3, rpx*0.1, fp.x, fp.y, rpx);
-  g.addColorStop(0, '#a0c8f0'); g.addColorStop(1, '#2a5070');
+  const col = FLOATER_COLORS[fi] || FLOATER_COLORS[0];
+  ctx.beginPath(); ctx.arc(fp.x,fp.y,rpx+7,0,Math.PI*2);
+  ctx.strokeStyle = col+'18'; ctx.lineWidth = 7; ctx.stroke();
+  ctx.beginPath(); ctx.arc(fp.x,fp.y,rpx,0,Math.PI*2);
+  const g = ctx.createRadialGradient(fp.x-rpx*0.3,fp.y-rpx*0.3,rpx*0.1,fp.x,fp.y,rpx);
+  g.addColorStop(0, col+'cc'); g.addColorStop(1, '#2a4060');
   ctx.fillStyle = g; ctx.fill();
-  ctx.strokeStyle = '#7ab8f5'; ctx.lineWidth = 2; ctx.stroke();
+  ctx.strokeStyle = col; ctx.lineWidth = 2; ctx.stroke();
   ctx.fillStyle = '#e0e0e0'; ctx.font = 'bold 11px Segoe UI'; ctx.textAlign = 'center';
-  ctx.fillText('Floater', fp.x, fp.y + rpx + 15);
+  ctx.fillText(`Floater ${fi+1}`, fp.x, fp.y + rpx + 15);
 }
 
-function drawForceVectors(pos) {
-  const fp = w2c(pos.x, pos.y);
+function drawForceVectors(fpos) {
   const fscale = forceScale * cam.zoom * 0.003;
-  for (let i = 0; i < anchors.length; i++) {
-    const f = springForce(i, pos);
-    const len = Math.sqrt(f.x*f.x + f.y*f.y);
-    if (len < 0.01) continue;
-    const ex = fp.x + f.x*fscale, ey = fp.y - f.y*fscale;
-    drawArrow(fp.x, fp.y, ex, ey, COLORS[i], 2);
-    const T = springTension(i, pos);
-    ctx.fillStyle = COLORS[i]; ctx.font = 'bold 10px Segoe UI'; ctx.textAlign = 'center';
-    ctx.fillText(`${T.toFixed(0)} N`, fp.x + f.x*fscale*0.5, fp.y - f.y*fscale*0.5 - 8);
+  const allForces = computeForces(fpos);
+
+  // Per-spring forces
+  for (let li = 0; li < lines.length; li++) {
+    const ln = lines[li];
+    const fi = Math.min(ln.floaterIdx, fpos.length-1);
+    const p = fpos[fi];
+    const dx = ln.ax-p.x, dy = ln.ay-p.y, d = Math.sqrt(dx*dx+dy*dy);
+    if (d < 1e-9) continue;
+    const T = Math.max(0, ln.k*(d-ln.L0));
+    if (T < 0.01) continue;
+    const fp = w2c(p.x, p.y);
+    const fx = T*dx/d, fy = T*dy/d;
+    const ex = fp.x+fx*fscale, ey = fp.y-fy*fscale;
+    drawArrow(fp.x,fp.y,ex,ey,lColor(li),2);
+    ctx.fillStyle = lColor(li)+'cc'; ctx.font = 'bold 9px Segoe UI'; ctx.textAlign = 'center';
+    ctx.fillText(`${T.toFixed(0)}N`, fp.x+fx*fscale*0.5, fp.y-fy*fscale*0.5-7);
   }
-  // Net residual (should be ~0)
-  const net = totalForce(pos);
-  const netLen = Math.sqrt(net.x*net.x + net.y*net.y);
-  if (netLen > 0.5) {
-    const ex = fp.x + net.x*fscale, ey = fp.y - net.y*fscale;
-    drawArrow(fp.x, fp.y, ex, ey, '#ff880080', 1.5);
-    ctx.fillStyle = '#ff880080'; ctx.font = '10px Segoe UI'; ctx.textAlign = 'center';
-    ctx.fillText(`net ${netLen.toFixed(1)} N`, fp.x + net.x*fscale*0.5, fp.y - net.y*fscale*0.5 - 8);
+
+  // Catenary forces
+  if (fpos.length >= 2) {
+    const p0 = fpos[0], p1 = fpos[1];
+    const dx = p1.x-p0.x, dy = p1.y-p0.y, d = Math.sqrt(dx*dx+dy*dy);
+    if (d > 1e-9) {
+      const H = Math.min(catenaryH(d, cat.L, cat.w), 1e6);
+      if (H > 0.1) {
+        const ux = dx/d, uy = dy/d;
+        for (let fi = 0; fi < 2; fi++) {
+          const fp = w2c(fpos[fi].x, fpos[fi].y);
+          const sx = (fi===0?1:-1)*H*ux, sy = (fi===0?1:-1)*H*uy;
+          const ex = fp.x+sx*fscale, ey = fp.y-sy*fscale;
+          drawArrow(fp.x,fp.y,ex,ey,'#f5c842',2);
+          ctx.fillStyle = '#f5c842cc'; ctx.font = 'bold 9px Segoe UI'; ctx.textAlign = 'center';
+          ctx.fillText(`${H.toFixed(0)}N`, fp.x+sx*fscale*0.5, fp.y-sy*fscale*0.5-7);
+        }
+      }
+    }
+  }
+
+  // Net residual per floater
+  for (let fi = 0; fi < fpos.length; fi++) {
+    const net = allForces[fi];
+    const netLen = Math.sqrt(net.x*net.x + net.y*net.y);
+    if (netLen > 0.5) {
+      const fp = w2c(fpos[fi].x, fpos[fi].y);
+      drawArrow(fp.x,fp.y, fp.x+net.x*fscale, fp.y-net.y*fscale, '#ff880060', 1.5);
+    }
   }
 }
 
 function drawScaleBar() {
-  const px = cam.zoom; // 1 metre
-  const x = 16, y = canvas.height - 16;
+  const px = cam.zoom, x = 16, y = canvas.height-16;
   ctx.strokeStyle = '#666'; ctx.lineWidth = 2;
-  ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x+px, y); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(x, y-4); ctx.lineTo(x, y+4); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(x+px, y-4); ctx.lineTo(x+px, y+4); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(x,y); ctx.lineTo(x+px,y); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(x,y-4); ctx.lineTo(x,y+4); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(x+px,y-4); ctx.lineTo(x+px,y+4); ctx.stroke();
   ctx.fillStyle = '#666'; ctx.font = '11px Segoe UI'; ctx.textAlign = 'left';
-  ctx.fillText('1 m', x, y - 8);
+  ctx.fillText('1 m', x, y-8);
 }
 
 function render() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = '#1a1d23'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle = '#1a1d23'; ctx.fillRect(0,0,canvas.width,canvas.height);
 
+  const activeFPos = floaters.slice(0, numFloaters);
   drawGrid();
-
-  // Natural length arcs
-  for (let i = 0; i < anchors.length; i++) drawNaturalLengthArc(i);
-
-  // Mooring lines (behind anchors)
-  for (let i = 0; i < anchors.length; i++) drawMooringLine(i, floaterPos);
-
+  // Natural length arcs (faint)
+  for (let i = 0; i < lines.length; i++) {
+    const L0px = lines[i].L0 * cam.zoom;
+    if (L0px < 2) continue;
+    const ap = w2c(lines[i].ax, lines[i].ay);
+    ctx.beginPath(); ctx.arc(ap.x,ap.y,L0px,0,Math.PI*2);
+    ctx.strokeStyle = lColor(i)+'18'; ctx.lineWidth=1; ctx.setLineDash([3,9]); ctx.stroke();
+    ctx.setLineDash([]);
+  }
+  // Catenary
+  if (numFloaters >= 2) drawCatenary(activeFPos);
+  // Spring lines
+  for (let i = 0; i < lines.length; i++) drawSpringLine(lines[i], i, activeFPos);
   // Anchors
-  for (let i = 0; i < anchors.length; i++) drawAnchor(i);
-
+  for (let i = 0; i < lines.length; i++) drawAnchor(lines[i], i);
   // Force vectors
-  if (showForces) drawForceVectors(floaterPos);
-
-  // Floater (on top)
-  drawFloater(floaterPos);
+  if (showForces) drawForceVectors(activeFPos);
+  // Floaters (on top)
+  for (let fi = 0; fi < numFloaters; fi++) drawFloater(fi, activeFPos[fi]);
 
   drawScaleBar();
-  updateResultsUI();
+  updateResultsUI(activeFPos);
 }
 
-// ── UI Updates ────────────────────────────────────────────────────────────────
-function updateResultsUI() {
-  const T = anchors.map((_, i) => springTension(i, floaterPos));
-  document.getElementById('T1-disp').textContent = T[0] !== undefined ? T[0].toFixed(1) : '—';
-  document.getElementById('T2-disp').textContent = T[1] !== undefined ? T[1].toFixed(1) : '—';
-  document.getElementById('T3-disp').textContent = T[2] !== undefined ? T[2].toFixed(1) : '—';
-  document.getElementById('px-disp').textContent = floaterPos.x.toFixed(3);
-  document.getElementById('py-disp').textContent = floaterPos.y.toFixed(3);
-
-  const net = totalForce(floaterPos);
-  const netLen = Math.sqrt(net.x*net.x + net.y*net.y);
-  const badge = document.getElementById('residual-badge');
-  badge.textContent = `|F_net| = ${netLen.toFixed(3)} N`;
-  badge.style.color = netLen > 0.5 ? '#e0a060' : '#60b860';
-
-  document.getElementById('mode-badge').textContent = isDragging ? 'Free Drag' : 'Equilibrium';
-
-  // Per-line detail rows
-  const det = document.getElementById('line-details');
-  det.innerHTML = '';
-  for (let i = 0; i < anchors.length; i++) {
-    const a = anchors[i];
-    const dx = a.x - floaterPos.x, dy = a.y - floaterPos.y;
-    const L = Math.sqrt(dx*dx + dy*dy);
-    const ang = Math.atan2(dy, dx) * 180 / Math.PI;
-    const slack = T[i] < 0.01;
-    const row = document.createElement('div');
-    row.className = 'line-row';
-    row.innerHTML = `
-      <div class="dot" style="background:${COLORS[i]}"></div>
-      <div class="ldata">
-        <span><b>${T[i].toFixed(1)}</b> N ${slack ? '<span class="slack-badge">SLACK</span>' : ''}</span>
-        <span>L = <b>${L.toFixed(3)}</b> m</span>
-        <span>L₀ = <b>${lines[i].L0.toFixed(3)}</b> m</span>
-        <span>ΔL = <b>${(L - lines[i].L0).toFixed(3)}</b> m</span>
-        <span>θ = <b>${ang.toFixed(1)}°</b></span>
+// ── Results UI ────────────────────────────────────────────────────────────────
+function updateResultsUI(fpos) {
+  // Floater positions
+  const rfDiv = document.getElementById('results-floaters');
+  rfDiv.innerHTML = '';
+  for (let fi = 0; fi < numFloaters; fi++) {
+    const col = FLOATER_COLORS[fi];
+    const p = fpos[fi];
+    const d = document.createElement('div');
+    d.className = 'res-floater';
+    d.innerHTML = `<div class="fhdr" style="color:${col}">Floater ${fi+1}</div>
+      <div class="res-row">
+        <div class="res-val"><div class="rlbl">x (m)</div><div class="rval" style="color:${col}">${p.x.toFixed(4)}</div></div>
+        <div class="res-val"><div class="rlbl">y (m)</div><div class="rval" style="color:${col}">${p.y.toFixed(4)}</div></div>
       </div>`;
-    det.appendChild(row);
+    rfDiv.appendChild(d);
   }
 
-  // Keep floater-tag labels current (floaterIdx may change in future)
-  for (let i = 0; i < anchors.length; i++) {
-    const el = document.getElementById(`ftag-${i}`);
-    if (!el) continue;
-    const fname = FLOATER_NAMES[lines[i].floaterIdx] || `Floater ${lines[i].floaterIdx + 1}`;
-    el.textContent = `→ ${fname}`;
+  // Net residual badge
+  const allF = computeForces(fpos);
+  const totalRes = Math.sqrt(allF.reduce((s,f)=>s+f.x*f.x+f.y*f.y,0));
+  const badge = document.getElementById('badge-res');
+  badge.textContent = `|F_net| = ${totalRes.toFixed(4)} N`;
+  badge.style.color = totalRes > 0.5 ? '#e0a060' : '#60b860';
+  document.getElementById('badge-mode').textContent = isDragging ? 'Free Drag' : 'Equilibrium';
+
+  // Catenary status
+  if (numFloaters >= 2) {
+    const p0=fpos[0], p1=fpos[1];
+    const dx=p1.x-p0.x, dy=p1.y-p0.y, d=Math.sqrt(dx*dx+dy*dy);
+    const el = document.getElementById('cat-status');
+    if (d >= cat.L) {
+      el.className='cat-status err'; el.textContent=`Distance ${d.toFixed(2)} m ≥ L=${cat.L} m — line taut/impossible`;
+    } else {
+      const H = catenaryH(d, cat.L, cat.w);
+      const sag = catenarySag(d, cat.L, cat.w);
+      el.className='cat-status ok';
+      el.textContent=`d=${d.toFixed(2)} m  H=${H.toFixed(1)} N  Sag=${sag.toFixed(2)} m`;
+    }
+  }
+
+  // Line results
+  const lrd = document.getElementById('line-res-list');
+  lrd.innerHTML = '';
+  for (let i = 0; i < lines.length; i++) {
+    const ln = lines[i];
+    const fi = Math.min(ln.floaterIdx, fpos.length-1);
+    const p = fpos[fi];
+    const dx=ln.ax-p.x, dy=ln.ay-p.y, d=Math.sqrt(dx*dx+dy*dy);
+    const T = Math.max(0, ln.k*(d-ln.L0));
+    const ang = Math.atan2(dy,dx)*180/Math.PI;
+    const slack = T < 0.01;
+    const col = lColor(i);
+    const row = document.createElement('div');
+    row.className = 'line-res';
+    row.innerHTML = `<div class="dot" style="background:${col}"></div>
+      <div class="rdata">
+        <span>L${i+1}:</span>
+        <span><b>${T.toFixed(1)}</b> N ${slack?'<span class="slack-tag">SLACK</span>':''}</span>
+        <span>L=<b>${d.toFixed(3)}</b>m</span>
+        <span>ΔL=<b>${(d-ln.L0).toFixed(3)}</b>m</span>
+        <span>θ=<b>${ang.toFixed(1)}°</b></span>
+        <span style="color:${FLOATER_COLORS[ln.floaterIdx]||'#888'}">→F${ln.floaterIdx+1}</span>
+      </div>`;
+    lrd.appendChild(row);
   }
 }
 
-// ── Anchor Setup ──────────────────────────────────────────────────────────────
-function applyCircleAnchors() {
-  const R = circleR;
-  const startRad = circleStartAngleDeg * Math.PI / 180;
-  anchors = [0, 1, 2].map(i => {
-    const ang = startRad + i * 2 * Math.PI / 3;
-    return { x: R * Math.cos(ang), y: R * Math.sin(ang) };
-  });
-  document.getElementById('circle-readout').textContent =
-    anchors.map((a, i) => `A${i+1}: (${a.x.toFixed(2)}, ${a.y.toFixed(2)})`).join('  ');
-  // Clamp L0 values that now exceed the new max
-  const ml = maxL0();
-  lines.forEach(l => { l.L0 = Math.min(l.L0, ml); });
-  rebuildLineCtrls();
+// ── Configuration controls ────────────────────────────────────────────────────
+function setNumFloaters(n) {
+  numFloaters = n;
+  document.getElementById('tog1').classList.toggle('active', n===1);
+  document.getElementById('tog2').classList.toggle('active', n===2);
+  document.getElementById('cat-section').style.display = n===2 ? '' : 'none';
+  rebuildLineList();
   resolveAndRender();
 }
 
-function setAnchorMode(mode) {
-  anchorMode = mode;
-  document.getElementById('tab-circle').classList.toggle('active', mode === 'circle');
-  document.getElementById('tab-manual').classList.toggle('active', mode === 'manual');
-  document.getElementById('anchor-circle').style.display = mode === 'circle' ? '' : 'none';
-  document.getElementById('anchor-manual').style.display = mode === 'manual' ? '' : 'none';
-  if (mode === 'manual') buildManualAnchorGrid();
+function addLine() {
+  // Default anchor: offset from existing centroid
+  const cx = lines.reduce((s,l)=>s+l.ax,0)/(lines.length||1);
+  const cy = lines.reduce((s,l)=>s+l.ay,0)/(lines.length||1);
+  const ang = Math.random()*Math.PI*2;
+  const R = 5;
+  lines.push({ ax: cx+R*Math.cos(ang), ay: cy+R*Math.sin(ang), k:500, L0:4.6, floaterIdx:0 });
+  rebuildLineList();
+  resolveAndRender();
 }
 
-function buildManualAnchorGrid() {
-  const grid = document.getElementById('anchor-manual-grid');
-  grid.innerHTML = '';
-  for (let i = 0; i < 3; i++) {
-    // Dot
-    const dot = document.createElement('div');
-    dot.className = 'dot';
-    dot.style.background = COLORS[i];
-    grid.appendChild(dot);
-    // x input
-    const xWrap = document.createElement('div');
-    xWrap.className = 'anchor-coord';
-    xWrap.innerHTML = `<span>x${i+1}</span>`;
-    const xi = document.createElement('input');
-    xi.type = 'number'; xi.step = '0.1'; xi.value = anchors[i].x.toFixed(2);
-    xi.addEventListener('input', () => { anchors[i].x = parseFloat(xi.value)||0; resolveAndRender(); });
-    xWrap.appendChild(xi);
-    grid.appendChild(xWrap);
-    // y input
-    const yWrap = document.createElement('div');
-    yWrap.className = 'anchor-coord';
-    yWrap.innerHTML = `<span>y${i+1}</span>`;
-    const yi = document.createElement('input');
-    yi.type = 'number'; yi.step = '0.1'; yi.value = anchors[i].y.toFixed(2);
-    yi.addEventListener('input', () => { anchors[i].y = parseFloat(yi.value)||0; resolveAndRender(); });
-    yWrap.appendChild(yi);
-    grid.appendChild(yWrap);
-  }
+function removeLine(i) {
+  lines.splice(i,1);
+  rebuildLineList();
+  resolveAndRender();
 }
 
-// ── Line Controls ─────────────────────────────────────────────────────────────
-function maxL0() {
-  return anchors.reduce((m, a) => Math.max(m, Math.sqrt(a.x*a.x + a.y*a.y)), 0) * 1.2 || 20;
-}
-
-function rebuildLineCtrls() {
-  const container = document.getElementById('line-controls');
+function rebuildLineList() {
+  const container = document.getElementById('line-list');
   container.innerHTML = '';
-  const ml = maxL0();
+  for (let i = 0; i < lines.length; i++) {
+    const ln = lines[i];
+    const col = lColor(i);
+    const card = document.createElement('div');
+    card.className = 'line-card';
 
-  for (let i = 0; i < anchors.length; i++) {
-    // Initialise missing line entries
-    if (lines[i] === undefined) {
-      const d = Math.sqrt(anchors[i].x**2 + anchors[i].y**2);
-      const kv = lines[0] ? lines[0].k : 500;
-      lines[i] = { k: kv, L0: Math.max(0, d - 200 / kv), floaterIdx: 0 };
-    }
-    if (lines[i].floaterIdx === undefined) lines[i].floaterIdx = 0;
-
-    const wrap = document.createElement('div');
-    wrap.className = 'line-ctrl';
-
-    // Header: colour dot, name, floater tag
-    const floaterName = FLOATER_NAMES[lines[i].floaterIdx] || `Floater ${lines[i].floaterIdx + 1}`;
+    // Header
     const hdr = document.createElement('div');
-    hdr.className = 'line-ctrl-header';
-    hdr.innerHTML = `
-      <div class="dot" style="background:${COLORS[i]}"></div>
-      <span class="lname">Line ${i+1}</span>
-      <span class="floater-tag" id="ftag-${i}">→ ${floaterName}</span>`;
-    wrap.appendChild(hdr);
+    hdr.className = 'lcard-hdr';
+    hdr.innerHTML = `<div class="dot" style="background:${col}"></div><span class="lname">Line ${i+1}</span>`;
+    const delBtn = document.createElement('button');
+    delBtn.className = 'del-btn'; delBtn.textContent = '×';
+    delBtn.onclick = () => removeLine(i);
+    if (lines.length <= 1) delBtn.disabled = true;
+    hdr.appendChild(delBtn);
+    card.appendChild(hdr);
 
-    // Row 1: L0 label + slider + number input
-    const l0label = document.createElement('div');
-    l0label.style.cssText = 'font-size:10px;color:#666;margin-bottom:3px;';
-    l0label.textContent = 'Natural length L₀ (m)';
-    wrap.appendChild(l0label);
+    // Anchor coords
+    const g1 = document.createElement('div'); g1.className = 'grid2';
+    g1.innerHTML = `
+      <div><label>Anchor x (m)</label><input type="number" step="0.01" value="${ln.ax.toFixed(3)}" id="ax-${i}"></div>
+      <div><label>Anchor y (m)</label><input type="number" step="0.01" value="${ln.ay.toFixed(3)}" id="ay-${i}"></div>`;
+    card.appendChild(g1);
 
-    const rowL0 = document.createElement('div');
-    rowL0.className = 'line-ctrl-row';
+    // L0 and k
+    const g2 = document.createElement('div'); g2.className = 'grid2';
+    g2.innerHTML = `
+      <div><label>Natural length L₀ (m)</label><input type="number" step="0.01" min="0" value="${ln.L0.toFixed(3)}" id="L0-${i}"></div>
+      <div><label>Stiffness k (N/m)</label><input type="number" step="10" min="1" value="${ln.k}" id="k-${i}"></div>`;
+    card.appendChild(g2);
 
-    const slider = document.createElement('input');
-    slider.type = 'range';
-    slider.min = 0; slider.max = ml.toFixed(2); slider.step = 0.01;
-    slider.value = lines[i].L0.toFixed(2);
-    slider.id = `l0-slider-${i}`;
+    // Floater assignment (only when numFloaters > 1)
+    if (numFloaters > 1) {
+      const g3 = document.createElement('div'); g3.className = 'grid1';
+      const sel = document.createElement('select'); sel.id = `fi-${i}`;
+      for (let f = 0; f < numFloaters; f++) {
+        const opt = document.createElement('option');
+        opt.value = f; opt.textContent = `Floater ${f+1}`;
+        if (f === ln.floaterIdx) opt.selected = true;
+        sel.appendChild(opt);
+      }
+      g3.innerHTML = '<label>Connected to</label>';
+      g3.appendChild(sel);
+      card.appendChild(g3);
+    }
 
-    const numL0 = document.createElement('input');
-    numL0.type = 'number';
-    numL0.min = 0; numL0.step = 0.01;
-    numL0.value = lines[i].L0.toFixed(2);
-    numL0.id = `l0-num-${i}`;
+    container.appendChild(card);
 
-    slider.addEventListener('input', () => {
-      const v = parseFloat(slider.value);
-      lines[i].L0 = v;
-      numL0.value = v.toFixed(2);
-      resolveAndRender();
-    });
-    numL0.addEventListener('change', () => {
-      const v = parseFloat(numL0.value);
-      if (isNaN(v) || v < 0) return;
-      lines[i].L0 = v;
-      slider.max = Math.max(ml, v).toFixed(2);
-      slider.value = v.toFixed(2);
-      resolveAndRender();
-    });
-
-    rowL0.appendChild(slider);
-    rowL0.appendChild(numL0);
-    wrap.appendChild(rowL0);
-
-    // Row 2: stiffness k
-    const kLabel = document.createElement('div');
-    kLabel.style.cssText = 'font-size:10px;color:#666;margin:6px 0 3px;';
-    kLabel.textContent = 'Stiffness k (N/m)';
-    wrap.appendChild(kLabel);
-
-    const rowK = document.createElement('div');
-    rowK.className = 'line-ctrl-row';
-
-    const numK = document.createElement('input');
-    numK.type = 'number';
-    numK.min = 1; numK.step = 10;
-    numK.value = lines[i].k;
-    numK.id = `k-num-${i}`;
-    numK.style.width = '100%';
-
-    numK.addEventListener('change', () => {
-      const v = parseFloat(numK.value);
-      if (isNaN(v) || v <= 0) return;
-      lines[i].k = v;
-      resolveAndRender();
-    });
-
-    rowK.appendChild(numK);
-    wrap.appendChild(rowK);
-    container.appendChild(wrap);
+    // Wire events (after DOM insertion)
+    const wire = (id, setter) => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('change', () => { setter(parseFloat(el.value)||0); resolveAndRender(); });
+    };
+    wire(`ax-${i}`, v => lines[i].ax = v);
+    wire(`ay-${i}`, v => lines[i].ay = v);
+    wire(`L0-${i}`, v => lines[i].L0 = Math.max(0, v));
+    wire(`k-${i}`,  v => lines[i].k  = Math.max(1, v));
+    if (numFloaters > 1) {
+      const sel = document.getElementById(`fi-${i}`);
+      if (sel) sel.addEventListener('change', () => { lines[i].floaterIdx = parseInt(sel.value); resolveAndRender(); });
+    }
   }
 }
 
-// ── Solve & Render ────────────────────────────────────────────────────────────
-function resolveAndRender(guess) {
-  const g = guess || floaterPos;
-  floaterPos = solveEquilibrium(g);
+// ── Catenary inputs ───────────────────────────────────────────────────────────
+document.getElementById('cat-L').addEventListener('change', function() {
+  cat.L = Math.max(0.01, parseFloat(this.value)||0.01);
+  resolveAndRender();
+});
+document.getElementById('cat-w').addEventListener('change', function() {
+  cat.w = Math.max(0, parseFloat(this.value)||0);
+  resolveAndRender();
+});
+
+// ── Solve + Render ────────────────────────────────────────────────────────────
+function resolveAndRender() {
+  const guesses = floaters.slice(0, numFloaters);
+  const result = solveEquilibrium(guesses);
+  for (let i = 0; i < numFloaters; i++) floaters[i] = result[i];
   render();
 }
 
-// ── Controls wiring ───────────────────────────────────────────────────────────
-document.getElementById('circR').addEventListener('input', function() {
-  circleR = parseFloat(this.value);
-  document.getElementById('circR-val').textContent = circleR.toFixed(1);
-  applyCircleAnchors();
-  fitView();
-});
-document.getElementById('circA').addEventListener('input', function() {
-  circleStartAngleDeg = parseFloat(this.value);
-  document.getElementById('circA-val').textContent = circleStartAngleDeg;
-  applyCircleAnchors();
-});
+// ── Display controls ──────────────────────────────────────────────────────────
 document.getElementById('floaterR').addEventListener('input', function() {
   floaterR = parseFloat(this.value);
   document.getElementById('fr-val').textContent = floaterR.toFixed(1);
   render();
 });
-document.getElementById('showForces').addEventListener('change', function() {
-  showForces = this.checked; render();
-});
+document.getElementById('showForces').addEventListener('change', function() { showForces = this.checked; render(); });
 document.getElementById('fscale').addEventListener('input', function() {
   forceScale = parseFloat(this.value);
   document.getElementById('fscale-val').textContent = forceScale.toFixed(1) + '×';
   render();
 });
 
-// ── View ──────────────────────────────────────────────────────────────────────
+// ── Fit view ──────────────────────────────────────────────────────────────────
 function fitView() {
-  // Bounding box of all anchors + floater
-  const pts = [...anchors, floaterPos];
-  let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
-  for (const p of pts) {
-    minX = Math.min(minX, p.x); maxX = Math.max(maxX, p.x);
-    minY = Math.min(minY, p.y); maxY = Math.max(maxY, p.y);
-  }
-  const spanX = (maxX - minX) || 2, spanY = (maxY - minY) || 2;
-  const margin = 1.5;
-  cam.x = (minX + maxX) / 2;
-  cam.y = (minY + maxY) / 2;
-  cam.zoom = Math.min(
-    canvas.width  / (spanX * margin),
-    canvas.height / (spanY * margin)
-  );
+  const pts = [...floaters.slice(0, numFloaters), ...lines.map(l => ({x:l.ax, y:l.ay}))];
+  let minX=Infinity, maxX=-Infinity, minY=Infinity, maxY=-Infinity;
+  for (const p of pts) { minX=Math.min(minX,p.x); maxX=Math.max(maxX,p.x); minY=Math.min(minY,p.y); maxY=Math.max(maxY,p.y); }
+  const sx=maxX-minX||2, sy=maxY-minY||2;
+  cam.x=(minX+maxX)/2; cam.y=(minY+maxY)/2;
+  cam.zoom = Math.min(canvas.width/(sx*1.5), canvas.height/(sy*1.5));
   render();
 }
 
 function resize() {
-  const wrap = document.getElementById('canvas-wrap');
-  canvas.width = wrap.clientWidth;
-  canvas.height = wrap.clientHeight;
+  const w = document.getElementById('canvas-wrap');
+  canvas.width = w.clientWidth; canvas.height = w.clientHeight;
   fitView();
 }
 window.addEventListener('resize', resize);
 
-// ── Drag floater ──────────────────────────────────────────────────────────────
-function ptInFloater(wx, wy) {
-  const dx = wx - floaterPos.x, dy = wy - floaterPos.y;
-  const r = floaterR + Math.max(0.3, 15 / cam.zoom);
-  return dx*dx + dy*dy < r*r;
+// ── Drag floaters ─────────────────────────────────────────────────────────────
+function floaterAtPoint(wx, wy) {
+  for (let fi = numFloaters - 1; fi >= 0; fi--) {
+    const p = floaters[fi];
+    const dx = wx-p.x, dy = wy-p.y;
+    const r = floaterR + Math.max(0.3, 12/cam.zoom);
+    if (dx*dx+dy*dy < r*r) return fi;
+  }
+  return -1;
 }
 
 canvas.addEventListener('mousemove', e => {
   const w = c2w(e.offsetX, e.offsetY);
   if (drag) {
-    floaterPos.x = drag.sf.x + (w.x - drag.sw.x);
-    floaterPos.y = drag.sf.y + (w.y - drag.sw.y);
+    floaters[drag.fi].x = drag.sf.x + (w.x - drag.sw.x);
+    floaters[drag.fi].y = drag.sf.y + (w.y - drag.sw.y);
     render();
   } else {
-    canvas.className = ptInFloater(w.x, w.y) ? 'hover-floater' : '';
+    canvas.className = floaterAtPoint(w.x, w.y) >= 0 ? 'hover-f' : '';
   }
 });
 canvas.addEventListener('mousedown', e => {
   const w = c2w(e.offsetX, e.offsetY);
-  if (ptInFloater(w.x, w.y)) {
-    drag = { sw: w, sf: { ...floaterPos } };
-    isDragging = true;
-    canvas.classList.add('dragging');
-  }
+  const fi = floaterAtPoint(w.x, w.y);
+  if (fi >= 0) { drag = { fi, sw: w, sf: {...floaters[fi]} }; isDragging = true; canvas.className = 'drag'; }
 });
 canvas.addEventListener('mouseup', () => {
-  drag = null;
-  if (isDragging) {
-    isDragging = false;
-    floaterPos = solveEquilibrium(floaterPos);
-    render();
-  }
+  if (drag) { drag = null; isDragging = false; resolveAndRender(); }
 });
 canvas.addEventListener('mouseleave', () => {
-  drag = null;
-  if (isDragging) {
-    isDragging = false;
-    floaterPos = solveEquilibrium(floaterPos);
-    render();
-  }
+  if (drag) { drag = null; isDragging = false; resolveAndRender(); }
 });
 
 canvas.addEventListener('touchstart', e => {
   e.preventDefault();
-  const t = e.touches[0], rect = canvas.getBoundingClientRect();
-  const w = c2w(t.clientX - rect.left, t.clientY - rect.top);
-  if (ptInFloater(w.x, w.y)) {
-    drag = { sw: w, sf: { ...floaterPos } };
-    isDragging = true;
-  }
-}, { passive: false });
+  const t=e.touches[0], rect=canvas.getBoundingClientRect();
+  const w=c2w(t.clientX-rect.left, t.clientY-rect.top);
+  const fi=floaterAtPoint(w.x,w.y);
+  if (fi>=0) { drag={fi,sw:w,sf:{...floaters[fi]}}; isDragging=true; }
+},{passive:false});
 canvas.addEventListener('touchmove', e => {
   e.preventDefault();
   if (!drag) return;
-  const t = e.touches[0], rect = canvas.getBoundingClientRect();
-  const w = c2w(t.clientX - rect.left, t.clientY - rect.top);
-  floaterPos.x = drag.sf.x + (w.x - drag.sw.x);
-  floaterPos.y = drag.sf.y + (w.y - drag.sw.y);
+  const t=e.touches[0], rect=canvas.getBoundingClientRect();
+  const w=c2w(t.clientX-rect.left, t.clientY-rect.top);
+  floaters[drag.fi].x = drag.sf.x+(w.x-drag.sw.x);
+  floaters[drag.fi].y = drag.sf.y+(w.y-drag.sw.y);
   render();
-}, { passive: false });
-canvas.addEventListener('touchend', () => {
-  drag = null;
-  if (isDragging) { isDragging = false; floaterPos = solveEquilibrium(floaterPos); render(); }
-});
+},{passive:false});
+canvas.addEventListener('touchend', ()=>{ if(drag){drag=null;isDragging=false;resolveAndRender();}});
 
 canvas.addEventListener('wheel', e => {
   e.preventDefault();
-  cam.zoom = Math.max(8, Math.min(800, cam.zoom * (e.deltaY < 0 ? 1.1 : 0.9)));
+  cam.zoom = Math.max(8, Math.min(800, cam.zoom*(e.deltaY<0?1.1:0.9)));
   render();
-}, { passive: false });
+},{passive:false});
 
 // ── Init ──────────────────────────────────────────────────────────────────────
-// Build initial circle readout
-document.getElementById('circle-readout').textContent =
-  anchors.map((a, i) => `A${i+1}: (${a.x.toFixed(2)}, ${a.y.toFixed(2)})`).join('  ');
-
-rebuildLineCtrls();
+rebuildLineList();
 resize();
 </script>
 </body>
