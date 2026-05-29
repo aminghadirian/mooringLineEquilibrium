@@ -183,6 +183,13 @@ canvas.hover-f { cursor: grab; } canvas.drag { cursor: grabbing; }
       <input type="range" id="fscale" min="0.1" max="5" step="0.1" value="1">
     </div>
     <button class="btn-fit" onclick="fitView()">Fit View</button>
+    <div style="display:flex;gap:6px;margin-top:6px;">
+      <button class="btn-fit" style="flex:1;" onclick="saveState()">&#x1F4BE; Save JSON</button>
+      <label class="btn-fit" style="flex:1;cursor:pointer;text-align:center;margin-top:0;">
+        &#x1F4C2; Load JSON
+        <input type="file" id="load-input" accept=".json" style="display:none;">
+      </label>
+    </div>
   </div>
 </div>
 
@@ -762,6 +769,54 @@ function resolveAndRender() {
 document.getElementById('floaterR').addEventListener('input',function(){ floaterR=parseFloat(this.value); document.getElementById('fr-val').textContent=floaterR.toFixed(1); render(); });
 document.getElementById('showForces').addEventListener('change',function(){ showForces=this.checked; render(); });
 document.getElementById('fscale').addEventListener('input',function(){ forceScale=parseFloat(this.value); document.getElementById('fscale-val').textContent=forceScale.toFixed(1)+'×'; render(); });
+
+// ── Save / Load ───────────────────────────────────────────────────────────────
+function saveState() {
+  const state = {
+    version: 1,
+    floaters,
+    lines,
+    catenaries,
+    display: { floaterR, showForces, forceScale }
+  };
+  const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `mooring-${new Date().toISOString().slice(0,16).replace('T','-')}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+document.getElementById('load-input').addEventListener('change', function() {
+  const file = this.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const s = JSON.parse(e.target.result);
+      floaters   = s.floaters   ?? floaters;
+      lines      = s.lines      ?? lines;
+      catenaries = s.catenaries ?? catenaries;
+      if (s.display) {
+        floaterR   = s.display.floaterR   ?? floaterR;
+        showForces = s.display.showForces ?? showForces;
+        forceScale = s.display.forceScale ?? forceScale;
+        document.getElementById('floaterR').value        = floaterR;
+        document.getElementById('fr-val').textContent    = floaterR.toFixed(1);
+        document.getElementById('showForces').checked    = showForces;
+        document.getElementById('fscale').value          = forceScale;
+        document.getElementById('fscale-val').textContent = forceScale.toFixed(1) + '×';
+      }
+      rebuildAll();
+      resolveAndRender();
+      fitView();
+    } catch(err) {
+      alert('Could not load file: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+  this.value = ''; // allow reloading same file
+});
 
 // ── Init ──────────────────────────────────────────────────────────────────────
 rebuildAll();
