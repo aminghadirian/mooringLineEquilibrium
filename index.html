@@ -46,11 +46,11 @@
   .line-ctrl-header { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }
   .line-ctrl-header .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
   .line-ctrl-header .lname { font-size: 12px; font-weight: 600; color: #ccc; }
-  .line-ctrl-header .pretension { font-size: 11px; color: #666; margin-left: auto; }
-  .line-ctrl-header .pretension.active { color: #7ab8f5; }
+  .line-ctrl-header .floater-tag { font-size: 10px; color: #7ab8f5; background: #1e3a5a; border: 1px solid #7ab8f540; border-radius: 10px; padding: 1px 7px; margin-left: auto; white-space: nowrap; }
   .line-ctrl-row { display: flex; gap: 6px; align-items: center; }
+  .line-ctrl-row label { font-size: 10px; color: #666; white-space: nowrap; }
   .line-ctrl-row input[type=range] { flex: 1; }
-  .line-ctrl-row input[type=number] { width: 68px; flex-shrink: 0; }
+  .line-ctrl-row input[type=number] { width: 72px; flex-shrink: 0; }
   .slack-badge { font-size: 9px; font-weight: 700; color: #e06c6c; background: #3a2020; border-radius: 3px; padding: 1px 5px; margin-left: 4px; }
 
   /* Results */
@@ -131,10 +131,6 @@
   <!-- ── Mooring Lines ── -->
   <div class="section">
     <div class="section-title">Mooring Lines</div>
-    <div class="field">
-      <label>Stiffness k <span id="k-val">500 N/m</span></label>
-      <input type="range" id="k" min="10" max="5000" step="10" value="500">
-    </div>
     <div id="line-controls"></div>
   </div>
 
@@ -191,13 +187,16 @@ let anchors = [
   { x: -2.5, y: -4.330127 }
 ];
 
-// Lines: one per anchor, {k, L0}
+// Lines: one per anchor, {k, L0, floaterIdx}
+// floaterIdx = which floater this line connects to (0-based). Always 0 for single-floater model.
 // Default: L0 = dist(anchor, origin) - 200/500 = 5 - 0.4 = 4.6 m (gives ~200 N pretension at origin)
 let lines = [
-  { k: 500, L0: 4.6 },
-  { k: 500, L0: 4.6 },
-  { k: 500, L0: 4.6 }
+  { k: 500, L0: 4.6, floaterIdx: 0 },
+  { k: 500, L0: 4.6, floaterIdx: 0 },
+  { k: 500, L0: 4.6, floaterIdx: 0 }
 ];
+// Floater names (one entry per floater, expandable for multi-floater)
+const FLOATER_NAMES = ['Floater 1'];
 
 let floaterR = 0.5;
 let showForces = true;
@@ -373,6 +372,23 @@ function drawMooringLine(i, pos) {
   }
   ctx.beginPath(); ctx.moveTo(fp.x, fp.y); ctx.lineTo(ap.x, ap.y); ctx.stroke();
   ctx.setLineDash([]);
+
+  // Label at 35% along the line from floater end (avoids overlapping anchors/floater)
+  if (cam.zoom > 15) {
+    const t = 0.35;
+    const mx = fp.x + (ap.x - fp.x) * t;
+    const my = fp.y + (ap.y - fp.y) * t;
+    // Small perpendicular offset so label sits beside the line
+    const dx = ap.x - fp.x, dy = ap.y - fp.y;
+    const len = Math.sqrt(dx*dx + dy*dy) || 1;
+    const nx = -dy / len * 10, ny = dx / len * 10;
+
+    const fname = FLOATER_NAMES[lines[i].floaterIdx] || `F${lines[i].floaterIdx + 1}`;
+    ctx.fillStyle = COLORS[i] + (slack ? '66' : 'cc');
+    ctx.font = `${Math.max(9, Math.min(11, cam.zoom * 0.18))}px Segoe UI`;
+    ctx.textAlign = 'center';
+    ctx.fillText(`L${i+1} → ${fname}`, mx + nx, my + ny);
+  }
 }
 
 function drawAnchor(i) {
@@ -521,20 +537,12 @@ function updateResultsUI() {
     det.appendChild(row);
   }
 
-  // Update pretension hints in line controls
+  // Keep floater-tag labels current (floaterIdx may change in future)
   for (let i = 0; i < anchors.length; i++) {
-    const el = document.getElementById(`pretension-hint-${i}`);
+    const el = document.getElementById(`ftag-${i}`);
     if (!el) continue;
-    const a = anchors[i];
-    const d0 = Math.sqrt(a.x*a.x + a.y*a.y);
-    const pt = lines[i].k * (d0 - lines[i].L0);
-    if (pt > 0) {
-      el.textContent = `Pretension at origin: ${pt.toFixed(1)} N`;
-      el.className = 'pretension active';
-    } else {
-      el.textContent = 'Slack at origin';
-      el.className = 'pretension';
-    }
+    const fname = FLOATER_NAMES[lines[i].floaterIdx] || `Floater ${lines[i].floaterIdx + 1}`;
+    el.textContent = `→ ${fname}`;
   }
 }
 
@@ -548,6 +556,9 @@ function applyCircleAnchors() {
   });
   document.getElementById('circle-readout').textContent =
     anchors.map((a, i) => `A${i+1}: (${a.x.toFixed(2)}, ${a.y.toFixed(2)})`).join('  ');
+  // Clamp L0 values that now exceed the new max
+  const ml = maxL0();
+  lines.forEach(l => { l.L0 = Math.min(l.L0, ml); });
   rebuildLineCtrls();
   resolveAndRender();
 }
@@ -599,28 +610,38 @@ function maxL0() {
 function rebuildLineCtrls() {
   const container = document.getElementById('line-controls');
   container.innerHTML = '';
+  const ml = maxL0();
+
   for (let i = 0; i < anchors.length; i++) {
-    // Default L0: nominal distance minus a small pretension
+    // Initialise missing line entries
     if (lines[i] === undefined) {
       const d = Math.sqrt(anchors[i].x**2 + anchors[i].y**2);
       const kv = lines[0] ? lines[0].k : 500;
-      lines[i] = { k: kv, L0: Math.max(0, d - 200 / kv) };
+      lines[i] = { k: kv, L0: Math.max(0, d - 200 / kv), floaterIdx: 0 };
     }
+    if (lines[i].floaterIdx === undefined) lines[i].floaterIdx = 0;
 
-    const ml = maxL0();
     const wrap = document.createElement('div');
     wrap.className = 'line-ctrl';
 
+    // Header: colour dot, name, floater tag
+    const floaterName = FLOATER_NAMES[lines[i].floaterIdx] || `Floater ${lines[i].floaterIdx + 1}`;
     const hdr = document.createElement('div');
     hdr.className = 'line-ctrl-header';
     hdr.innerHTML = `
       <div class="dot" style="background:${COLORS[i]}"></div>
       <span class="lname">Line ${i+1}</span>
-      <span class="pretension" id="pretension-hint-${i}"></span>`;
+      <span class="floater-tag" id="ftag-${i}">→ ${floaterName}</span>`;
     wrap.appendChild(hdr);
 
-    const row = document.createElement('div');
-    row.className = 'line-ctrl-row';
+    // Row 1: L0 label + slider + number input
+    const l0label = document.createElement('div');
+    l0label.style.cssText = 'font-size:10px;color:#666;margin-bottom:3px;';
+    l0label.textContent = 'Natural length L₀ (m)';
+    wrap.appendChild(l0label);
+
+    const rowL0 = document.createElement('div');
+    rowL0.className = 'line-ctrl-row';
 
     const slider = document.createElement('input');
     slider.type = 'range';
@@ -628,29 +649,56 @@ function rebuildLineCtrls() {
     slider.value = lines[i].L0.toFixed(2);
     slider.id = `l0-slider-${i}`;
 
-    const numIn = document.createElement('input');
-    numIn.type = 'number';
-    numIn.min = 0; numIn.max = ml.toFixed(2); numIn.step = 0.01;
-    numIn.value = lines[i].L0.toFixed(2);
-    numIn.id = `l0-num-${i}`;
+    const numL0 = document.createElement('input');
+    numL0.type = 'number';
+    numL0.min = 0; numL0.step = 0.01;
+    numL0.value = lines[i].L0.toFixed(2);
+    numL0.id = `l0-num-${i}`;
 
     slider.addEventListener('input', () => {
       const v = parseFloat(slider.value);
       lines[i].L0 = v;
-      numIn.value = v.toFixed(2);
+      numL0.value = v.toFixed(2);
       resolveAndRender();
     });
-    numIn.addEventListener('input', () => {
-      const v = parseFloat(numIn.value);
-      if (isNaN(v)) return;
-      lines[i].L0 = Math.max(0, Math.min(ml, v));
-      slider.value = lines[i].L0.toFixed(2);
+    numL0.addEventListener('change', () => {
+      const v = parseFloat(numL0.value);
+      if (isNaN(v) || v < 0) return;
+      lines[i].L0 = v;
+      slider.max = Math.max(ml, v).toFixed(2);
+      slider.value = v.toFixed(2);
       resolveAndRender();
     });
 
-    row.appendChild(slider);
-    row.appendChild(numIn);
-    wrap.appendChild(row);
+    rowL0.appendChild(slider);
+    rowL0.appendChild(numL0);
+    wrap.appendChild(rowL0);
+
+    // Row 2: stiffness k
+    const kLabel = document.createElement('div');
+    kLabel.style.cssText = 'font-size:10px;color:#666;margin:6px 0 3px;';
+    kLabel.textContent = 'Stiffness k (N/m)';
+    wrap.appendChild(kLabel);
+
+    const rowK = document.createElement('div');
+    rowK.className = 'line-ctrl-row';
+
+    const numK = document.createElement('input');
+    numK.type = 'number';
+    numK.min = 1; numK.step = 10;
+    numK.value = lines[i].k;
+    numK.id = `k-num-${i}`;
+    numK.style.width = '100%';
+
+    numK.addEventListener('change', () => {
+      const v = parseFloat(numK.value);
+      if (isNaN(v) || v <= 0) return;
+      lines[i].k = v;
+      resolveAndRender();
+    });
+
+    rowK.appendChild(numK);
+    wrap.appendChild(rowK);
     container.appendChild(wrap);
   }
 }
@@ -673,12 +721,6 @@ document.getElementById('circA').addEventListener('input', function() {
   circleStartAngleDeg = parseFloat(this.value);
   document.getElementById('circA-val').textContent = circleStartAngleDeg;
   applyCircleAnchors();
-});
-document.getElementById('k').addEventListener('input', function() {
-  const v = parseFloat(this.value);
-  document.getElementById('k-val').textContent = v + ' N/m';
-  lines.forEach(l => l.k = v);
-  resolveAndRender();
 });
 document.getElementById('floaterR').addEventListener('input', function() {
   floaterR = parseFloat(this.value);
