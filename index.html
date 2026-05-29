@@ -8,85 +8,83 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { background: #1a1d23; color: #e0e0e0; font-family: 'Segoe UI', sans-serif; display: flex; height: 100vh; overflow: hidden; }
 
-#sidebar { width: 330px; min-width: 330px; background: #22252e; border-right: 1px solid #333; display: flex; flex-direction: column; overflow-y: auto; }
-#sidebar h1 { font-size: 14px; font-weight: 600; color: #7ab8f5; padding: 14px 16px 10px; border-bottom: 1px solid #333; letter-spacing: 0.5px; }
+/* ── Sidebar ── */
+#sidebar { width: 520px; min-width: 520px; background: #22252e; border-right: 1px solid #2d3040; display: flex; flex-direction: column; overflow-y: auto; }
+#sidebar h1 { font-size: 13px; font-weight: 600; color: #7ab8f5; padding: 12px 16px 10px; border-bottom: 1px solid #2d3040; letter-spacing: 0.5px; }
 
-.section { padding: 12px 16px; border-bottom: 1px solid #2d3040; }
-.section-hdr { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-.section-title { font-size: 11px; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+.section { padding: 10px 14px; border-bottom: 1px solid #2d3040; }
+.section-hdr { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.section-title { font-size: 10px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 1px; }
 
-/* Number fields */
-input[type=number] { background: #1a1d23; border: 1px solid #3a3d4a; color: #e0e0e0; padding: 5px 7px; border-radius: 4px; font-size: 12px; width: 100%; }
-input[type=number]:focus { outline: none; border-color: #7ab8f5; }
-select { background: #1a1d23; border: 1px solid #3a3d4a; color: #e0e0e0; padding: 5px 7px; border-radius: 4px; font-size: 12px; width: 100%; cursor: pointer; }
-select:focus { outline: none; border-color: #7ab8f5; }
+/* ── Tables ── */
+.data-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+.data-table thead th { color: #666; font-weight: 600; padding: 3px 4px; text-align: left; border-bottom: 1px solid #2d3040; white-space: nowrap; }
+.data-table tbody td { padding: 2px 3px; border-bottom: 1px solid #1e2028; vertical-align: middle; }
+.data-table tbody tr:last-child td { border-bottom: none; }
+.data-table tbody tr:hover td { background: #262930; }
 
-/* Labelled field row */
-.frow { display: flex; gap: 8px; align-items: center; margin-bottom: 7px; }
-.frow .flbl { font-size: 11px; color: #888; white-space: nowrap; min-width: 56px; }
-.frow.two > * { flex: 1; }
-.frow.two .flbl { flex: 0 0 auto; }
+/* dot cell */
+.dot-cell { width: 14px; padding: 0 4px 0 2px !important; }
+.dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; vertical-align: middle; }
 
-/* Floater toggle */
-.tog-row { display: flex; gap: 0; border-radius: 5px; overflow: hidden; border: 1px solid #3a3d4a; }
-.tog-btn { flex: 1; background: #1a1d23; border: none; color: #888; padding: 6px; font-size: 12px; cursor: pointer; }
-.tog-btn.active { background: #2a3a50; color: #7ab8f5; font-weight: 600; }
+/* inline inputs */
+input.ti { background: #161820; border: 1px solid #333; color: #e0e0e0; padding: 3px 5px; border-radius: 3px; font-size: 11px; width: 100%; }
+input.ti:focus { outline: none; border-color: #7ab8f5; }
+select.ti { background: #161820; border: 1px solid #333; color: #e0e0e0; padding: 3px 4px; border-radius: 3px; font-size: 11px; width: 100%; cursor: pointer; }
+select.ti:focus { outline: none; border-color: #7ab8f5; }
+td.w55 { width: 55px; }
+td.w65 { width: 65px; }
+td.w70 { width: 70px; }
+td.w80 { width: 80px; }
+td.w28 { width: 28px; }
 
-/* Line cards */
-.line-card { background: #1a1d23; border-radius: 6px; padding: 9px 9px 7px; margin-bottom: 8px; border: 1px solid #2a2d3a; }
-.lcard-hdr { display: flex; align-items: center; gap: 7px; margin-bottom: 8px; }
-.lcard-hdr .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
-.lcard-hdr .lname { font-size: 12px; font-weight: 600; color: #ccc; flex: 1; }
-.del-btn { background: none; border: none; color: #555; font-size: 14px; cursor: pointer; padding: 0 2px; line-height: 1; }
-.del-btn:hover { color: #e06c6c; }
-.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 6px; }
-.grid2 label, .grid1 label { display: block; font-size: 10px; color: #666; margin-bottom: 2px; }
-.grid1 { margin-bottom: 6px; }
+/* result columns (right side of table) */
+.res-td { color: #7ab8f5; font-variant-numeric: tabular-nums; white-space: nowrap; padding: 2px 6px !important; }
+.res-td.slack { color: #e06c6c; }
+th.res-th { color: #7ab8f5 !important; }
 
-/* Add button */
-.add-btn { background: #2a3a50; color: #7ab8f5; border: 1px dashed #7ab8f550; padding: 6px; border-radius: 4px; font-size: 11px; cursor: pointer; width: 100%; }
-.add-btn:hover { background: #3a4a60; }
+/* del button */
+.del-btn { background: none; border: none; color: #555; font-size: 13px; cursor: pointer; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; border-radius: 3px; }
+.del-btn:hover { color: #e06c6c; background: #3a2020; }
+.del-btn:disabled { opacity: 0.3; cursor: default; }
 
-/* Catenary status */
-.cat-status { font-size: 11px; margin-top: 8px; padding: 6px 8px; border-radius: 4px; background: #1a1d23; }
-.cat-status.ok { color: #6ce0a0; }
-.cat-status.warn { color: #e0a060; }
-.cat-status.err { color: #e06c6c; }
+/* add button */
+.add-btn { background: #1e2a3a; color: #7ab8f5; border: 1px dashed #7ab8f540; padding: 3px 10px; border-radius: 4px; font-size: 11px; cursor: pointer; }
+.add-btn:hover { background: #2a3a50; }
 
-/* Results */
-.res-floater { background: #1a1d23; border-radius: 6px; padding: 8px; margin-bottom: 8px; }
-.res-floater .fhdr { font-size: 11px; font-weight: 600; margin-bottom: 6px; }
-.res-row { display: flex; gap: 8px; flex-wrap: wrap; }
-.res-val { text-align: center; flex: 1; }
-.res-val .rlbl { font-size: 10px; color: #888; }
-.res-val .rval { font-size: 14px; font-weight: 700; }
+/* cat status */
+.cat-status { font-size: 11px; padding: 5px 8px; border-radius: 4px; background: #1a1d23; margin-top: 6px; }
+.cat-status.ok { color: #6ce0a0; } .cat-status.warn { color: #e0a060; } .cat-status.err { color: #e06c6c; }
 
-.line-res-list { margin-top: 6px; }
-.line-res { display: flex; gap: 4px; align-items: flex-start; margin-bottom: 4px; padding: 4px 6px; background: #1a1d23; border-radius: 4px; font-size: 11px; }
-.line-res .dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; margin-top: 2px; }
-.line-res .rdata { display: flex; gap: 8px; flex-wrap: wrap; }
-.line-res .rdata span { color: #999; }
-.line-res .rdata span b { color: #ddd; }
-.slack-tag { font-size: 9px; font-weight: 700; color: #e06c6c; background: #3a2020; border-radius: 3px; padding: 1px 4px; }
+/* floater results */
+.fres-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 4px; }
+.fres-chip { background: #1a1d23; border-radius: 4px; padding: 4px 8px; text-align: center; min-width: 80px; }
+.fres-chip .rl { font-size: 9px; color: #888; margin-bottom: 1px; }
+.fres-chip .rv { font-size: 13px; font-weight: 700; }
 
-/* Canvas */
+/* display */
+.field { margin-bottom: 7px; }
+.field > label { display: flex; justify-content: space-between; font-size: 11px; color: #bbb; margin-bottom: 2px; }
+.field > label span { color: #7ab8f5; font-weight: 600; }
+input[type=range] { width: 100%; accent-color: #7ab8f5; cursor: pointer; }
+.frow { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.frow label { font-size: 11px; color: #bbb; flex: 1; }
+.btn-fit { background: #2a3a50; color: #7ab8f5; border: 1px solid #7ab8f550; padding: 6px 14px; border-radius: 4px; font-size: 11px; font-weight: 600; cursor: pointer; width: 100%; margin-top: 4px; }
+.btn-fit:hover { background: #3a4a60; }
+
+/* legend */
+.legend { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 6px; }
+.legend-item { display: flex; align-items: center; gap: 4px; font-size: 10px; color: #888; }
+.legend-line { width: 20px; height: 3px; border-radius: 2px; }
+
+/* ── Canvas ── */
 #canvas-wrap { flex: 1; display: flex; position: relative; overflow: hidden; }
 canvas { display: block; flex: 1; cursor: default; }
-canvas.hover-f { cursor: grab; }
-canvas.drag { cursor: grabbing; }
-.badge { position: absolute; font-size: 11px; background: #22252e; border: 1px solid #333; color: #888; padding: 4px 10px; border-radius: 12px; pointer-events: none; }
+canvas.hover-f { cursor: grab; } canvas.drag { cursor: grabbing; }
+.badge { position: absolute; font-size: 11px; background: #22252eee; border: 1px solid #333; color: #888; padding: 4px 10px; border-radius: 12px; pointer-events: none; }
 #badge-res { top: 10px; left: 10px; }
 #badge-mode { top: 10px; right: 10px; }
-#hint { bottom: 10px; left: 50%; transform: translateX(-50%); font-size: 11px; color: #444; white-space: nowrap; }
-
-/* Display section */
-.field { margin-bottom: 8px; }
-.field label { display: flex; justify-content: space-between; font-size: 12px; color: #bbb; margin-bottom: 3px; }
-.field label span { color: #7ab8f5; font-weight: 600; }
-input[type=range] { width: 100%; accent-color: #7ab8f5; cursor: pointer; }
-.btn-ghost { background: #2a3a50; color: #7ab8f5; border: 1px solid #7ab8f550; padding: 6px 14px; border-radius: 4px; font-size: 12px; font-weight: 600; cursor: pointer; width: 100%; margin-top: 4px; }
-.btn-ghost:hover { background: #3a4a60; }
-input[type=checkbox] { accent-color: #7ab8f5; }
+#hint-badge { bottom: 10px; left: 50%; transform: translateX(-50%); font-size: 11px; color: #444; white-space: nowrap; }
 </style>
 </head>
 <body>
@@ -94,66 +92,97 @@ input[type=checkbox] { accent-color: #7ab8f5; }
 <div id="sidebar">
   <h1>Mooring Line Equilibrium</h1>
 
-  <!-- Configuration -->
+  <!-- ── Floaters ── -->
   <div class="section">
-    <div class="section-title" style="margin-bottom:10px;">Configuration</div>
-    <div class="frow">
-      <span class="flbl">Floaters</span>
-      <div class="tog-row" style="flex:1;">
-        <button class="tog-btn active" id="tog1" onclick="setNumFloaters(1)">1 Floater</button>
-        <button class="tog-btn" id="tog2" onclick="setNumFloaters(2)">2 Floaters</button>
-      </div>
+    <div class="section-hdr">
+      <div class="section-title">Floaters</div>
+      <button class="add-btn" onclick="addFloater()">+ Add Floater</button>
     </div>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th class="dot-cell"></th>
+          <th>Name</th>
+          <th class="res-th">x (m)</th>
+          <th class="res-th">y (m)</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="floater-tbody"></tbody>
+    </table>
   </div>
 
-  <!-- Spring mooring lines -->
+  <!-- ── Spring Mooring Lines ── -->
   <div class="section">
     <div class="section-hdr">
       <div class="section-title">Spring Mooring Lines</div>
-      <button class="add-btn" style="width:auto;padding:4px 10px;" onclick="addLine()">+ Add Line</button>
+      <button class="add-btn" onclick="addLine()">+ Add Line</button>
     </div>
-    <div id="line-list"></div>
+    <table class="data-table" id="line-table">
+      <thead>
+        <tr>
+          <th class="dot-cell"></th>
+          <th class="w65">Anchor x</th>
+          <th class="w65">Anchor y</th>
+          <th class="w65">L₀ (m)</th>
+          <th class="w70">k (N/m)</th>
+          <th class="w55">Floater</th>
+          <th class="res-th w70">T (N)</th>
+          <th class="res-th w65">L (m)</th>
+          <th class="res-th w65">ΔL (m)</th>
+          <th class="w28"></th>
+        </tr>
+      </thead>
+      <tbody id="line-tbody"></tbody>
+    </table>
+    <div class="legend" id="k-legend"></div>
   </div>
 
-  <!-- Catenary connection -->
-  <div class="section" id="cat-section" style="display:none;">
-    <div class="section-title" style="margin-bottom:10px;">Catenary — Floater 1 to Floater 2</div>
-    <div class="grid2">
-      <div>
-        <label>Length L (m)</label>
-        <input type="number" id="cat-L" min="0.01" step="0.1" value="8">
-      </div>
-      <div>
-        <label>Unit weight w (N/m)</label>
-        <input type="number" id="cat-w" min="0" step="1" value="50">
-      </div>
+  <!-- ── Catenary Lines ── -->
+  <div class="section">
+    <div class="section-hdr">
+      <div class="section-title">Catenary Lines (non-linear)</div>
+      <button class="add-btn" onclick="addCatenary()">+ Add Catenary</button>
     </div>
-    <div class="cat-status" id="cat-status">—</div>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th class="dot-cell"></th>
+          <th class="w55">From</th>
+          <th class="w55">To</th>
+          <th class="w70">Length L (m)</th>
+          <th class="w70">w (N/m)</th>
+          <th class="res-th w70">H (N)</th>
+          <th class="res-th w65">Sag (m)</th>
+          <th class="w28"></th>
+        </tr>
+      </thead>
+      <tbody id="cat-tbody"></tbody>
+    </table>
   </div>
 
-  <!-- Results -->
+  <!-- ── Results ── -->
   <div class="section">
-    <div class="section-title" style="margin-bottom:10px;">Results — Equilibrium</div>
-    <div id="results-floaters"></div>
-    <div class="line-res-list" id="line-res-list"></div>
+    <div class="section-title" style="margin-bottom:8px;">Equilibrium Results</div>
+    <div id="results-div"></div>
   </div>
 
-  <!-- Display -->
+  <!-- ── Display ── -->
   <div class="section">
-    <div class="section-title" style="margin-bottom:10px;">Display</div>
+    <div class="section-title" style="margin-bottom:8px;">Display</div>
     <div class="field">
       <label>Floater radius (m) <span id="fr-val">0.5</span></label>
       <input type="range" id="floaterR" min="0.1" max="2" step="0.1" value="0.5">
     </div>
-    <div class="frow" style="margin-bottom:8px;">
-      <label style="font-size:12px;color:#bbb;flex:1;">Force vectors</label>
+    <div class="frow">
+      <label>Force vectors</label>
       <input type="checkbox" id="showForces" checked>
     </div>
     <div class="field">
       <label>Force scale <span id="fscale-val">1.0×</span></label>
       <input type="range" id="fscale" min="0.1" max="5" step="0.1" value="1">
     </div>
-    <button class="btn-ghost" onclick="fitView()">Fit View</button>
+    <button class="btn-fit" onclick="fitView()">Fit View</button>
   </div>
 </div>
 
@@ -161,7 +190,7 @@ input[type=checkbox] { accent-color: #7ab8f5; }
   <canvas id="canvas"></canvas>
   <div class="badge" id="badge-res">|F_net| = 0.000 N</div>
   <div class="badge" id="badge-mode">Equilibrium</div>
-  <div class="badge" id="hint">Drag floater · Scroll to zoom</div>
+  <div class="badge" id="hint-badge">Drag floater · Scroll to zoom</div>
 </div>
 
 <script>
@@ -169,60 +198,52 @@ const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
 // ── State ─────────────────────────────────────────────────────────────────────
-let numFloaters = 1;
-// floaters[i] = {x, y}  — positions solved by equilibrium
 let floaters = [{ x: 0, y: 0 }, { x: 4, y: 0 }];
 
-// Spring mooring lines — each has its own anchor position
 let lines = [
-  { ax: 5,    ay:  0,         k: 500, L0: 4.6, floaterIdx: 0 },
-  { ax: -2.5, ay:  4.330127,  k: 500, L0: 4.6, floaterIdx: 0 },
-  { ax: -2.5, ay: -4.330127,  k: 500, L0: 4.6, floaterIdx: 0 }
+  { ax: 5,    ay:  0,        k: 500, L0: 4.6, floaterIdx: 0 },
+  { ax: -2.5, ay:  4.330127, k: 500, L0: 4.6, floaterIdx: 0 },
+  { ax: -2.5, ay: -4.330127, k: 500, L0: 4.6, floaterIdx: 0 }
 ];
 
-// Catenary between floaters (active only when numFloaters === 2)
-let cat = { L: 8, w: 50 };
+let catenaries = [
+  { f0: 0, f1: 1, L: 8, w: 50 }
+];
 
-let floaterR = 0.5;
-let showForces = true;
-let forceScale = 1;
-let isDragging = false;
-let drag = null; // { floaterIdx, sw:{x,y}, sf:{x,y} }
-
+let floaterR = 0.5, showForces = true, forceScale = 1;
+let drag = null, isDragging = false;
 let cam = { x: 0, y: 0, zoom: 50 };
 
-const FLOATER_COLORS = ['#7ab8f5', '#f5a742'];
-// 6 distinct colors for mooring lines (expand as needed)
-const LINE_COLORS = ['#e06c6c','#6ce0a0','#6cb8e0','#c06ce0','#e0b06c','#6ce0c8','#a0e06c','#e06ca0'];
-function lColor(i) { return LINE_COLORS[i % LINE_COLORS.length]; }
+// ── Color helpers ─────────────────────────────────────────────────────────────
+const FLOATER_PALETTE = ['#7ab8f5','#f5a742','#a0e060','#e060c0','#60e0c0','#e0e060'];
+function floaterColor(fi) { return FLOATER_PALETTE[fi % FLOATER_PALETTE.length]; }
 
-// ── Catenary physics ──────────────────────────────────────────────────────────
-// Horizontal tension in catenary of total length L, unit weight w,
-// horizontal span d between endpoints at equal elevation.
-// Solves: (2H/w)*sinh(wd/(2H)) = L  →  sinh(λ)/λ = L/d  where λ = wd/(2H)
-function catenaryH(d, L, w) {
-  if (d <= 1e-9) return 0;
-  if (w <= 0) return 0;
-  if (L <= d + 1e-9) return 1e7; // near-taut: very large tension
-  const ratio = L / d;
-  // sinh(λ)/λ = ratio, λ > 0
-  // For small λ: sinh(λ)/λ ≈ 1 + λ²/6 + …  → all λ ≥ 0 give ≥ 1
-  let lo = 1e-9, hi = 300;
-  // Ensure hi bracket: sinh(hi)/hi >> ratio
-  for (let i = 0; i < 50; i++) {
-    if (Math.sinh(Math.min(hi, 700)) / hi >= ratio) break;
-    hi *= 2;
-  }
-  for (let i = 0; i < 200; i++) {
-    const mid = (lo + hi) / 2;
-    const sv = mid < 700 ? Math.sinh(mid) / mid : Infinity;
-    if (sv < ratio) lo = mid; else hi = mid;
-  }
-  const lambda = (lo + hi) / 2;
-  return w * d / (2 * lambda);
+const CAT_COLOR = '#f5c842';
+
+// Spring line color: same-k → index-based palette; mixed-k → hue by k value
+const LINE_PALETTE = ['#e06c6c','#6ce0a0','#6cb8e0','#c06ce0','#e0b06c','#6ce0c8','#a0e06c','#e06ca0'];
+function springLineColor(i) {
+  const ks = lines.map(l => l.k);
+  const kMin = Math.min(...ks), kMax = Math.max(...ks);
+  if (kMax === kMin) return LINE_PALETTE[i % LINE_PALETTE.length];
+  const t = (lines[i].k - kMin) / (kMax - kMin);
+  const hue = Math.round(220 - t * 220); // 220=blue (low k) → 0=red (high k)
+  return `hsl(${hue},72%,58%)`;
 }
 
-// Vertical sag at mid-span
+// ── Catenary physics ──────────────────────────────────────────────────────────
+function catenaryH(d, L, w) {
+  if (d <= 1e-9 || w <= 0) return 0;
+  if (L <= d + 1e-9) return 1e7;
+  const ratio = L / d;
+  let lo = 1e-9, hi = 400;
+  for (let i = 0; i < 60; i++) { if (Math.sinh(Math.min(hi,700)) / hi >= ratio) break; hi *= 2; }
+  for (let i = 0; i < 200; i++) {
+    const m = (lo + hi) / 2;
+    if (m < 700 ? Math.sinh(m) / m < ratio : false) lo = m; else hi = m;
+  }
+  return w * d / (2 * ((lo + hi) / 2));
+}
 function catenarySag(d, L, w) {
   const H = catenaryH(d, L, w);
   if (!isFinite(H) || H > 1e6) return 0;
@@ -231,12 +252,10 @@ function catenarySag(d, L, w) {
 }
 
 // ── Force model ───────────────────────────────────────────────────────────────
-// Returns array of {x,y} forces on each floater given their positions
 function computeForces(fpos) {
   const N = fpos.length;
   const F = Array.from({ length: N }, () => ({ x: 0, y: 0 }));
 
-  // Spring mooring lines
   for (const ln of lines) {
     const fi = Math.min(ln.floaterIdx, N - 1);
     const p = fpos[fi];
@@ -248,80 +267,66 @@ function computeForces(fpos) {
     F[fi].y += T * dy / d;
   }
 
-  // Catenary between floater 0 and floater 1
-  if (N >= 2) {
-    const p0 = fpos[0], p1 = fpos[1];
+  for (const cat of catenaries) {
+    const fi0 = Math.min(cat.f0, N - 1), fi1 = Math.min(cat.f1, N - 1);
+    if (fi0 === fi1) continue;
+    const p0 = fpos[fi0], p1 = fpos[fi1];
     const dx = p1.x - p0.x, dy = p1.y - p0.y;
     const d = Math.sqrt(dx * dx + dy * dy);
-    if (d > 1e-9) {
-      const H = catenaryH(d, cat.L, cat.w);
-      const hv = Math.min(H, 1e6);
-      const ux = dx / d, uy = dy / d;
-      F[0].x += hv * ux;   F[0].y += hv * uy;
-      F[1].x -= hv * ux;   F[1].y -= hv * uy;
-    }
+    if (d < 1e-9) continue;
+    const H = Math.min(catenaryH(d, cat.L, cat.w), 1e6);
+    const ux = dx / d, uy = dy / d;
+    F[fi0].x += H * ux;  F[fi0].y += H * uy;
+    F[fi1].x -= H * ux;  F[fi1].y -= H * uy;
   }
   return F;
 }
 
-// Flat state ↔ positions
-function stateToPos(s) {
-  const p = [];
-  for (let i = 0; i < s.length; i += 2) p.push({ x: s[i], y: s[i + 1] });
-  return p;
-}
-function posToState(p) { return p.flatMap(f => [f.x, f.y]); }
+// ── Solver (Newton-Raphson, 2N DOF) ──────────────────────────────────────────
+function stateToPos(s) { const p=[]; for(let i=0;i<s.length;i+=2) p.push({x:s[i],y:s[i+1]}); return p; }
+function posToState(p) { return p.flatMap(f=>[f.x,f.y]); }
 
-// Gaussian elimination (in-place on augmented matrix)
 function solveLinear(A, b) {
   const n = b.length;
   const M = A.map((row, i) => [...row, b[i]]);
   for (let c = 0; c < n; c++) {
-    let maxR = c;
-    for (let r = c + 1; r < n; r++) if (Math.abs(M[r][c]) > Math.abs(M[maxR][c])) maxR = r;
-    [M[c], M[maxR]] = [M[maxR], M[c]];
+    let mr = c;
+    for (let r = c+1; r < n; r++) if (Math.abs(M[r][c]) > Math.abs(M[mr][c])) mr = r;
+    [M[c],M[mr]] = [M[mr],M[c]];
     if (Math.abs(M[c][c]) < 1e-15) continue;
     for (let r = 0; r < n; r++) {
       if (r === c) continue;
-      const f = M[r][c] / M[c][c];
-      for (let k = c; k <= n; k++) M[r][k] -= f * M[c][k];
+      const f = M[r][c]/M[c][c];
+      for (let k = c; k <= n; k++) M[r][k] -= f*M[c][k];
     }
   }
-  return M.map((row, i) => (Math.abs(row[i]) > 1e-15 ? row[n] / row[i] : 0));
+  return M.map((row,i) => Math.abs(row[i])>1e-15 ? row[n]/row[i] : 0);
 }
 
-// ── Solver ────────────────────────────────────────────────────────────────────
 function solveEquilibrium(guesses) {
-  // guesses: [{x,y}, ...] for each active floater
   let state = posToState(guesses);
   const n = state.length;
-  const maxDist = Math.max(...lines.map(l => Math.sqrt(l.ax*l.ax + l.ay*l.ay)), 5);
+  const maxDist = Math.max(...lines.map(l=>Math.sqrt(l.ax*l.ax+l.ay*l.ay)), 5);
   const bound = maxDist * 4;
-  const eps = 1e-6, tol = 1e-8, maxIter = 500;
+  const eps = 1e-6, tol = 1e-8;
 
-  for (let iter = 0; iter < maxIter; iter++) {
+  for (let iter = 0; iter < 500; iter++) {
     const forces = computeForces(stateToPos(state));
     const F = forces.flatMap(f => [f.x, f.y]);
-    const fNorm = Math.sqrt(F.reduce((s, v) => s + v * v, 0));
-    if (fNorm < tol) break;
+    if (Math.sqrt(F.reduce((s,v)=>s+v*v,0)) < tol) break;
 
-    // Numerical Jacobian
-    const J = Array.from({ length: n }, () => new Array(n).fill(0));
+    const J = Array.from({length:n}, ()=>new Array(n).fill(0));
     for (let j = 0; j < n; j++) {
       const sp = [...state]; sp[j] += eps;
-      const Fp = computeForces(stateToPos(sp)).flatMap(f => [f.x, f.y]);
-      for (let k = 0; k < n; k++) J[k][j] = (Fp[k] - F[k]) / eps;
+      const Fp = computeForces(stateToPos(sp)).flatMap(f=>[f.x,f.y]);
+      for (let k = 0; k < n; k++) J[k][j] = (Fp[k]-F[k])/eps;
     }
-
-    const delta = solveLinear(J, F.map(v => -v));
-    const dNorm = Math.sqrt(delta.reduce((s, v) => s + v * v, 0));
-    const scale = dNorm > 0.3 ? 0.3 / dNorm : 1;
-
-    for (let j = 0; j < n; j++) state[j] += scale * delta[j];
-
-    // Bound each floater
-    for (let fi = 0; fi < n / 2; fi++) {
-      const r = Math.sqrt(state[fi*2]**2 + state[fi*2+1]**2);
+    const delta = solveLinear(J, F.map(v=>-v));
+    const dN = Math.sqrt(delta.reduce((s,v)=>s+v*v,0));
+    const sc = dN > 0.3 ? 0.3/dN : 1;
+    for (let j = 0; j < n; j++) state[j] += sc*delta[j];
+    for (let fi = 0; fi < n/2; fi++) {
+      const r = Math.sqrt(state[fi*2]**2+state[fi*2+1]**2);
       if (r > bound) { state[fi*2] *= bound/r; state[fi*2+1] *= bound/r; }
     }
   }
@@ -329,496 +334,437 @@ function solveEquilibrium(guesses) {
 }
 
 // ── Camera ────────────────────────────────────────────────────────────────────
-function w2c(wx, wy) {
-  return { x: canvas.width/2 + (wx - cam.x)*cam.zoom, y: canvas.height/2 - (wy - cam.y)*cam.zoom };
-}
-function c2w(cx, cy) {
-  return { x: (cx - canvas.width/2)/cam.zoom + cam.x, y: -(cy - canvas.height/2)/cam.zoom + cam.y };
-}
+function w2c(wx,wy) { return {x:canvas.width/2+(wx-cam.x)*cam.zoom, y:canvas.height/2-(wy-cam.y)*cam.zoom}; }
+function c2w(cx,cy) { return {x:(cx-canvas.width/2)/cam.zoom+cam.x, y:-(cy-canvas.height/2)/cam.zoom+cam.y}; }
 
 // ── Drawing ───────────────────────────────────────────────────────────────────
-function drawArrow(x1, y1, x2, y2, color, lw) {
-  lw = lw || 2;
-  const dx = x2-x1, dy = y2-y1, L = Math.sqrt(dx*dx+dy*dy);
-  if (L < 3) return;
-  const ux = dx/L, uy = dy/L, hw = Math.max(6,lw*3), hl = Math.max(10,lw*4.5);
-  ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2-ux*hl, y2-uy*hl);
-  ctx.strokeStyle = color; ctx.lineWidth = lw; ctx.stroke();
-  ctx.beginPath();
-  ctx.moveTo(x2,y2);
+function drawArrow(x1,y1,x2,y2,color,lw) {
+  lw=lw||2;
+  const dx=x2-x1, dy=y2-y1, L=Math.sqrt(dx*dx+dy*dy);
+  if (L<3) return;
+  const ux=dx/L, uy=dy/L, hw=Math.max(6,lw*3), hl=Math.max(10,lw*4.5);
+  ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2-ux*hl,y2-uy*hl);
+  ctx.strokeStyle=color; ctx.lineWidth=lw; ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(x2,y2);
   ctx.lineTo(x2-ux*hl-uy*hw/2, y2-uy*hl+ux*hw/2);
   ctx.lineTo(x2-ux*hl+uy*hw/2, y2-uy*hl-ux*hw/2);
-  ctx.closePath(); ctx.fillStyle = color; ctx.fill();
+  ctx.closePath(); ctx.fillStyle=color; ctx.fill();
 }
 
 function drawGrid() {
   if (cam.zoom < 8) return;
-  const l = c2w(0,0).x, r = c2w(canvas.width,0).x;
-  const t = c2w(0,0).y, b = c2w(0,canvas.height).y;
-  ctx.strokeStyle = '#22252f'; ctx.lineWidth = 1;
-  for (let x = Math.floor(l); x <= r+1; x++) { const p=w2c(x,0); ctx.beginPath(); ctx.moveTo(p.x,0); ctx.lineTo(p.x,canvas.height); ctx.stroke(); }
-  for (let y = Math.floor(b); y <= t+1; y++) { const p=w2c(0,y); ctx.beginPath(); ctx.moveTo(0,p.y); ctx.lineTo(canvas.width,p.y); ctx.stroke(); }
-  ctx.strokeStyle = '#2d3245'; ctx.lineWidth = 1;
-  const o = w2c(0,0);
+  const l=c2w(0,0).x, r=c2w(canvas.width,0).x, t=c2w(0,0).y, b=c2w(0,canvas.height).y;
+  ctx.strokeStyle='#22252f'; ctx.lineWidth=1;
+  for (let x=Math.floor(l);x<=r+1;x++) { const p=w2c(x,0); ctx.beginPath(); ctx.moveTo(p.x,0); ctx.lineTo(p.x,canvas.height); ctx.stroke(); }
+  for (let y=Math.floor(b);y<=t+1;y++) { const p=w2c(0,y); ctx.beginPath(); ctx.moveTo(0,p.y); ctx.lineTo(canvas.width,p.y); ctx.stroke(); }
+  ctx.strokeStyle='#2d3245'; const o=w2c(0,0);
   ctx.beginPath(); ctx.moveTo(o.x,0); ctx.lineTo(o.x,canvas.height); ctx.stroke();
   ctx.beginPath(); ctx.moveTo(0,o.y); ctx.lineTo(canvas.width,o.y); ctx.stroke();
 }
 
-function drawAnchor(ln, lIdx) {
+function drawAnchor(ln, col) {
   const ap = w2c(ln.ax, ln.ay);
-  const col = lColor(lIdx);
-  ctx.beginPath(); ctx.arc(ap.x, ap.y, 10, 0, Math.PI*2);
-  ctx.fillStyle = col+'22'; ctx.fill();
-  ctx.strokeStyle = col; ctx.lineWidth = 2; ctx.stroke();
-  ctx.strokeStyle = col; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.arc(ap.x,ap.y,10,0,Math.PI*2);
+  ctx.fillStyle=col+'22'; ctx.fill();
+  ctx.strokeStyle=col; ctx.lineWidth=2; ctx.stroke();
+  ctx.lineWidth=1.5;
   ctx.beginPath(); ctx.moveTo(ap.x-7,ap.y); ctx.lineTo(ap.x+7,ap.y); ctx.stroke();
   ctx.beginPath(); ctx.moveTo(ap.x,ap.y-7); ctx.lineTo(ap.x,ap.y+7); ctx.stroke();
-  if (cam.zoom > 15) {
-    ctx.fillStyle = col; ctx.font = 'bold 10px Segoe UI'; ctx.textAlign = 'center';
-    ctx.fillText(`A${lIdx+1}`, ap.x, ap.y - 14);
-  }
 }
 
-function drawSpringLine(ln, lIdx, fpos) {
-  const fi = Math.min(ln.floaterIdx, fpos.length - 1);
+function drawSpringLine(i, fpos) {
+  const ln = lines[i], col = springLineColor(i);
+  const fi = Math.min(ln.floaterIdx, fpos.length-1);
   const p = fpos[fi];
-  const fp = w2c(p.x, p.y), ap = w2c(ln.ax, ln.ay);
-  const dx = ln.ax - p.x, dy = ln.ay - p.y;
-  const d = Math.sqrt(dx*dx + dy*dy);
-  const T = Math.max(0, ln.k * (d - ln.L0));
+  const fp=w2c(p.x,p.y), ap=w2c(ln.ax,ln.ay);
+  const dx=ln.ax-p.x, dy=ln.ay-p.y, d=Math.sqrt(dx*dx+dy*dy);
+  const T = Math.max(0, ln.k*(d-ln.L0));
   const slack = T < 0.01;
-  const col = lColor(lIdx);
-
-  if (slack) { ctx.setLineDash([4,5]); ctx.strokeStyle = col+'44'; ctx.lineWidth = 1; }
-  else { ctx.setLineDash([]); ctx.strokeStyle = col; ctx.lineWidth = Math.max(1.5, Math.min(5, T/80)); }
+  if (slack) { ctx.setLineDash([4,5]); ctx.strokeStyle=col+'44'; ctx.lineWidth=1; }
+  else { ctx.setLineDash([]); ctx.strokeStyle=col; ctx.lineWidth=Math.max(1.5,Math.min(5,T/80)); }
   ctx.beginPath(); ctx.moveTo(fp.x,fp.y); ctx.lineTo(ap.x,ap.y); ctx.stroke();
   ctx.setLineDash([]);
-
-  // Line label
   if (cam.zoom > 18) {
-    const t = 0.4;
-    const mx = fp.x + (ap.x-fp.x)*t, my = fp.y + (ap.y-fp.y)*t;
-    const nx = -(ap.y-fp.y)/(Math.sqrt((ap.x-fp.x)**2+(ap.y-fp.y)**2)||1)*11;
-    const ny =  (ap.x-fp.x)/(Math.sqrt((ap.x-fp.x)**2+(ap.y-fp.y)**2)||1)*11;
-    const fname = `F${ln.floaterIdx+1}`;
-    ctx.fillStyle = col+(slack?'66':'bb');
-    ctx.font = `${Math.max(9, Math.min(11, cam.zoom*0.18))}px Segoe UI`;
-    ctx.textAlign = 'center';
-    ctx.fillText(`L${lIdx+1}→${fname}`, mx+nx, my+ny);
+    const t=0.38, mx=fp.x+(ap.x-fp.x)*t, my=fp.y+(ap.y-fp.y)*t;
+    const ld=Math.sqrt((ap.x-fp.x)**2+(ap.y-fp.y)**2)||1;
+    const nx=-(ap.y-fp.y)/ld*11, ny=(ap.x-fp.x)/ld*11;
+    ctx.fillStyle=col+(slack?'66':'cc');
+    ctx.font=`${Math.max(9,Math.min(11,cam.zoom*0.17))}px Segoe UI`;
+    ctx.textAlign='center';
+    ctx.fillText(`L${i+1}→F${ln.floaterIdx+1}`, mx+nx, my+ny);
   }
 }
 
-function drawCatenary(fpos) {
-  if (fpos.length < 2) return;
-  const p0 = fpos[0], p1 = fpos[1];
-  const dx = p1.x-p0.x, dy = p1.y-p0.y;
-  const d = Math.sqrt(dx*dx+dy*dy);
-  const a = w2c(p0.x,p0.y), b = w2c(p1.x,p1.y);
-
-  // Visual sag bow (proportional to excess length L-d)
-  const excess = Math.max(0, cat.L - d);
-  const sagWorld = Math.min(excess * 0.3, d * 0.25);
-  const sagPx = sagWorld * cam.zoom;
-  // Perpendicular direction (right-hand of p0→p1)
-  const len2d = Math.sqrt((b.x-a.x)**2+(b.y-a.y)**2) || 1;
-  const nx = -(b.y-a.y)/len2d, ny = (b.x-a.x)/len2d;
-  const cx = (a.x+b.x)/2 + nx*sagPx;
-  const cy = (a.y+b.y)/2 + ny*sagPx;
-
-  ctx.beginPath();
-  ctx.moveTo(a.x, a.y);
-  ctx.quadraticCurveTo(cx, cy, b.x, b.y);
-  const H = catenaryH(d, cat.L, cat.w);
-  const taut = d >= cat.L - 1e-3;
-  if (taut) { ctx.setLineDash([3,4]); ctx.strokeStyle = '#e0604088'; }
-  else { ctx.setLineDash([]); ctx.strokeStyle = '#f5c842'; }
-  ctx.lineWidth = 2.5; ctx.stroke();
-  ctx.setLineDash([]);
-
-  // Label at midpoint
+function drawCatenaryLine(ci, fpos) {
+  const cat = catenaries[ci];
+  const fi0=Math.min(cat.f0,fpos.length-1), fi1=Math.min(cat.f1,fpos.length-1);
+  if (fi0===fi1) return;
+  const p0=fpos[fi0], p1=fpos[fi1];
+  const a=w2c(p0.x,p0.y), b=w2c(p1.x,p1.y);
+  const dx=p1.x-p0.x, dy=p1.y-p0.y, d=Math.sqrt(dx*dx+dy*dy);
+  const excess=Math.max(0,cat.L-d);
+  const sagWorld=Math.min(excess*0.3, d*0.25);
+  const sagPx=sagWorld*cam.zoom;
+  const ld=Math.sqrt((b.x-a.x)**2+(b.y-a.y)**2)||1;
+  const nx=-(b.y-a.y)/ld, ny=(b.x-a.x)/ld;
+  const cx=(a.x+b.x)/2+nx*sagPx, cy=(a.y+b.y)/2+ny*sagPx;
+  const taut=d>=cat.L-1e-3;
+  ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.quadraticCurveTo(cx,cy,b.x,b.y);
+  ctx.setLineDash(taut?[3,4]:[]);
+  ctx.strokeStyle=taut?'#e0604088':CAT_COLOR;
+  ctx.lineWidth=2.5; ctx.stroke(); ctx.setLineDash([]);
   if (cam.zoom > 18) {
-    ctx.fillStyle = '#f5c842cc'; ctx.font = '10px Segoe UI'; ctx.textAlign = 'center';
-    ctx.fillText(`Cat. H=${isFinite(H)&&H<1e6?H.toFixed(0):'∞'} N`, cx, cy - 10);
+    const H=catenaryH(d,cat.L,cat.w);
+    ctx.fillStyle=CAT_COLOR+'cc'; ctx.font='10px Segoe UI'; ctx.textAlign='center';
+    ctx.fillText(`Cat${ci+1} H=${isFinite(H)&&H<1e6?H.toFixed(0):'∞'}N`, cx, cy-10);
   }
 }
 
 function drawFloater(fi, p) {
-  const fp = w2c(p.x, p.y);
-  const rpx = floaterR * cam.zoom;
-  const col = FLOATER_COLORS[fi] || FLOATER_COLORS[0];
+  const fp=w2c(p.x,p.y), rpx=floaterR*cam.zoom;
+  const col=floaterColor(fi);
   ctx.beginPath(); ctx.arc(fp.x,fp.y,rpx+7,0,Math.PI*2);
-  ctx.strokeStyle = col+'18'; ctx.lineWidth = 7; ctx.stroke();
+  ctx.strokeStyle=col+'18'; ctx.lineWidth=7; ctx.stroke();
   ctx.beginPath(); ctx.arc(fp.x,fp.y,rpx,0,Math.PI*2);
-  const g = ctx.createRadialGradient(fp.x-rpx*0.3,fp.y-rpx*0.3,rpx*0.1,fp.x,fp.y,rpx);
-  g.addColorStop(0, col+'cc'); g.addColorStop(1, '#2a4060');
-  ctx.fillStyle = g; ctx.fill();
-  ctx.strokeStyle = col; ctx.lineWidth = 2; ctx.stroke();
-  ctx.fillStyle = '#e0e0e0'; ctx.font = 'bold 11px Segoe UI'; ctx.textAlign = 'center';
-  ctx.fillText(`Floater ${fi+1}`, fp.x, fp.y + rpx + 15);
+  const g=ctx.createRadialGradient(fp.x-rpx*0.3,fp.y-rpx*0.3,rpx*0.1,fp.x,fp.y,rpx);
+  g.addColorStop(0,col+'cc'); g.addColorStop(1,'#2a4060');
+  ctx.fillStyle=g; ctx.fill();
+  ctx.strokeStyle=col; ctx.lineWidth=2; ctx.stroke();
+  ctx.fillStyle='#e0e0e0'; ctx.font='bold 11px Segoe UI'; ctx.textAlign='center';
+  ctx.fillText(`F${fi+1}`, fp.x, fp.y+rpx+15);
 }
 
 function drawForceVectors(fpos) {
-  const fscale = forceScale * cam.zoom * 0.003;
-  const allForces = computeForces(fpos);
-
-  // Per-spring forces
-  for (let li = 0; li < lines.length; li++) {
-    const ln = lines[li];
-    const fi = Math.min(ln.floaterIdx, fpos.length-1);
-    const p = fpos[fi];
-    const dx = ln.ax-p.x, dy = ln.ay-p.y, d = Math.sqrt(dx*dx+dy*dy);
-    if (d < 1e-9) continue;
-    const T = Math.max(0, ln.k*(d-ln.L0));
-    if (T < 0.01) continue;
-    const fp = w2c(p.x, p.y);
-    const fx = T*dx/d, fy = T*dy/d;
-    const ex = fp.x+fx*fscale, ey = fp.y-fy*fscale;
-    drawArrow(fp.x,fp.y,ex,ey,lColor(li),2);
-    ctx.fillStyle = lColor(li)+'cc'; ctx.font = 'bold 9px Segoe UI'; ctx.textAlign = 'center';
-    ctx.fillText(`${T.toFixed(0)}N`, fp.x+fx*fscale*0.5, fp.y-fy*fscale*0.5-7);
+  const fscale=forceScale*cam.zoom*0.003;
+  for (let i=0; i<lines.length; i++) {
+    const ln=lines[i], col=springLineColor(i);
+    const fi=Math.min(ln.floaterIdx,fpos.length-1), p=fpos[fi];
+    const dx=ln.ax-p.x, dy=ln.ay-p.y, d=Math.sqrt(dx*dx+dy*dy);
+    if (d<1e-9) continue;
+    const T=Math.max(0,ln.k*(d-ln.L0)); if(T<0.01) continue;
+    const fp=w2c(p.x,p.y);
+    const fx=T*dx/d, fy=T*dy/d;
+    drawArrow(fp.x,fp.y,fp.x+fx*fscale,fp.y-fy*fscale,col,2);
+    ctx.fillStyle=col+'cc'; ctx.font='bold 9px Segoe UI'; ctx.textAlign='center';
+    ctx.fillText(`${T.toFixed(0)}N`,fp.x+fx*fscale*0.5,fp.y-fy*fscale*0.5-7);
   }
-
-  // Catenary forces
-  if (fpos.length >= 2) {
-    const p0 = fpos[0], p1 = fpos[1];
-    const dx = p1.x-p0.x, dy = p1.y-p0.y, d = Math.sqrt(dx*dx+dy*dy);
-    if (d > 1e-9) {
-      const H = Math.min(catenaryH(d, cat.L, cat.w), 1e6);
-      if (H > 0.1) {
-        const ux = dx/d, uy = dy/d;
-        for (let fi = 0; fi < 2; fi++) {
-          const fp = w2c(fpos[fi].x, fpos[fi].y);
-          const sx = (fi===0?1:-1)*H*ux, sy = (fi===0?1:-1)*H*uy;
-          const ex = fp.x+sx*fscale, ey = fp.y-sy*fscale;
-          drawArrow(fp.x,fp.y,ex,ey,'#f5c842',2);
-          ctx.fillStyle = '#f5c842cc'; ctx.font = 'bold 9px Segoe UI'; ctx.textAlign = 'center';
-          ctx.fillText(`${H.toFixed(0)}N`, fp.x+sx*fscale*0.5, fp.y-sy*fscale*0.5-7);
-        }
-      }
+  for (const cat of catenaries) {
+    const fi0=Math.min(cat.f0,fpos.length-1), fi1=Math.min(cat.f1,fpos.length-1);
+    if (fi0===fi1) continue;
+    const p0=fpos[fi0], p1=fpos[fi1];
+    const dx=p1.x-p0.x, dy=p1.y-p0.y, d=Math.sqrt(dx*dx+dy*dy);
+    if (d<1e-9) continue;
+    const H=Math.min(catenaryH(d,cat.L,cat.w),1e6); if(H<0.1) continue;
+    const ux=dx/d, uy=dy/d;
+    for (const [fi,sx,sy] of [[fi0,H*ux,H*uy],[fi1,-H*ux,-H*uy]]) {
+      const fp=w2c(fpos[fi].x,fpos[fi].y);
+      drawArrow(fp.x,fp.y,fp.x+sx*fscale,fp.y-sy*fscale,CAT_COLOR,2);
+      ctx.fillStyle=CAT_COLOR+'cc'; ctx.font='bold 9px Segoe UI'; ctx.textAlign='center';
+      ctx.fillText(`${H.toFixed(0)}N`,fp.x+sx*fscale*0.5,fp.y-sy*fscale*0.5-7);
     }
   }
-
-  // Net residual per floater
-  for (let fi = 0; fi < fpos.length; fi++) {
-    const net = allForces[fi];
-    const netLen = Math.sqrt(net.x*net.x + net.y*net.y);
-    if (netLen > 0.5) {
-      const fp = w2c(fpos[fi].x, fpos[fi].y);
-      drawArrow(fp.x,fp.y, fp.x+net.x*fscale, fp.y-net.y*fscale, '#ff880060', 1.5);
-    }
+  // Net residual
+  const allF=computeForces(fpos);
+  for (let fi=0; fi<fpos.length; fi++) {
+    const net=allF[fi], nl=Math.sqrt(net.x*net.x+net.y*net.y);
+    if (nl>0.5) { const fp=w2c(fpos[fi].x,fpos[fi].y); drawArrow(fp.x,fp.y,fp.x+net.x*fscale,fp.y-net.y*fscale,'#ff880060',1.5); }
   }
 }
 
 function drawScaleBar() {
-  const px = cam.zoom, x = 16, y = canvas.height-16;
-  ctx.strokeStyle = '#666'; ctx.lineWidth = 2;
+  const px=cam.zoom, x=16, y=canvas.height-16;
+  ctx.strokeStyle='#666'; ctx.lineWidth=2;
   ctx.beginPath(); ctx.moveTo(x,y); ctx.lineTo(x+px,y); ctx.stroke();
   ctx.beginPath(); ctx.moveTo(x,y-4); ctx.lineTo(x,y+4); ctx.stroke();
   ctx.beginPath(); ctx.moveTo(x+px,y-4); ctx.lineTo(x+px,y+4); ctx.stroke();
-  ctx.fillStyle = '#666'; ctx.font = '11px Segoe UI'; ctx.textAlign = 'left';
-  ctx.fillText('1 m', x, y-8);
+  ctx.fillStyle='#666'; ctx.font='11px Segoe UI'; ctx.textAlign='left';
+  ctx.fillText('1 m',x,y-8);
 }
 
 function render() {
   ctx.clearRect(0,0,canvas.width,canvas.height);
-  ctx.fillStyle = '#1a1d23'; ctx.fillRect(0,0,canvas.width,canvas.height);
-
-  const activeFPos = floaters.slice(0, numFloaters);
+  ctx.fillStyle='#1a1d23'; ctx.fillRect(0,0,canvas.width,canvas.height);
   drawGrid();
-  // Natural length arcs (faint)
-  for (let i = 0; i < lines.length; i++) {
-    const L0px = lines[i].L0 * cam.zoom;
-    if (L0px < 2) continue;
-    const ap = w2c(lines[i].ax, lines[i].ay);
+  // Natural length arcs
+  for (let i=0;i<lines.length;i++) {
+    const L0px=lines[i].L0*cam.zoom; if(L0px<2) continue;
+    const ap=w2c(lines[i].ax,lines[i].ay);
     ctx.beginPath(); ctx.arc(ap.x,ap.y,L0px,0,Math.PI*2);
-    ctx.strokeStyle = lColor(i)+'18'; ctx.lineWidth=1; ctx.setLineDash([3,9]); ctx.stroke();
-    ctx.setLineDash([]);
+    ctx.strokeStyle=springLineColor(i)+'18'; ctx.lineWidth=1; ctx.setLineDash([3,9]); ctx.stroke(); ctx.setLineDash([]);
   }
-  // Catenary
-  if (numFloaters >= 2) drawCatenary(activeFPos);
+  // Catenaries (behind floaters)
+  for (let ci=0;ci<catenaries.length;ci++) drawCatenaryLine(ci,floaters);
   // Spring lines
-  for (let i = 0; i < lines.length; i++) drawSpringLine(lines[i], i, activeFPos);
+  for (let i=0;i<lines.length;i++) drawSpringLine(i,floaters);
   // Anchors
-  for (let i = 0; i < lines.length; i++) drawAnchor(lines[i], i);
+  for (let i=0;i<lines.length;i++) drawAnchor(lines[i],springLineColor(i));
   // Force vectors
-  if (showForces) drawForceVectors(activeFPos);
-  // Floaters (on top)
-  for (let fi = 0; fi < numFloaters; fi++) drawFloater(fi, activeFPos[fi]);
-
+  if (showForces) drawForceVectors(floaters);
+  // Floaters
+  for (let fi=0;fi<floaters.length;fi++) drawFloater(fi,floaters[fi]);
   drawScaleBar();
-  updateResultsUI(activeFPos);
+  updateResultsUI();
 }
 
-// ── Results UI ────────────────────────────────────────────────────────────────
-function updateResultsUI(fpos) {
+// ── UI rebuild ────────────────────────────────────────────────────────────────
+function rebuildAll() {
+  rebuildFloaterTable();
+  rebuildLineTable();
+  rebuildCatTable();
+  updateLegend();
+}
+
+function rebuildFloaterTable() {
+  const tbody=document.getElementById('floater-tbody');
+  tbody.innerHTML='';
+  floaters.forEach((f,fi) => {
+    const col=floaterColor(fi);
+    const tr=document.createElement('tr');
+    tr.innerHTML=`
+      <td class="dot-cell"><span class="dot" style="background:${col}"></span></td>
+      <td style="color:${col};font-weight:600;font-size:11px;padding:3px 6px;">Floater ${fi+1}</td>
+      <td class="res-td" id="fx-${fi}">${f.x.toFixed(4)}</td>
+      <td class="res-td" id="fy-${fi}">${f.y.toFixed(4)}</td>
+      <td><button class="del-btn" ${floaters.length<=1?'disabled':''} onclick="removeFloater(${fi})">×</button></td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+function rebuildLineTable() {
+  const tbody=document.getElementById('line-tbody');
+  tbody.innerHTML='';
+  lines.forEach((ln,i) => {
+    const col=springLineColor(i);
+    const tr=document.createElement('tr');
+    // Build floater options
+    let opts=floaters.map((f,fi)=>`<option value="${fi}"${fi===ln.floaterIdx?' selected':''}>F${fi+1}</option>`).join('');
+    tr.innerHTML=`
+      <td class="dot-cell"><span class="dot" style="background:${col}"></span></td>
+      <td class="w65"><input class="ti" type="number" step="0.01" value="${ln.ax.toFixed(3)}" id="ax-${i}"></td>
+      <td class="w65"><input class="ti" type="number" step="0.01" value="${ln.ay.toFixed(3)}" id="ay-${i}"></td>
+      <td class="w65"><input class="ti" type="number" step="0.01" min="0" value="${ln.L0.toFixed(3)}" id="L0-${i}"></td>
+      <td class="w70"><input class="ti" type="number" step="10" min="1" value="${ln.k}" id="k-${i}"></td>
+      <td class="w55"><select class="ti" id="fi-${i}">${opts}</select></td>
+      <td class="res-td w70" id="lT-${i}">—</td>
+      <td class="res-td w65" id="lL-${i}">—</td>
+      <td class="res-td w65" id="ldL-${i}">—</td>
+      <td class="w28"><button class="del-btn" onclick="removeLine(${i})">×</button></td>`;
+    tbody.appendChild(tr);
+    const wire=(id,setter)=>{
+      const el=document.getElementById(id);
+      if(el) el.addEventListener('change',()=>{ setter(parseFloat(el.value)||0); resolveAndRender(); });
+    };
+    wire(`ax-${i}`,v=>lines[i].ax=v);
+    wire(`ay-${i}`,v=>lines[i].ay=v);
+    wire(`L0-${i}`,v=>lines[i].L0=Math.max(0,v));
+    wire(`k-${i}`, v=>{ lines[i].k=Math.max(1,v); rebuildAll(); resolveAndRender(); });
+    const sel=document.getElementById(`fi-${i}`);
+    if(sel) sel.addEventListener('change',()=>{ lines[i].floaterIdx=parseInt(sel.value); resolveAndRender(); });
+  });
+}
+
+function rebuildCatTable() {
+  const tbody=document.getElementById('cat-tbody');
+  tbody.innerHTML='';
+  catenaries.forEach((cat,ci) => {
+    const tr=document.createElement('tr');
+    let opts0=floaters.map((_,fi)=>`<option value="${fi}"${fi===cat.f0?' selected':''}>F${fi+1}</option>`).join('');
+    let opts1=floaters.map((_,fi)=>`<option value="${fi}"${fi===cat.f1?' selected':''}>F${fi+1}</option>`).join('');
+    tr.innerHTML=`
+      <td class="dot-cell"><span class="dot" style="background:${CAT_COLOR}"></span></td>
+      <td class="w55"><select class="ti" id="cf0-${ci}">${opts0}</select></td>
+      <td class="w55"><select class="ti" id="cf1-${ci}">${opts1}</select></td>
+      <td class="w70"><input class="ti" type="number" step="0.1" min="0.01" value="${cat.L}" id="cL-${ci}"></td>
+      <td class="w70"><input class="ti" type="number" step="1" min="0" value="${cat.w}" id="cw-${ci}"></td>
+      <td class="res-td w70" id="cH-${ci}">—</td>
+      <td class="res-td w65" id="cSag-${ci}">—</td>
+      <td class="w28"><button class="del-btn" onclick="removeCatenary(${ci})">×</button></td>`;
+    tbody.appendChild(tr);
+    const wire=(id,setter)=>{
+      const el=document.getElementById(id);
+      if(el) el.addEventListener('change',()=>{ setter(parseFloat(el.value)||0); resolveAndRender(); });
+    };
+    wire(`cL-${ci}`,v=>catenaries[ci].L=Math.max(0.01,v));
+    wire(`cw-${ci}`,v=>catenaries[ci].w=Math.max(0,v));
+    const s0=document.getElementById(`cf0-${ci}`),s1=document.getElementById(`cf1-${ci}`);
+    if(s0) s0.addEventListener('change',()=>{ catenaries[ci].f0=parseInt(s0.value); resolveAndRender(); });
+    if(s1) s1.addEventListener('change',()=>{ catenaries[ci].f1=parseInt(s1.value); resolveAndRender(); });
+  });
+}
+
+function updateLegend() {
+  const el=document.getElementById('k-legend'); el.innerHTML='';
+  const ks=[...new Set(lines.map(l=>l.k))].sort((a,b)=>a-b);
+  if (ks.length>1) {
+    el.innerHTML='<span style="font-size:10px;color:#666;margin-right:4px;">k scale:</span>';
+    const kMin=Math.min(...ks), kMax=Math.max(...ks);
+    [kMin,...ks.filter(k=>k>kMin&&k<kMax),...(kMax>kMin?[kMax]:[])].forEach(k=>{
+      const t=(k-kMin)/(kMax-kMin||1);
+      const col=`hsl(${Math.round(220-t*220)},72%,58%)`;
+      el.innerHTML+=`<span class="legend-item"><span class="legend-line" style="background:${col}"></span>${k} N/m</span>`;
+    });
+  }
+  // Catenary entry
+  if (catenaries.length>0)
+    el.innerHTML+=`<span class="legend-item"><span class="legend-line" style="background:${CAT_COLOR}"></span>Catenary (non-linear)</span>`;
+}
+
+function updateResultsUI() {
   // Floater positions
-  const rfDiv = document.getElementById('results-floaters');
-  rfDiv.innerHTML = '';
-  for (let fi = 0; fi < numFloaters; fi++) {
-    const col = FLOATER_COLORS[fi];
-    const p = fpos[fi];
-    const d = document.createElement('div');
-    d.className = 'res-floater';
-    d.innerHTML = `<div class="fhdr" style="color:${col}">Floater ${fi+1}</div>
-      <div class="res-row">
-        <div class="res-val"><div class="rlbl">x (m)</div><div class="rval" style="color:${col}">${p.x.toFixed(4)}</div></div>
-        <div class="res-val"><div class="rlbl">y (m)</div><div class="rval" style="color:${col}">${p.y.toFixed(4)}</div></div>
-      </div>`;
-    rfDiv.appendChild(d);
-  }
-
-  // Net residual badge
-  const allF = computeForces(fpos);
-  const totalRes = Math.sqrt(allF.reduce((s,f)=>s+f.x*f.x+f.y*f.y,0));
-  const badge = document.getElementById('badge-res');
-  badge.textContent = `|F_net| = ${totalRes.toFixed(4)} N`;
-  badge.style.color = totalRes > 0.5 ? '#e0a060' : '#60b860';
-  document.getElementById('badge-mode').textContent = isDragging ? 'Free Drag' : 'Equilibrium';
-
-  // Catenary status
-  if (numFloaters >= 2) {
-    const p0=fpos[0], p1=fpos[1];
-    const dx=p1.x-p0.x, dy=p1.y-p0.y, d=Math.sqrt(dx*dx+dy*dy);
-    const el = document.getElementById('cat-status');
-    if (d >= cat.L) {
-      el.className='cat-status err'; el.textContent=`Distance ${d.toFixed(2)} m ≥ L=${cat.L} m — line taut/impossible`;
-    } else {
-      const H = catenaryH(d, cat.L, cat.w);
-      const sag = catenarySag(d, cat.L, cat.w);
-      el.className='cat-status ok';
-      el.textContent=`d=${d.toFixed(2)} m  H=${H.toFixed(1)} N  Sag=${sag.toFixed(2)} m`;
-    }
-  }
+  floaters.forEach((f,fi)=>{
+    const ex=document.getElementById(`fx-${fi}`), ey=document.getElementById(`fy-${fi}`);
+    if(ex) ex.textContent=f.x.toFixed(4);
+    if(ey) ey.textContent=f.y.toFixed(4);
+  });
 
   // Line results
-  const lrd = document.getElementById('line-res-list');
-  lrd.innerHTML = '';
-  for (let i = 0; i < lines.length; i++) {
-    const ln = lines[i];
-    const fi = Math.min(ln.floaterIdx, fpos.length-1);
-    const p = fpos[fi];
+  lines.forEach((ln,i)=>{
+    const fi=Math.min(ln.floaterIdx,floaters.length-1), p=floaters[fi];
     const dx=ln.ax-p.x, dy=ln.ay-p.y, d=Math.sqrt(dx*dx+dy*dy);
-    const T = Math.max(0, ln.k*(d-ln.L0));
-    const ang = Math.atan2(dy,dx)*180/Math.PI;
-    const slack = T < 0.01;
-    const col = lColor(i);
-    const row = document.createElement('div');
-    row.className = 'line-res';
-    row.innerHTML = `<div class="dot" style="background:${col}"></div>
-      <div class="rdata">
-        <span>L${i+1}:</span>
-        <span><b>${T.toFixed(1)}</b> N ${slack?'<span class="slack-tag">SLACK</span>':''}</span>
-        <span>L=<b>${d.toFixed(3)}</b>m</span>
-        <span>ΔL=<b>${(d-ln.L0).toFixed(3)}</b>m</span>
-        <span>θ=<b>${ang.toFixed(1)}°</b></span>
-        <span style="color:${FLOATER_COLORS[ln.floaterIdx]||'#888'}">→F${ln.floaterIdx+1}</span>
-      </div>`;
-    lrd.appendChild(row);
+    const T=Math.max(0,ln.k*(d-ln.L0)), slack=T<0.01;
+    const eT=document.getElementById(`lT-${i}`), eL=document.getElementById(`lL-${i}`), edL=document.getElementById(`ldL-${i}`);
+    if(eT){ eT.textContent=slack?'SLACK':T.toFixed(1); eT.className=slack?'res-td slack':'res-td'; }
+    if(eL) eL.textContent=d.toFixed(3);
+    if(edL) edL.textContent=(d-ln.L0).toFixed(3);
+  });
+
+  // Catenary results
+  catenaries.forEach((cat,ci)=>{
+    const fi0=Math.min(cat.f0,floaters.length-1), fi1=Math.min(cat.f1,floaters.length-1);
+    const eH=document.getElementById(`cH-${ci}`), eSag=document.getElementById(`cSag-${ci}`);
+    if(fi0===fi1){ if(eH)eH.textContent='same floater'; return; }
+    const p0=floaters[fi0], p1=floaters[fi1];
+    const dx=p1.x-p0.x, dy=p1.y-p0.y, d=Math.sqrt(dx*dx+dy*dy);
+    const H=catenaryH(d,cat.L,cat.w), sag=catenarySag(d,cat.L,cat.w);
+    if(eH) { eH.textContent=H>1e6?'TAUT':H.toFixed(1); eH.className=H>1e6?'res-td warn':'res-td'; }
+    if(eSag) eSag.textContent=sag.toFixed(3);
+  });
+
+  // Summary results section
+  const allF=computeForces(floaters);
+  const res=Math.sqrt(allF.reduce((s,f)=>s+f.x*f.x+f.y*f.y,0));
+  const badge=document.getElementById('badge-res');
+  badge.textContent=`|F_net| = ${res.toFixed(4)} N`;
+  badge.style.color=res>0.5?'#e0a060':'#60b860';
+  document.getElementById('badge-mode').textContent=isDragging?'Free Drag':'Equilibrium';
+
+  // Results section
+  const rdiv=document.getElementById('results-div'); rdiv.innerHTML='';
+  for(let fi=0;fi<floaters.length;fi++){
+    const col=floaterColor(fi), p=floaters[fi];
+    rdiv.innerHTML+=`<div class="fres-row">
+      <div class="fres-chip"><div class="rl" style="color:${col}">F${fi+1} x (m)</div><div class="rv" style="color:${col}">${p.x.toFixed(4)}</div></div>
+      <div class="fres-chip"><div class="rl" style="color:${col}">F${fi+1} y (m)</div><div class="rv" style="color:${col}">${p.y.toFixed(4)}</div></div>
+    </div>`;
   }
 }
 
-// ── Configuration controls ────────────────────────────────────────────────────
-function setNumFloaters(n) {
-  numFloaters = n;
-  document.getElementById('tog1').classList.toggle('active', n===1);
-  document.getElementById('tog2').classList.toggle('active', n===2);
-  document.getElementById('cat-section').style.display = n===2 ? '' : 'none';
-  rebuildLineList();
+// ── Add / Remove ──────────────────────────────────────────────────────────────
+function addFloater() {
+  const n=floaters.length;
+  floaters.push({x: n*3, y:0});
+  rebuildAll();
   resolveAndRender();
 }
-
+function removeFloater(fi) {
+  if(floaters.length<=1) return;
+  floaters.splice(fi,1);
+  // Remap lines
+  lines.forEach(l=>{
+    if(l.floaterIdx===fi) l.floaterIdx=0;
+    else if(l.floaterIdx>fi) l.floaterIdx--;
+  });
+  // Remap catenaries
+  catenaries=catenaries.filter(c=>c.f0!==fi&&c.f1!==fi);
+  catenaries.forEach(c=>{ if(c.f0>fi)c.f0--; if(c.f1>fi)c.f1--; });
+  rebuildAll();
+  resolveAndRender();
+}
 function addLine() {
-  // Default anchor: offset from existing centroid
-  const cx = lines.reduce((s,l)=>s+l.ax,0)/(lines.length||1);
-  const cy = lines.reduce((s,l)=>s+l.ay,0)/(lines.length||1);
-  const ang = Math.random()*Math.PI*2;
-  const R = 5;
-  lines.push({ ax: cx+R*Math.cos(ang), ay: cy+R*Math.sin(ang), k:500, L0:4.6, floaterIdx:0 });
-  rebuildLineList();
-  resolveAndRender();
+  const cx=lines.reduce((s,l)=>s+l.ax,0)/(lines.length||1);
+  const cy=lines.reduce((s,l)=>s+l.ay,0)/(lines.length||1);
+  const ang=Math.random()*Math.PI*2, R=5;
+  lines.push({ax:cx+R*Math.cos(ang), ay:cy+R*Math.sin(ang), k:500, L0:4.6, floaterIdx:0});
+  rebuildAll(); resolveAndRender();
 }
-
 function removeLine(i) {
-  lines.splice(i,1);
-  rebuildLineList();
-  resolveAndRender();
+  if(lines.length<=1) return;
+  lines.splice(i,1); rebuildAll(); resolveAndRender();
+}
+function addCatenary() {
+  const f1=floaters.length>1?1:0;
+  catenaries.push({f0:0, f1:f1, L:8, w:50});
+  rebuildAll(); resolveAndRender();
+}
+function removeCatenary(ci) {
+  catenaries.splice(ci,1); rebuildAll(); resolveAndRender();
 }
 
-function rebuildLineList() {
-  const container = document.getElementById('line-list');
-  container.innerHTML = '';
-  for (let i = 0; i < lines.length; i++) {
-    const ln = lines[i];
-    const col = lColor(i);
-    const card = document.createElement('div');
-    card.className = 'line-card';
+// ── Fit & resize ──────────────────────────────────────────────────────────────
+function fitView() {
+  const pts=[...floaters,...lines.map(l=>({x:l.ax,y:l.ay}))];
+  let mn={x:Infinity,y:Infinity}, mx={x:-Infinity,y:-Infinity};
+  for(const p of pts){ mn.x=Math.min(mn.x,p.x);mx.x=Math.max(mx.x,p.x);mn.y=Math.min(mn.y,p.y);mx.y=Math.max(mx.y,p.y); }
+  const sx=mx.x-mn.x||2, sy=mx.y-mn.y||2;
+  cam.x=(mn.x+mx.x)/2; cam.y=(mn.y+mx.y)/2;
+  cam.zoom=Math.min(canvas.width/(sx*1.5), canvas.height/(sy*1.5));
+  render();
+}
+function resize() {
+  const w=document.getElementById('canvas-wrap');
+  canvas.width=w.clientWidth; canvas.height=w.clientHeight; fitView();
+}
+window.addEventListener('resize',resize);
 
-    // Header
-    const hdr = document.createElement('div');
-    hdr.className = 'lcard-hdr';
-    hdr.innerHTML = `<div class="dot" style="background:${col}"></div><span class="lname">Line ${i+1}</span>`;
-    const delBtn = document.createElement('button');
-    delBtn.className = 'del-btn'; delBtn.textContent = '×';
-    delBtn.onclick = () => removeLine(i);
-    if (lines.length <= 1) delBtn.disabled = true;
-    hdr.appendChild(delBtn);
-    card.appendChild(hdr);
-
-    // Anchor coords
-    const g1 = document.createElement('div'); g1.className = 'grid2';
-    g1.innerHTML = `
-      <div><label>Anchor x (m)</label><input type="number" step="0.01" value="${ln.ax.toFixed(3)}" id="ax-${i}"></div>
-      <div><label>Anchor y (m)</label><input type="number" step="0.01" value="${ln.ay.toFixed(3)}" id="ay-${i}"></div>`;
-    card.appendChild(g1);
-
-    // L0 and k
-    const g2 = document.createElement('div'); g2.className = 'grid2';
-    g2.innerHTML = `
-      <div><label>Natural length L₀ (m)</label><input type="number" step="0.01" min="0" value="${ln.L0.toFixed(3)}" id="L0-${i}"></div>
-      <div><label>Stiffness k (N/m)</label><input type="number" step="10" min="1" value="${ln.k}" id="k-${i}"></div>`;
-    card.appendChild(g2);
-
-    // Floater assignment (only when numFloaters > 1)
-    if (numFloaters > 1) {
-      const g3 = document.createElement('div'); g3.className = 'grid1';
-      const sel = document.createElement('select'); sel.id = `fi-${i}`;
-      for (let f = 0; f < numFloaters; f++) {
-        const opt = document.createElement('option');
-        opt.value = f; opt.textContent = `Floater ${f+1}`;
-        if (f === ln.floaterIdx) opt.selected = true;
-        sel.appendChild(opt);
-      }
-      g3.innerHTML = '<label>Connected to</label>';
-      g3.appendChild(sel);
-      card.appendChild(g3);
-    }
-
-    container.appendChild(card);
-
-    // Wire events (after DOM insertion)
-    const wire = (id, setter) => {
-      const el = document.getElementById(id);
-      if (el) el.addEventListener('change', () => { setter(parseFloat(el.value)||0); resolveAndRender(); });
-    };
-    wire(`ax-${i}`, v => lines[i].ax = v);
-    wire(`ay-${i}`, v => lines[i].ay = v);
-    wire(`L0-${i}`, v => lines[i].L0 = Math.max(0, v));
-    wire(`k-${i}`,  v => lines[i].k  = Math.max(1, v));
-    if (numFloaters > 1) {
-      const sel = document.getElementById(`fi-${i}`);
-      if (sel) sel.addEventListener('change', () => { lines[i].floaterIdx = parseInt(sel.value); resolveAndRender(); });
-    }
+// ── Drag floaters ─────────────────────────────────────────────────────────────
+function floaterAt(wx,wy) {
+  for(let fi=floaters.length-1;fi>=0;fi--){
+    const p=floaters[fi], dx=wx-p.x, dy=wy-p.y, r=floaterR+Math.max(0.3,12/cam.zoom);
+    if(dx*dx+dy*dy<r*r) return fi;
   }
+  return -1;
 }
-
-// ── Catenary inputs ───────────────────────────────────────────────────────────
-document.getElementById('cat-L').addEventListener('change', function() {
-  cat.L = Math.max(0.01, parseFloat(this.value)||0.01);
-  resolveAndRender();
+canvas.addEventListener('mousemove',e=>{
+  const w=c2w(e.offsetX,e.offsetY);
+  if(drag){ floaters[drag.fi].x=drag.sf.x+(w.x-drag.sw.x); floaters[drag.fi].y=drag.sf.y+(w.y-drag.sw.y); render(); }
+  else canvas.className=floaterAt(w.x,w.y)>=0?'hover-f':'';
 });
-document.getElementById('cat-w').addEventListener('change', function() {
-  cat.w = Math.max(0, parseFloat(this.value)||0);
-  resolveAndRender();
+canvas.addEventListener('mousedown',e=>{
+  const w=c2w(e.offsetX,e.offsetY), fi=floaterAt(w.x,w.y);
+  if(fi>=0){ drag={fi,sw:w,sf:{...floaters[fi]}}; isDragging=true; canvas.className='drag'; }
 });
+canvas.addEventListener('mouseup',()=>{ if(drag){drag=null;isDragging=false;resolveAndRender();} });
+canvas.addEventListener('mouseleave',()=>{ if(drag){drag=null;isDragging=false;resolveAndRender();} });
+canvas.addEventListener('touchstart',e=>{
+  e.preventDefault();
+  const t=e.touches[0],rect=canvas.getBoundingClientRect(),w=c2w(t.clientX-rect.left,t.clientY-rect.top),fi=floaterAt(w.x,w.y);
+  if(fi>=0){ drag={fi,sw:w,sf:{...floaters[fi]}}; isDragging=true; }
+},{passive:false});
+canvas.addEventListener('touchmove',e=>{
+  e.preventDefault(); if(!drag)return;
+  const t=e.touches[0],rect=canvas.getBoundingClientRect(),w=c2w(t.clientX-rect.left,t.clientY-rect.top);
+  floaters[drag.fi].x=drag.sf.x+(w.x-drag.sw.x); floaters[drag.fi].y=drag.sf.y+(w.y-drag.sw.y); render();
+},{passive:false});
+canvas.addEventListener('touchend',()=>{ if(drag){drag=null;isDragging=false;resolveAndRender();} });
+canvas.addEventListener('wheel',e=>{
+  e.preventDefault();
+  cam.zoom=Math.max(8,Math.min(800,cam.zoom*(e.deltaY<0?1.1:0.9))); render();
+},{passive:false});
 
-// ── Solve + Render ────────────────────────────────────────────────────────────
+// ── Solve & render ────────────────────────────────────────────────────────────
 function resolveAndRender() {
-  const guesses = floaters.slice(0, numFloaters);
-  const result = solveEquilibrium(guesses);
-  for (let i = 0; i < numFloaters; i++) floaters[i] = result[i];
+  const res=solveEquilibrium([...floaters]);
+  res.forEach((p,fi)=>{ floaters[fi]=p; });
   render();
 }
 
 // ── Display controls ──────────────────────────────────────────────────────────
-document.getElementById('floaterR').addEventListener('input', function() {
-  floaterR = parseFloat(this.value);
-  document.getElementById('fr-val').textContent = floaterR.toFixed(1);
-  render();
-});
-document.getElementById('showForces').addEventListener('change', function() { showForces = this.checked; render(); });
-document.getElementById('fscale').addEventListener('input', function() {
-  forceScale = parseFloat(this.value);
-  document.getElementById('fscale-val').textContent = forceScale.toFixed(1) + '×';
-  render();
-});
-
-// ── Fit view ──────────────────────────────────────────────────────────────────
-function fitView() {
-  const pts = [...floaters.slice(0, numFloaters), ...lines.map(l => ({x:l.ax, y:l.ay}))];
-  let minX=Infinity, maxX=-Infinity, minY=Infinity, maxY=-Infinity;
-  for (const p of pts) { minX=Math.min(minX,p.x); maxX=Math.max(maxX,p.x); minY=Math.min(minY,p.y); maxY=Math.max(maxY,p.y); }
-  const sx=maxX-minX||2, sy=maxY-minY||2;
-  cam.x=(minX+maxX)/2; cam.y=(minY+maxY)/2;
-  cam.zoom = Math.min(canvas.width/(sx*1.5), canvas.height/(sy*1.5));
-  render();
-}
-
-function resize() {
-  const w = document.getElementById('canvas-wrap');
-  canvas.width = w.clientWidth; canvas.height = w.clientHeight;
-  fitView();
-}
-window.addEventListener('resize', resize);
-
-// ── Drag floaters ─────────────────────────────────────────────────────────────
-function floaterAtPoint(wx, wy) {
-  for (let fi = numFloaters - 1; fi >= 0; fi--) {
-    const p = floaters[fi];
-    const dx = wx-p.x, dy = wy-p.y;
-    const r = floaterR + Math.max(0.3, 12/cam.zoom);
-    if (dx*dx+dy*dy < r*r) return fi;
-  }
-  return -1;
-}
-
-canvas.addEventListener('mousemove', e => {
-  const w = c2w(e.offsetX, e.offsetY);
-  if (drag) {
-    floaters[drag.fi].x = drag.sf.x + (w.x - drag.sw.x);
-    floaters[drag.fi].y = drag.sf.y + (w.y - drag.sw.y);
-    render();
-  } else {
-    canvas.className = floaterAtPoint(w.x, w.y) >= 0 ? 'hover-f' : '';
-  }
-});
-canvas.addEventListener('mousedown', e => {
-  const w = c2w(e.offsetX, e.offsetY);
-  const fi = floaterAtPoint(w.x, w.y);
-  if (fi >= 0) { drag = { fi, sw: w, sf: {...floaters[fi]} }; isDragging = true; canvas.className = 'drag'; }
-});
-canvas.addEventListener('mouseup', () => {
-  if (drag) { drag = null; isDragging = false; resolveAndRender(); }
-});
-canvas.addEventListener('mouseleave', () => {
-  if (drag) { drag = null; isDragging = false; resolveAndRender(); }
-});
-
-canvas.addEventListener('touchstart', e => {
-  e.preventDefault();
-  const t=e.touches[0], rect=canvas.getBoundingClientRect();
-  const w=c2w(t.clientX-rect.left, t.clientY-rect.top);
-  const fi=floaterAtPoint(w.x,w.y);
-  if (fi>=0) { drag={fi,sw:w,sf:{...floaters[fi]}}; isDragging=true; }
-},{passive:false});
-canvas.addEventListener('touchmove', e => {
-  e.preventDefault();
-  if (!drag) return;
-  const t=e.touches[0], rect=canvas.getBoundingClientRect();
-  const w=c2w(t.clientX-rect.left, t.clientY-rect.top);
-  floaters[drag.fi].x = drag.sf.x+(w.x-drag.sw.x);
-  floaters[drag.fi].y = drag.sf.y+(w.y-drag.sw.y);
-  render();
-},{passive:false});
-canvas.addEventListener('touchend', ()=>{ if(drag){drag=null;isDragging=false;resolveAndRender();}});
-
-canvas.addEventListener('wheel', e => {
-  e.preventDefault();
-  cam.zoom = Math.max(8, Math.min(800, cam.zoom*(e.deltaY<0?1.1:0.9)));
-  render();
-},{passive:false});
+document.getElementById('floaterR').addEventListener('input',function(){ floaterR=parseFloat(this.value); document.getElementById('fr-val').textContent=floaterR.toFixed(1); render(); });
+document.getElementById('showForces').addEventListener('change',function(){ showForces=this.checked; render(); });
+document.getElementById('fscale').addEventListener('input',function(){ forceScale=parseFloat(this.value); document.getElementById('fscale-val').textContent=forceScale.toFixed(1)+'×'; render(); });
 
 // ── Init ──────────────────────────────────────────────────────────────────────
-rebuildLineList();
+rebuildAll();
 resize();
 </script>
 </body>
