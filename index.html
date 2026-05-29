@@ -205,7 +205,7 @@ const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
 // ── State ─────────────────────────────────────────────────────────────────────
-let floaters = [{ x: 0, y: 0 }, { x: 4, y: 0 }];
+let floaters = [{ x: 0, y: 0 }];
 
 let lines = [
   { ax: 5,    ay:  0,        k: 500, L0: 4.6, floaterIdx: 0 },
@@ -213,9 +213,7 @@ let lines = [
   { ax: -2.5, ay: -4.330127, k: 500, L0: 4.6, floaterIdx: 0 }
 ];
 
-let catenaries = [
-  { f0: 0, f1: 1, L: 8, w: 50 }
-];
+let catenaries = [];
 
 let floaterR = 0.5, showForces = true, forceScale = 1;
 let drag = null, isDragging = false;
