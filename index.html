@@ -6,7 +6,17 @@
 <title>Mooring Line Equilibrium</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { background: #1a1d23; color: #e0e0e0; font-family: 'Segoe UI', sans-serif; display: flex; height: 100vh; overflow: hidden; }
+body { background: #1a1d23; color: #e0e0e0; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+
+/* ── Tab bar ── */
+#tab-bar { display: flex; background: #161820; border-bottom: 1px solid #2d3040; flex-shrink: 0; }
+.tab { background: none; border: none; color: #888; padding: 9px 20px; font-size: 12px; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; letter-spacing: 0.3px; }
+.tab:hover { color: #bbb; }
+.tab.active { color: #7ab8f5; border-bottom-color: #7ab8f5; }
+
+/* ── Pages ── */
+#page-model { display: flex; flex: 1; overflow: hidden; }
+#page-modal { display: none; flex: 1; overflow: hidden; }
 
 /* ── Sidebar ── */
 #sidebar { width: 520px; min-width: 520px; background: #22252e; border-right: 1px solid #2d3040; display: flex; flex-direction: column; overflow-y: auto; }
@@ -85,10 +95,39 @@ canvas.hover-f { cursor: grab; } canvas.drag { cursor: grabbing; }
 #badge-res { top: 10px; left: 10px; }
 #badge-mode { top: 10px; right: 10px; }
 #hint-badge { bottom: 10px; left: 50%; transform: translateX(-50%); font-size: 11px; color: #444; white-space: nowrap; }
+
+/* ── Modal Analysis page ── */
+#modal-left { width: 300px; min-width: 300px; background: #22252e; border-right: 1px solid #2d3040; display: flex; flex-direction: column; overflow-y: auto; padding: 14px; gap: 14px; }
+#modal-left h2 { font-size: 10px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+#modal-right { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+#modal-top { padding: 14px; border-bottom: 1px solid #2d3040; }
+#modal-top h2 { font-size: 10px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+#modes-table-wrap { flex: 1; overflow-y: auto; max-height: 220px; }
+.modes-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+.modes-table thead th { color: #666; font-weight: 600; padding: 4px 8px; text-align: left; border-bottom: 1px solid #2d3040; white-space: nowrap; }
+.modes-table tbody td { padding: 4px 8px; border-bottom: 1px solid #1e2028; font-variant-numeric: tabular-nums; }
+.modes-table tbody tr { cursor: pointer; }
+.modes-table tbody tr:hover td { background: #262930; }
+.modes-table tbody tr.selected td { background: #1e2a3a; color: #7ab8f5; }
+#modal-canvas-wrap { flex: 1; position: relative; overflow: hidden; }
+#modal-canvas { display: block; width: 100%; height: 100%; }
+#modal-hint { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); font-size: 11px; color: #444; pointer-events: none; white-space: nowrap; }
+.btn-run { background: #1e3a2a; color: #6ce0a0; border: 1px solid #6ce0a050; padding: 7px 14px; border-radius: 4px; font-size: 12px; font-weight: 600; cursor: pointer; width: 100%; }
+.btn-run:hover { background: #2a4a38; }
+#modal-status { font-size: 11px; color: #888; margin-top: 6px; min-height: 16px; }
+.mass-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+.mass-table th { color: #666; font-weight: 600; padding: 3px 4px; text-align: left; border-bottom: 1px solid #2d3040; }
+.mass-table td { padding: 3px 4px; border-bottom: 1px solid #1e2028; }
 </style>
 </head>
 <body>
 
+<div id="tab-bar">
+  <button class="tab active" id="tab-model" onclick="switchTab('model')">&#9875; Model</button>
+  <button class="tab" id="tab-modal" onclick="switchTab('modal')">&#126; Modal Analysis</button>
+</div>
+
+<div id="page-model">
 <div id="sidebar">
   <h1>Mooring Line Equilibrium</h1>
 
@@ -198,6 +237,40 @@ canvas.hover-f { cursor: grab; } canvas.drag { cursor: grabbing; }
   <div class="badge" id="badge-res">|F_net| = 0.000 N</div>
   <div class="badge" id="badge-mode">Equilibrium</div>
   <div class="badge" id="hint-badge">Drag floater · Scroll to zoom</div>
+</div>
+</div><!-- end #page-model -->
+
+<div id="page-modal">
+  <!-- Left: mass inputs + run button -->
+  <div id="modal-left">
+    <div>
+      <h2>Floater Masses</h2>
+      <table class="mass-table" id="mass-table">
+        <thead><tr><th>Floater</th><th>Mass (kg)</th></tr></thead>
+        <tbody id="mass-tbody"></tbody>
+      </table>
+    </div>
+    <div>
+      <button class="btn-run" onclick="runModalAnalysis()">&#9654; Run Modal Analysis</button>
+      <div id="modal-status"></div>
+    </div>
+  </div>
+  <!-- Right: modes list + animation canvas -->
+  <div id="modal-right">
+    <div id="modal-top">
+      <h2>Mode Shapes</h2>
+      <div id="modes-table-wrap">
+        <table class="modes-table" id="modes-table">
+          <thead><tr><th>#</th><th>&#969; (rad/s)</th><th>f (Hz)</th><th>T (s)</th><th>Description</th></tr></thead>
+          <tbody id="modes-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+    <div id="modal-canvas-wrap">
+      <canvas id="modal-canvas"></canvas>
+      <div id="modal-hint">Run analysis and select a mode to animate</div>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -815,6 +888,290 @@ document.getElementById('load-input').addEventListener('change', function() {
   reader.readAsText(file);
   this.value = ''; // allow reloading same file
 });
+
+// ── Tab switching ─────────────────────────────────────────────────────────────
+function switchTab(name) {
+  document.getElementById('page-model').style.display = name === 'model' ? 'flex' : 'none';
+  document.getElementById('page-modal').style.display = name === 'modal' ? 'flex' : 'none';
+  document.getElementById('tab-model').classList.toggle('active', name === 'model');
+  document.getElementById('tab-modal').classList.toggle('active', name === 'modal');
+  if (name === 'modal') { rebuildMassTable(); resizeModalCanvas(); }
+}
+
+// ── Modal Analysis ────────────────────────────────────────────────────────────
+let modalMasses = [];       // per-floater mass in kg
+let modalModes  = [];       // [{omega, freq, period, shape:[{x,y},...]}, ...]
+let selectedMode = -1;
+let modalAnimId  = null;
+let modalAnimT   = 0;
+
+function rebuildMassTable() {
+  // ensure modalMasses length matches floaters
+  while (modalMasses.length < floaters.length) modalMasses.push(1000);
+  modalMasses.length = floaters.length;
+  const tbody = document.getElementById('mass-tbody');
+  tbody.innerHTML = '';
+  floaters.forEach((f, fi) => {
+    const col = floaterColor(fi);
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td style="color:${col};font-weight:600;">Floater ${fi+1}</td>
+      <td><input class="ti" type="number" min="1" step="100" value="${modalMasses[fi]}" oninput="modalMasses[${fi}]=Math.max(1,parseFloat(this.value)||1)"></td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+function buildStiffnessMatrix() {
+  const N = floaters.length;
+  const dim = 2 * N;
+  const eps = 1e-4;
+  // baseline forces
+  const F0 = computeForces(floaters);
+  const f0 = F0.flatMap(f => [f.x, f.y]);
+  const K = Array.from({length: dim}, () => new Array(dim).fill(0));
+  for (let j = 0; j < dim; j++) {
+    const perturbed = floaters.map(f => ({...f}));
+    const fi = Math.floor(j / 2), coord = j % 2;
+    if (coord === 0) perturbed[fi].x += eps; else perturbed[fi].y += eps;
+    const Fp = computeForces(perturbed).flatMap(f => [f.x, f.y]);
+    for (let i = 0; i < dim; i++) {
+      K[i][j] = -(Fp[i] - f0[i]) / eps;
+    }
+  }
+  return K;
+}
+
+// Jacobi eigenvalue algorithm for real symmetric matrix
+// Returns {values: [ω²,...], vectors: [[v00,v01,...], ...]} sorted ascending
+function jacobiEigen(A) {
+  const n = A.length;
+  let a = A.map(row => [...row]);
+  // identity as eigenvector matrix
+  let v = Array.from({length:n}, (_,i) => Array.from({length:n}, (_,j) => i===j?1:0));
+  for (let sweep = 0; sweep < 100 * n * n; sweep++) {
+    // find largest off-diagonal
+    let p=0, q=1, max=0;
+    for (let i=0;i<n;i++) for (let j=i+1;j<n;j++) if (Math.abs(a[i][j])>max){max=Math.abs(a[i][j]);p=i;q=j;}
+    if (max < 1e-12) break;
+    const theta = (a[q][q]-a[p][p])/(2*a[p][q]);
+    const t = Math.sign(theta)/(Math.abs(theta)+Math.sqrt(1+theta*theta));
+    const c = 1/Math.sqrt(1+t*t), s = t*c;
+    // update a
+    const app=a[p][p], aqq=a[q][q], apq=a[p][q];
+    a[p][p] = app - t*apq;
+    a[q][q] = aqq + t*apq;
+    a[p][q] = a[q][p] = 0;
+    for (let r=0;r<n;r++) {
+      if (r===p||r===q) continue;
+      const arp=a[r][p], arq=a[r][q];
+      a[r][p]=a[p][r]=c*arp-s*arq;
+      a[r][q]=a[q][r]=s*arp+c*arq;
+    }
+    // update eigenvectors
+    for (let r=0;r<n;r++) {
+      const vrp=v[r][p], vrq=v[r][q];
+      v[r][p]=c*vrp-s*vrq;
+      v[r][q]=s*vrp+c*vrq;
+    }
+  }
+  // extract and sort
+  const order = Array.from({length:n},(_,i)=>i).sort((i,j)=>a[i][i]-a[j][j]);
+  return {
+    values: order.map(i=>a[i][i]),
+    vectors: order.map(i=>Array.from({length:n},(_,r)=>v[r][i]))
+  };
+}
+
+function runModalAnalysis() {
+  const N = floaters.length;
+  const dim = 2 * N;
+  document.getElementById('modal-status').textContent = 'Computing…';
+  document.getElementById('modal-status').style.color = '#888';
+
+  // Build K
+  const K = buildStiffnessMatrix();
+
+  // Build M^{-1/2} (diagonal)
+  const mhalf = new Array(dim);
+  for (let k=0;k<N;k++) {
+    const m = Math.max(1, modalMasses[k]);
+    mhalf[2*k]   = 1/Math.sqrt(m);
+    mhalf[2*k+1] = 1/Math.sqrt(m);
+  }
+
+  // A = M^{-1/2} K M^{-1/2}
+  const A = Array.from({length:dim}, (_, i) =>
+    Array.from({length:dim}, (_, j) => mhalf[i] * K[i][j] * mhalf[j])
+  );
+
+  const {values, vectors} = jacobiEigen(A);
+
+  modalModes = values.map((lam, mi) => {
+    const omega = lam > 0 ? Math.sqrt(lam) : 0;
+    const freq  = omega / (2*Math.PI);
+    // back-transform: phi = M^{-1/2} v
+    const raw = vectors[mi];
+    const phi = raw.map((vi, i) => vi * mhalf[i]);
+    // normalise so max |component| = 1
+    const maxAbs = Math.max(...phi.map(Math.abs), 1e-12);
+    const norm = phi.map(v => v/maxAbs);
+    const shape = Array.from({length:N}, (_,k) => ({x: norm[2*k], y: norm[2*k+1]}));
+    return { omega, freq, period: freq>1e-9?1/freq:Infinity, shape, eigenvalue: lam };
+  });
+
+  // Populate table
+  const tbody = document.getElementById('modes-tbody');
+  tbody.innerHTML = '';
+  modalModes.forEach((m, mi) => {
+    const tr = document.createElement('tr');
+    const desc = N===1 ? (mi===0?'Surge (x)':'Sway (y)') : `Mode ${mi+1}`;
+    tr.innerHTML = `
+      <td>${mi+1}</td>
+      <td>${m.omega.toFixed(4)}</td>
+      <td>${m.freq.toFixed(4)}</td>
+      <td>${isFinite(m.period)?m.period.toFixed(3):'∞'}</td>
+      <td style="color:#888">${desc}</td>`;
+    tr.onclick = () => selectMode(mi);
+    tbody.appendChild(tr);
+  });
+
+  selectedMode = -1;
+  stopModeAnimation();
+  document.getElementById('modal-hint').textContent = 'Click a mode row to animate';
+  document.getElementById('modal-status').textContent = `${dim} modes computed`;
+  document.getElementById('modal-status').style.color = '#6ce0a0';
+}
+
+function selectMode(mi) {
+  selectedMode = mi;
+  document.querySelectorAll('#modes-tbody tr').forEach((tr,i)=>tr.classList.toggle('selected',i===mi));
+  stopModeAnimation();
+  document.getElementById('modal-hint').style.display = 'none';
+  startModeAnimation();
+}
+
+function stopModeAnimation() {
+  if (modalAnimId) { cancelAnimationFrame(modalAnimId); modalAnimId=null; }
+}
+
+function startModeAnimation() {
+  const mc = document.getElementById('modal-canvas');
+  const mctx = mc.getContext('2d');
+  const mode = modalModes[selectedMode];
+  if (!mode) return;
+
+  // compute bounding box from equilibrium + anchor positions for scale
+  const allX = [...floaters.map(f=>f.x), ...lines.map(l=>l.ax)];
+  const allY = [...floaters.map(f=>f.y), ...lines.map(l=>l.ay)];
+  const xmin=Math.min(...allX)-1, xmax=Math.max(...allX)+1;
+  const ymin=Math.min(...allY)-1, ymax=Math.max(...allY)+1;
+  const span = Math.max(xmax-xmin, ymax-ymin, 1);
+  const ampScale = span * 0.08; // 8% of bounding box span
+
+  function frame(ts) {
+    const t = ts * 0.001;
+    const w = mc.clientWidth, h = mc.clientHeight;
+    if (mc.width!==w||mc.height!==h){mc.width=w;mc.height=h;}
+    const mctx2 = mc.getContext('2d');
+    mctx2.clearRect(0,0,w,h);
+
+    const cx = w/2, cy = h/2;
+    const zoom = Math.min(w,h)*0.4/span;
+
+    function wx(x){return cx + (x-(xmin+xmax)/2)*zoom;}
+    function wy(y){return cy - (y-(ymin+ymax)/2)*zoom;}
+
+    const phase = Math.sin(Math.max(mode.omega,1)*t);
+
+    // displaced positions
+    const disp = floaters.map((f,fi)=>({
+      x: f.x + mode.shape[fi].x * ampScale * phase,
+      y: f.y + mode.shape[fi].y * ampScale * phase
+    }));
+
+    // draw anchor points
+    lines.forEach(ln=>{
+      mctx2.beginPath();
+      mctx2.arc(wx(ln.ax),wy(ln.ay),5,0,2*Math.PI);
+      mctx2.fillStyle='#555';
+      mctx2.fill();
+    });
+
+    // draw mooring lines (from displaced floater to anchor)
+    lines.forEach((ln,i)=>{
+      const fi=Math.min(ln.floaterIdx,floaters.length-1);
+      const p=disp[fi];
+      mctx2.beginPath();
+      mctx2.moveTo(wx(ln.ax),wy(ln.ay));
+      mctx2.lineTo(wx(p.x),wy(p.y));
+      mctx2.strokeStyle=springLineColor(i);
+      mctx2.lineWidth=1.5;
+      mctx2.stroke();
+    });
+
+    // draw catenaries
+    catenaries.forEach(cat=>{
+      const p0=disp[Math.min(cat.f0,floaters.length-1)];
+      const p1=disp[Math.min(cat.f1,floaters.length-1)];
+      mctx2.beginPath();
+      mctx2.moveTo(wx(p0.x),wy(p0.y));
+      mctx2.lineTo(wx(p1.x),wy(p1.y));
+      mctx2.strokeStyle='#f5c842';
+      mctx2.lineWidth=2;
+      mctx2.stroke();
+    });
+
+    // draw floaters (equilibrium ghost + displaced)
+    floaters.forEach((f,fi)=>{
+      const col=floaterColor(fi);
+      const r=Math.max(4,span*zoom*0.03);
+      // ghost at equilibrium
+      mctx2.beginPath();
+      mctx2.arc(wx(f.x),wy(f.y),r,0,2*Math.PI);
+      mctx2.strokeStyle=col+'55';
+      mctx2.lineWidth=1;
+      mctx2.stroke();
+      // displaced
+      mctx2.beginPath();
+      mctx2.arc(wx(disp[fi].x),wy(disp[fi].y),r,0,2*Math.PI);
+      mctx2.fillStyle=col+'99';
+      mctx2.fill();
+      mctx2.strokeStyle=col;
+      mctx2.lineWidth=2;
+      mctx2.stroke();
+      // mode shape arrow
+      const arrowScale = ampScale * zoom * 1.5;
+      const ax=mode.shape[fi].x*arrowScale, ay=-mode.shape[fi].y*arrowScale;
+      const fx=wx(f.x), fy=wy(f.y);
+      if (Math.sqrt(ax*ax+ay*ay)>2) {
+        mctx2.beginPath();
+        mctx2.moveTo(fx,fy);
+        mctx2.lineTo(fx+ax,fy+ay);
+        mctx2.strokeStyle=col;
+        mctx2.lineWidth=1.5;
+        mctx2.setLineDash([3,3]);
+        mctx2.stroke();
+        mctx2.setLineDash([]);
+      }
+    });
+
+    // label
+    mctx2.fillStyle='#888';
+    mctx2.font='11px Segoe UI';
+    mctx2.fillText(`Mode ${selectedMode+1}  ω=${mode.omega.toFixed(3)} rad/s  f=${mode.freq.toFixed(4)} Hz  T=${isFinite(mode.period)?mode.period.toFixed(3)+'s':'∞'}`, 10, 20);
+
+    modalAnimId = requestAnimationFrame(frame);
+  }
+  modalAnimId = requestAnimationFrame(frame);
+}
+
+function resizeModalCanvas() {
+  const mc = document.getElementById('modal-canvas');
+  mc.width  = mc.clientWidth;
+  mc.height = mc.clientHeight;
+}
+
+window.addEventListener('resize', () => { if (document.getElementById('page-modal').style.display!=='none') resizeModalCanvas(); });
 
 // ── Init ──────────────────────────────────────────────────────────────────────
 rebuildAll();
