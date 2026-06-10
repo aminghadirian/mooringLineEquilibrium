@@ -412,8 +412,11 @@ function solveEquilibrium(guesses) {
 }
 
 // ── Camera ────────────────────────────────────────────────────────────────────
-function w2c(wx,wy) { return {x:canvas.width/2+(wx-cam.x)*cam.zoom, y:canvas.height/2-(wy-cam.y)*cam.zoom}; }
-function c2w(cx,cy) { return {x:(cx-canvas.width/2)/cam.zoom+cam.x, y:-(cy-canvas.height/2)/cam.zoom+cam.y}; }
+// Coordinate convention: world x points UP on screen, world y points LEFT, z out of page.
+function w2c(wx,wy) { return {x:canvas.width/2-(wy-cam.y)*cam.zoom, y:canvas.height/2-(wx-cam.x)*cam.zoom}; }
+function c2w(cx,cy) { return {x:-(cy-canvas.height/2)/cam.zoom+cam.x, y:-(cx-canvas.width/2)/cam.zoom+cam.y}; }
+// world vector (vx,vy) → screen delta
+function wvec(vx,vy,scale) { return {x:-vy*scale, y:-vx*scale}; }
 
 // ── Drawing ───────────────────────────────────────────────────────────────────
 function drawArrow(x1,y1,x2,y2,color,lw) {
@@ -431,13 +434,25 @@ function drawArrow(x1,y1,x2,y2,color,lw) {
 
 function drawGrid() {
   if (cam.zoom < 8) return;
-  const l=c2w(0,0).x, r=c2w(canvas.width,0).x, t=c2w(0,0).y, b=c2w(0,canvas.height).y;
+  // world x varies along screen vertical; world y along screen horizontal
+  const xLo=c2w(0,canvas.height).x, xHi=c2w(0,0).x;
+  const yLo=c2w(canvas.width,0).y, yHi=c2w(0,0).y;
   ctx.strokeStyle='#22252f'; ctx.lineWidth=1;
-  for (let x=Math.floor(l);x<=r+1;x++) { const p=w2c(x,0); ctx.beginPath(); ctx.moveTo(p.x,0); ctx.lineTo(p.x,canvas.height); ctx.stroke(); }
-  for (let y=Math.floor(b);y<=t+1;y++) { const p=w2c(0,y); ctx.beginPath(); ctx.moveTo(0,p.y); ctx.lineTo(canvas.width,p.y); ctx.stroke(); }
+  for (let x=Math.floor(xLo);x<=xHi+1;x++) { const p=w2c(x,0); ctx.beginPath(); ctx.moveTo(0,p.y); ctx.lineTo(canvas.width,p.y); ctx.stroke(); }
+  for (let y=Math.floor(yLo);y<=yHi+1;y++) { const p=w2c(0,y); ctx.beginPath(); ctx.moveTo(p.x,0); ctx.lineTo(p.x,canvas.height); ctx.stroke(); }
   ctx.strokeStyle='#2d3245'; const o=w2c(0,0);
   ctx.beginPath(); ctx.moveTo(o.x,0); ctx.lineTo(o.x,canvas.height); ctx.stroke();
   ctx.beginPath(); ctx.moveTo(0,o.y); ctx.lineTo(canvas.width,o.y); ctx.stroke();
+}
+
+function drawAxes() {
+  // axes indicator: x up, y left
+  const ox=canvas.width-50, oy=canvas.height-50, len=32;
+  drawArrow(ox,oy,ox,oy-len,'#7ab8f5',1.5);
+  drawArrow(ox,oy,ox-len,oy,'#6ce0a0',1.5);
+  ctx.font='bold 11px Segoe UI'; ctx.textAlign='center';
+  ctx.fillStyle='#7ab8f5'; ctx.fillText('x',ox,oy-len-5);
+  ctx.fillStyle='#6ce0a0'; ctx.fillText('y',ox-len-8,oy+4);
 }
 
 function drawAnchor(ln, col) {
@@ -522,9 +537,10 @@ function drawForceVectors(fpos) {
     const T=Math.max(0,ln.k*(d-ln.L0)); if(T<0.01) continue;
     const fp=w2c(p.x,p.y);
     const fx=T*dx/d, fy=T*dy/d;
-    drawArrow(fp.x,fp.y,fp.x+fx*fscale,fp.y-fy*fscale,col,2);
+    const dv=wvec(fx,fy,fscale);
+    drawArrow(fp.x,fp.y,fp.x+dv.x,fp.y+dv.y,col,2);
     ctx.fillStyle=col+'cc'; ctx.font='bold 9px Segoe UI'; ctx.textAlign='center';
-    ctx.fillText(`${T.toFixed(0)}N`,fp.x+fx*fscale*0.5,fp.y-fy*fscale*0.5-7);
+    ctx.fillText(`${T.toFixed(0)}N`,fp.x+dv.x*0.5,fp.y+dv.y*0.5-7);
   }
   for (const cat of catenaries) {
     const fi0=Math.min(cat.f0,fpos.length-1), fi1=Math.min(cat.f1,fpos.length-1);
@@ -536,16 +552,17 @@ function drawForceVectors(fpos) {
     const ux=dx/d, uy=dy/d;
     for (const [fi,sx,sy] of [[fi0,H*ux,H*uy],[fi1,-H*ux,-H*uy]]) {
       const fp=w2c(fpos[fi].x,fpos[fi].y);
-      drawArrow(fp.x,fp.y,fp.x+sx*fscale,fp.y-sy*fscale,CAT_COLOR,2);
+      const dv=wvec(sx,sy,fscale);
+      drawArrow(fp.x,fp.y,fp.x+dv.x,fp.y+dv.y,CAT_COLOR,2);
       ctx.fillStyle=CAT_COLOR+'cc'; ctx.font='bold 9px Segoe UI'; ctx.textAlign='center';
-      ctx.fillText(`${H.toFixed(0)}N`,fp.x+sx*fscale*0.5,fp.y-sy*fscale*0.5-7);
+      ctx.fillText(`${H.toFixed(0)}N`,fp.x+dv.x*0.5,fp.y+dv.y*0.5-7);
     }
   }
   // Net residual
   const allF=computeForces(fpos);
   for (let fi=0; fi<fpos.length; fi++) {
     const net=allF[fi], nl=Math.sqrt(net.x*net.x+net.y*net.y);
-    if (nl>0.5) { const fp=w2c(fpos[fi].x,fpos[fi].y); drawArrow(fp.x,fp.y,fp.x+net.x*fscale,fp.y-net.y*fscale,'#ff880060',1.5); }
+    if (nl>0.5) { const fp=w2c(fpos[fi].x,fpos[fi].y); const dv=wvec(net.x,net.y,fscale); drawArrow(fp.x,fp.y,fp.x+dv.x,fp.y+dv.y,'#ff880060',1.5); }
   }
 }
 
@@ -581,6 +598,7 @@ function render() {
   // Floaters
   for (let fi=0;fi<floaters.length;fi++) drawFloater(fi,floaters[fi]);
   drawScaleBar();
+  drawAxes();
   updateResultsUI();
 }
 
@@ -785,7 +803,8 @@ function fitView() {
   for(const p of pts){ mn.x=Math.min(mn.x,p.x);mx.x=Math.max(mx.x,p.x);mn.y=Math.min(mn.y,p.y);mx.y=Math.max(mx.y,p.y); }
   const sx=mx.x-mn.x||2, sy=mx.y-mn.y||2;
   cam.x=(mn.x+mx.x)/2; cam.y=(mn.y+mx.y)/2;
-  cam.zoom=Math.min(canvas.width/(sx*1.5), canvas.height/(sy*1.5));
+  // x spans the screen height, y spans the screen width
+  cam.zoom=Math.min(canvas.width/(sy*1.5), canvas.height/(sx*1.5));
   render();
 }
 function resize() {
@@ -1006,12 +1025,30 @@ function runModalAnalysis() {
 
   const {values, vectors} = jacobiEigen(A);
 
+  // back-transform: phi = M^{-1/2} v
+  const phis = vectors.map(raw => raw.map((vi, i) => vi * mhalf[i]));
+
+  // Degenerate eigenvalue pairs have arbitrary eigenvector directions —
+  // rotate each pair so the first mode aligns with the global x axis (surge).
+  for (let i = 0; i + 1 < values.length; i++) {
+    const lam = values[i], lam2 = values[i+1];
+    if (Math.abs(lam2 - lam) > 1e-6 * Math.max(Math.abs(lam), 1e-9)) continue;
+    const p1 = phis[i], p2 = phis[i+1];
+    // projection of each onto the "all-x" direction
+    let a1 = 0, a2 = 0;
+    for (let k = 0; k < N; k++) { a1 += p1[2*k]; a2 += p2[2*k]; }
+    const r = Math.hypot(a1, a2);
+    if (r < 1e-9) continue;
+    const c = a1/r, s = a2/r;
+    phis[i]   = p1.map((v, j) =>  c*v + s*p2[j]);
+    phis[i+1] = p1.map((v, j) => -s*v + c*p2[j]);
+    i++; // skip the partner
+  }
+
   modalModes = values.map((lam, mi) => {
     const omega = lam > 0 ? Math.sqrt(lam) : 0;
     const freq  = omega / (2*Math.PI);
-    // back-transform: phi = M^{-1/2} v
-    const raw = vectors[mi];
-    const phi = raw.map((vi, i) => vi * mhalf[i]);
+    const phi = phis[mi];
     // normalise so max |component| = 1
     const maxAbs = Math.max(...phi.map(Math.abs), 1e-12);
     const norm = phi.map(v => v/maxAbs);
@@ -1024,7 +1061,9 @@ function runModalAnalysis() {
   tbody.innerHTML = '';
   modalModes.forEach((m, mi) => {
     const tr = document.createElement('tr');
-    const desc = N===1 ? (mi===0?'Surge (x)':'Sway (y)') : `Mode ${mi+1}`;
+    const sx = m.shape.reduce((a,s)=>a+Math.abs(s.x),0);
+    const sy = m.shape.reduce((a,s)=>a+Math.abs(s.y),0);
+    const desc = sx > 3*sy ? 'Surge (x, up)' : sy > 3*sx ? 'Sway (y, left)' : 'Coupled x–y';
     tr.innerHTML = `
       <td>${mi+1}</td>
       <td>${m.omega.toFixed(4)}</td>
@@ -1078,8 +1117,8 @@ function startModeAnimation() {
     const cx = w/2, cy = h/2;
     const zoom = Math.min(w,h)*0.4/span;
 
-    function wx(x){return cx + (x-(xmin+xmax)/2)*zoom;}
-    function wy(y){return cy - (y-(ymin+ymax)/2)*zoom;}
+    // same convention as the model canvas: world x up, world y left
+    const sp = (x,y) => ({ x: cx - (y-(ymin+ymax)/2)*zoom, y: cy - (x-(xmin+xmax)/2)*zoom });
 
     const phase = Math.sin(Math.max(mode.omega,1)*t);
 
@@ -1091,8 +1130,9 @@ function startModeAnimation() {
 
     // draw anchor points
     lines.forEach(ln=>{
+      const a=sp(ln.ax,ln.ay);
       mctx2.beginPath();
-      mctx2.arc(wx(ln.ax),wy(ln.ay),5,0,2*Math.PI);
+      mctx2.arc(a.x,a.y,5,0,2*Math.PI);
       mctx2.fillStyle='#555';
       mctx2.fill();
     });
@@ -1100,10 +1140,10 @@ function startModeAnimation() {
     // draw mooring lines (from displaced floater to anchor)
     lines.forEach((ln,i)=>{
       const fi=Math.min(ln.floaterIdx,floaters.length-1);
-      const p=disp[fi];
+      const p=sp(disp[fi].x,disp[fi].y), a=sp(ln.ax,ln.ay);
       mctx2.beginPath();
-      mctx2.moveTo(wx(ln.ax),wy(ln.ay));
-      mctx2.lineTo(wx(p.x),wy(p.y));
+      mctx2.moveTo(a.x,a.y);
+      mctx2.lineTo(p.x,p.y);
       mctx2.strokeStyle=springLineColor(i);
       mctx2.lineWidth=1.5;
       mctx2.stroke();
@@ -1111,11 +1151,12 @@ function startModeAnimation() {
 
     // draw catenaries
     catenaries.forEach(cat=>{
-      const p0=disp[Math.min(cat.f0,floaters.length-1)];
-      const p1=disp[Math.min(cat.f1,floaters.length-1)];
+      const d0=disp[Math.min(cat.f0,floaters.length-1)];
+      const d1=disp[Math.min(cat.f1,floaters.length-1)];
+      const a=sp(d0.x,d0.y), b=sp(d1.x,d1.y);
       mctx2.beginPath();
-      mctx2.moveTo(wx(p0.x),wy(p0.y));
-      mctx2.lineTo(wx(p1.x),wy(p1.y));
+      mctx2.moveTo(a.x,a.y);
+      mctx2.lineTo(b.x,b.y);
       mctx2.strokeStyle='#f5c842';
       mctx2.lineWidth=2;
       mctx2.stroke();
@@ -1125,28 +1166,28 @@ function startModeAnimation() {
     floaters.forEach((f,fi)=>{
       const col=floaterColor(fi);
       const r=Math.max(4,span*zoom*0.03);
+      const fe=sp(f.x,f.y), fd=sp(disp[fi].x,disp[fi].y);
       // ghost at equilibrium
       mctx2.beginPath();
-      mctx2.arc(wx(f.x),wy(f.y),r,0,2*Math.PI);
+      mctx2.arc(fe.x,fe.y,r,0,2*Math.PI);
       mctx2.strokeStyle=col+'55';
       mctx2.lineWidth=1;
       mctx2.stroke();
       // displaced
       mctx2.beginPath();
-      mctx2.arc(wx(disp[fi].x),wy(disp[fi].y),r,0,2*Math.PI);
+      mctx2.arc(fd.x,fd.y,r,0,2*Math.PI);
       mctx2.fillStyle=col+'99';
       mctx2.fill();
       mctx2.strokeStyle=col;
       mctx2.lineWidth=2;
       mctx2.stroke();
-      // mode shape arrow
+      // mode shape arrow: world (sx,sy) → screen (−sy, −sx)
       const arrowScale = ampScale * zoom * 1.5;
-      const ax=mode.shape[fi].x*arrowScale, ay=-mode.shape[fi].y*arrowScale;
-      const fx=wx(f.x), fy=wy(f.y);
+      const ax=-mode.shape[fi].y*arrowScale, ay=-mode.shape[fi].x*arrowScale;
       if (Math.sqrt(ax*ax+ay*ay)>2) {
         mctx2.beginPath();
-        mctx2.moveTo(fx,fy);
-        mctx2.lineTo(fx+ax,fy+ay);
+        mctx2.moveTo(fe.x,fe.y);
+        mctx2.lineTo(fe.x+ax,fe.y+ay);
         mctx2.strokeStyle=col;
         mctx2.lineWidth=1.5;
         mctx2.setLineDash([3,3]);
@@ -1154,6 +1195,19 @@ function startModeAnimation() {
         mctx2.setLineDash([]);
       }
     });
+
+    // axes indicator: x up, y left
+    {
+      const ox=w-50, oy=h-50, len=30;
+      mctx2.strokeStyle='#7ab8f5'; mctx2.lineWidth=1.5;
+      mctx2.beginPath(); mctx2.moveTo(ox,oy); mctx2.lineTo(ox,oy-len); mctx2.stroke();
+      mctx2.strokeStyle='#6ce0a0';
+      mctx2.beginPath(); mctx2.moveTo(ox,oy); mctx2.lineTo(ox-len,oy); mctx2.stroke();
+      mctx2.font='bold 11px Segoe UI'; mctx2.textAlign='center';
+      mctx2.fillStyle='#7ab8f5'; mctx2.fillText('x',ox,oy-len-5);
+      mctx2.fillStyle='#6ce0a0'; mctx2.fillText('y',ox-len-8,oy+4);
+      mctx2.textAlign='left';
+    }
 
     // label
     mctx2.fillStyle='#888';
