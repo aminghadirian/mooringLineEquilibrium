@@ -412,11 +412,11 @@ function solveEquilibrium(guesses) {
 }
 
 // ── Camera ────────────────────────────────────────────────────────────────────
-// Coordinate convention: world x points UP on screen, world y points LEFT, z out of page.
-function w2c(wx,wy) { return {x:canvas.width/2-(wy-cam.y)*cam.zoom, y:canvas.height/2-(wx-cam.x)*cam.zoom}; }
-function c2w(cx,cy) { return {x:-(cy-canvas.height/2)/cam.zoom+cam.x, y:-(cx-canvas.width/2)/cam.zoom+cam.y}; }
-// world vector (vx,vy) → screen delta
-function wvec(vx,vy,scale) { return {x:-vy*scale, y:-vx*scale}; }
+// Model canvas: standard convention — world x right, world y up.
+function w2c(wx,wy) { return {x:canvas.width/2+(wx-cam.x)*cam.zoom, y:canvas.height/2-(wy-cam.y)*cam.zoom}; }
+function c2w(cx,cy) { return {x:(cx-canvas.width/2)/cam.zoom+cam.x, y:-(cy-canvas.height/2)/cam.zoom+cam.y}; }
+// world force vector → screen delta (y-flip because screen-y is downward)
+function wvec(vx,vy,scale) { return {x:vx*scale, y:-vy*scale}; }
 
 // ── Drawing ───────────────────────────────────────────────────────────────────
 function drawArrow(x1,y1,x2,y2,color,lw) {
@@ -434,25 +434,23 @@ function drawArrow(x1,y1,x2,y2,color,lw) {
 
 function drawGrid() {
   if (cam.zoom < 8) return;
-  // world x varies along screen vertical; world y along screen horizontal
-  const xLo=c2w(0,canvas.height).x, xHi=c2w(0,0).x;
-  const yLo=c2w(canvas.width,0).y, yHi=c2w(0,0).y;
+  const l=c2w(0,0).x, r=c2w(canvas.width,0).x, t=c2w(0,0).y, b=c2w(0,canvas.height).y;
   ctx.strokeStyle='#22252f'; ctx.lineWidth=1;
-  for (let x=Math.floor(xLo);x<=xHi+1;x++) { const p=w2c(x,0); ctx.beginPath(); ctx.moveTo(0,p.y); ctx.lineTo(canvas.width,p.y); ctx.stroke(); }
-  for (let y=Math.floor(yLo);y<=yHi+1;y++) { const p=w2c(0,y); ctx.beginPath(); ctx.moveTo(p.x,0); ctx.lineTo(p.x,canvas.height); ctx.stroke(); }
+  for (let x=Math.floor(l);x<=r+1;x++) { const p=w2c(x,0); ctx.beginPath(); ctx.moveTo(p.x,0); ctx.lineTo(p.x,canvas.height); ctx.stroke(); }
+  for (let y=Math.floor(b);y<=t+1;y++) { const p=w2c(0,y); ctx.beginPath(); ctx.moveTo(0,p.y); ctx.lineTo(canvas.width,p.y); ctx.stroke(); }
   ctx.strokeStyle='#2d3245'; const o=w2c(0,0);
   ctx.beginPath(); ctx.moveTo(o.x,0); ctx.lineTo(o.x,canvas.height); ctx.stroke();
   ctx.beginPath(); ctx.moveTo(0,o.y); ctx.lineTo(canvas.width,o.y); ctx.stroke();
 }
 
 function drawAxes() {
-  // axes indicator: x up, y left
+  // axes indicator: x right, y up (model canvas standard convention)
   const ox=canvas.width-50, oy=canvas.height-50, len=32;
-  drawArrow(ox,oy,ox,oy-len,'#7ab8f5',1.5);
-  drawArrow(ox,oy,ox-len,oy,'#6ce0a0',1.5);
+  drawArrow(ox,oy,ox+len,oy,'#7ab8f5',1.5);
+  drawArrow(ox,oy,ox,oy-len,'#6ce0a0',1.5);
   ctx.font='bold 11px Segoe UI'; ctx.textAlign='center';
-  ctx.fillStyle='#7ab8f5'; ctx.fillText('x',ox,oy-len-5);
-  ctx.fillStyle='#6ce0a0'; ctx.fillText('y',ox-len-8,oy+4);
+  ctx.fillStyle='#7ab8f5'; ctx.fillText('x',ox+len+7,oy+4);
+  ctx.fillStyle='#6ce0a0'; ctx.fillText('y',ox,oy-len-5);
 }
 
 function drawAnchor(ln, col) {
@@ -803,8 +801,7 @@ function fitView() {
   for(const p of pts){ mn.x=Math.min(mn.x,p.x);mx.x=Math.max(mx.x,p.x);mn.y=Math.min(mn.y,p.y);mx.y=Math.max(mx.y,p.y); }
   const sx=mx.x-mn.x||2, sy=mx.y-mn.y||2;
   cam.x=(mn.x+mx.x)/2; cam.y=(mn.y+mx.y)/2;
-  // x spans the screen height, y spans the screen width
-  cam.zoom=Math.min(canvas.width/(sy*1.5), canvas.height/(sx*1.5));
+  cam.zoom=Math.min(canvas.width/(sx*1.5), canvas.height/(sy*1.5));
   render();
 }
 function resize() {
