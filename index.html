@@ -1060,7 +1060,7 @@ function runModalAnalysis() {
     const tr = document.createElement('tr');
     const sx = m.shape.reduce((a,s)=>a+Math.abs(s.x),0);
     const sy = m.shape.reduce((a,s)=>a+Math.abs(s.y),0);
-    const desc = sx > 3*sy ? 'Surge (x, up)' : sy > 3*sx ? 'Sway (y, left)' : 'Coupled x–y';
+    const desc = sx > 3*sy ? 'Surge (x)' : sy > 3*sx ? 'Sway (y)' : 'Coupled x–y';
     tr.innerHTML = `
       <td>${mi+1}</td>
       <td>${m.omega.toFixed(4)}</td>
@@ -1114,8 +1114,8 @@ function startModeAnimation() {
     const cx = w/2, cy = h/2;
     const zoom = Math.min(w,h)*0.4/span;
 
-    // same convention as the model canvas: world x up, world y left
-    const sp = (x,y) => ({ x: cx - (y-(ymin+ymax)/2)*zoom, y: cy - (x-(xmin+xmax)/2)*zoom });
+    // same convention as the model canvas: world x right, world y up
+    const sp = (x,y) => ({ x: cx + (x-(xmin+xmax)/2)*zoom, y: cy - (y-(ymin+ymax)/2)*zoom });
 
     const phase = Math.sin(Math.max(mode.omega,1)*t);
 
@@ -1178,9 +1178,9 @@ function startModeAnimation() {
       mctx2.strokeStyle=col;
       mctx2.lineWidth=2;
       mctx2.stroke();
-      // mode shape arrow: world (sx,sy) → screen (−sy, −sx)
+      // mode shape arrow: world (sx,sy) → screen (sx, −sy)
       const arrowScale = ampScale * zoom * 1.5;
-      const ax=-mode.shape[fi].y*arrowScale, ay=-mode.shape[fi].x*arrowScale;
+      const ax=mode.shape[fi].x*arrowScale, ay=-mode.shape[fi].y*arrowScale;
       if (Math.sqrt(ax*ax+ay*ay)>2) {
         mctx2.beginPath();
         mctx2.moveTo(fe.x,fe.y);
@@ -1193,16 +1193,16 @@ function startModeAnimation() {
       }
     });
 
-    // axes indicator: x up, y left
+    // axes indicator: x right, y up
     {
-      const ox=w-50, oy=h-50, len=30;
+      const ox=w-70, oy=h-50, len=30;
       mctx2.strokeStyle='#7ab8f5'; mctx2.lineWidth=1.5;
-      mctx2.beginPath(); mctx2.moveTo(ox,oy); mctx2.lineTo(ox,oy-len); mctx2.stroke();
+      mctx2.beginPath(); mctx2.moveTo(ox,oy); mctx2.lineTo(ox+len,oy); mctx2.stroke();
       mctx2.strokeStyle='#6ce0a0';
-      mctx2.beginPath(); mctx2.moveTo(ox,oy); mctx2.lineTo(ox-len,oy); mctx2.stroke();
+      mctx2.beginPath(); mctx2.moveTo(ox,oy); mctx2.lineTo(ox,oy-len); mctx2.stroke();
       mctx2.font='bold 11px Segoe UI'; mctx2.textAlign='center';
-      mctx2.fillStyle='#7ab8f5'; mctx2.fillText('x',ox,oy-len-5);
-      mctx2.fillStyle='#6ce0a0'; mctx2.fillText('y',ox-len-8,oy+4);
+      mctx2.fillStyle='#7ab8f5'; mctx2.fillText('x',ox+len+7,oy+4);
+      mctx2.fillStyle='#6ce0a0'; mctx2.fillText('y',ox,oy-len-5);
       mctx2.textAlign='left';
     }
 
