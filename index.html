@@ -245,6 +245,11 @@ canvas.hover-f { cursor: grab; } canvas.drag { cursor: grabbing; }
   <div id="modal-left">
     <div>
       <h2>Floater Masses</h2>
+      <div style="display:flex;align-items:center;gap:6px;margin:8px 0;">
+        <label style="font-size:11px;color:#bbb;white-space:nowrap;">Set all (kg)</label>
+        <input class="ti" type="number" min="1" step="100" id="mass-all" value="1000" style="flex:1;">
+        <button class="add-btn" onclick="applyMassAll()">Apply</button>
+      </div>
       <table class="mass-table" id="mass-table">
         <thead><tr><th>Floater</th><th>Mass (kg)</th></tr></thead>
         <tbody id="mass-tbody"></tbody>
@@ -938,9 +943,19 @@ function rebuildMassTable() {
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td style="color:${col};font-weight:600;">Floater ${fi+1}</td>
-      <td><input class="ti" type="number" min="1" step="100" value="${modalMasses[fi]}" oninput="modalMasses[${fi}]=Math.max(1,parseFloat(this.value)||1)"></td>`;
+      <td><input class="ti" type="number" min="1" step="100" id="mass-${fi}" value="${modalMasses[fi]}" oninput="modalMasses[${fi}]=Math.max(1,parseFloat(this.value)||1)"></td>`;
     tbody.appendChild(tr);
   });
+}
+
+// Apply the "Set all" value to every floater mass
+function applyMassAll() {
+  const v = Math.max(1, parseFloat(document.getElementById('mass-all').value) || 1);
+  for (let fi = 0; fi < floaters.length; fi++) {
+    modalMasses[fi] = v;
+    const el = document.getElementById(`mass-${fi}`);
+    if (el) el.value = v;
+  }
 }
 
 function buildStiffnessMatrix() {
